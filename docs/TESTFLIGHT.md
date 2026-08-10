@@ -2,7 +2,7 @@
 
 Indulge is configured as iOS version `0.1.0`, build `1`, with bundle identifier
 `com.significanthobbies.indulge`. The App Store icon is present in `AppIcon`,
-and the generated Info.plist declares that the current app does not use
+and the checked-in Info.plist declares that the current app does not use
 non-exempt encryption.
 
 ## Account boundary
@@ -85,8 +85,14 @@ and recovery.
 - Screen Time authorization and automatic activity history are not included in
   this build.
 - Data remains local to the device; iCloud sync is not active yet.
-- On-device Focus tag suggestions appear only on supported Apple Intelligence
-  devices. Manual classification remains available everywhere.
+- Private iCloud sync is prepared but remains unverified until the development
+  container and two signed devices complete the checklist in
+  `docs/CLOUDKIT_PREPARATION.md`.
+- On-device Focus tag suggestions and grounded reflection selection appear only
+  on supported Apple Intelligence devices. Manual classification and authored
+  reflections remain available everywhere.
+- Optional Image Playground card creation appears only on supported devices.
+- Privacy Lock is optional and uses Face ID, Touch ID, or the device passcode.
 - Trade and History are still early product surfaces.
 
 ## Before the first upload

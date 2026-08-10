@@ -4,16 +4,19 @@ import Testing
 
 struct FocusTagSuggestingTests {
   @Test func manualFallbackNeverInventsTags() async {
-    let suggester = ManualFocusTagSuggester()
+    let service = ManualAppleIntelligenceService()
+    let suggestion = try? await service.suggestTags(
+      for: "Slack arrived during a hard paragraph")
 
-    #expect(suggester.availability == .unavailable)
-    #expect(await suggester.suggestTags(for: "Slack arrived during a hard paragraph") == nil)
+    #expect(service.capabilities.onDeviceIntelligence == .unavailable)
+    #expect(suggestion == nil)
   }
 
   @Test func explicitChoicesRemainIndependentOfSuggestions() async {
     let explicitSource = FocusInterruptionSource.external
     let explicitReason = FocusInterruptionReason.message
-    let failedSuggestion = await ManualFocusTagSuggester().suggestTags(for: "Opened video")
+    let failedSuggestion = try? await ManualAppleIntelligenceService().suggestTags(
+      for: "Opened video")
 
     #expect(failedSuggestion == nil)
     #expect(explicitSource == .external)

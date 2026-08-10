@@ -79,6 +79,151 @@ struct FocusJournalTests {
     }
   }
 
+  @MainActor
+  @Test func legacyLocalStoreOpensThroughTheVersionedMigrationPlan() throws {
+    let directory = FileManager.default.temporaryDirectory.appending(
+      path: "indulge-migration-\(UUID().uuidString)",
+      directoryHint: .isDirectory
+    )
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let storeURL = directory.appending(path: "indulge.store")
+    let sessionID = UUID()
+
+    do {
+      let legacy = try FocusModelContainer.makeLegacyStore(at: storeURL)
+      legacy.mainContext.insert(
+        FocusSessionRecord(id: sessionID, intention: "Preserve me", startedAt: .distantPast)
+      )
+      try legacy.mainContext.save()
+    }
+
+    let migrated = try FocusModelContainer.make(storeURL: storeURL)
+    let repository = FocusRepository(context: migrated.mainContext)
+    #expect(migrated.schema.version == IndulgeDataSchemaV1.versionIdentifier)
+    #expect(migrated.migrationPlan != nil)
+    #expect(try repository.sessions().first?.id == sessionID)
+  }
+
+  @MainActor
+  @Test func swiftDataProfileAndGeneratedMetadataPersistAndDeleteExplicitly() throws {
+    let container = try FocusModelContainer.make(inMemory: true)
+    let profileRepository = OnboardingProfileRepository(context: container.mainContext)
+    let generatedRepository = GeneratedStateRepository(context: container.mainContext)
+    let profile = OnboardingProfile(
+      preferredName: "Maya",
+      activities: [.television],
+      primaryIndulgence: .television,
+      lifeDirections: [.presence]
+    )
+    try profileRepository.save(profile)
+
+    let reflection = GeneratedReflectionRecord(
+      evidenceRevision: "evidence-v1",
+      headline: "A pattern is taking shape",
+      observation: "One interruption was recorded."
+    )
+    let card = try FutureLifeCardRecord(
+      imageFileName: "future-life-card.jpg",
+      lifeDirections: [.presence]
+    )
+    container.mainContext.insert(reflection)
+    container.mainContext.insert(card)
+    try container.mainContext.save()
+
+    #expect(try profileRepository.latest() == profile)
+    #expect(
+      try container.mainContext.fetch(FetchDescriptor<GeneratedReflectionRecord>()).count == 1)
+    #expect(try container.mainContext.fetch(FetchDescriptor<FutureLifeCardRecord>()).count == 1)
+
+    try generatedRepository.deleteReflection(reflection)
+    try generatedRepository.deleteCard(card)
+    try profileRepository.delete()
+
+    #expect(try profileRepository.latest() == nil)
+    #expect(try container.mainContext.fetch(FetchDescriptor<GeneratedReflectionRecord>()).isEmpty)
+    #expect(try container.mainContext.fetch(FetchDescriptor<FutureLifeCardRecord>()).isEmpty)
+  }
+
+  @MainActor
+  @Test func swiftDataProfileRestoresAfterContainerRecreation() throws {
+    let directory = FileManager.default.temporaryDirectory.appending(
+      path: "indulge-profile-store-\(UUID().uuidString)",
+      directoryHint: .isDirectory
+    )
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let storeURL = directory.appending(path: "indulge.store")
+    let profile = OnboardingProfile(
+      preferredName: "Maya",
+      activities: [.television],
+      primaryIndulgence: .television,
+      lifeDirections: [.creativity]
+    )
+
+    do {
+      let container = try FocusModelContainer.make(storeURL: storeURL)
+      try OnboardingProfileRepository(context: container.mainContext).save(profile)
+    }
+
+    do {
+      let reopened = try FocusModelContainer.make(storeURL: storeURL)
+      let restored = try OnboardingProfileRepository(context: reopened.mainContext).latest()
+      #expect(restored == profile)
+    }
+  }
+
+  @MainActor
+  @Test func startupRepairDeterministicallyDeduplicatesImportedEvents() throws {
+    let container = try FocusModelContainer.make(inMemory: true)
+    let context = container.mainContext
+    let repository = FocusRepository(context: context)
+    let sessionID = UUID()
+    let interruptionID = UUID()
+    let start = Date(timeIntervalSince1970: 1_800_000_000)
+
+    context.insert(FocusSessionRecord(id: sessionID, intention: "", startedAt: start))
+    context.insert(
+      FocusSessionRecord(
+        id: sessionID,
+        intention: "Retained intention",
+        startedAt: start,
+        endedAt: start.addingTimeInterval(1_800)
+      )
+    )
+    context.insert(
+      FocusInterruptionRecord(
+        id: interruptionID,
+        sessionID: sessionID,
+        interruptedAt: start.addingTimeInterval(300)
+      )
+    )
+    context.insert(
+      FocusInterruptionRecord(
+        id: interruptionID,
+        sessionID: sessionID,
+        interruptedAt: start.addingTimeInterval(300),
+        returnedAt: start.addingTimeInterval(600),
+        source: .drift,
+        reason: .temptingApp,
+        blockage: .temptingContent,
+        note: "Complete import"
+      )
+    )
+    try context.save()
+
+    try repository.repairActiveRecords(at: start.addingTimeInterval(2_000))
+
+    let sessions = try repository.sessions()
+    let interruptions = try repository.interruptions()
+    #expect(sessions.count == 1)
+    #expect(sessions.first?.intention == "Retained intention")
+    #expect(sessions.first?.endedAt == start.addingTimeInterval(1_800))
+    #expect(interruptions.count == 1)
+    #expect(interruptions.first?.isComplete == true)
+    #expect(interruptions.first?.note == "Complete import")
+  }
+
   @Test func dailySummarySplitsAtMidnightAndSubtractsRecovery() throws {
     var calendar = Calendar(identifier: .gregorian)
     calendar.timeZone = try #require(TimeZone(secondsFromGMT: 0))

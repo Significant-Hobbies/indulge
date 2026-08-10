@@ -56,7 +56,8 @@ The deploy-ready privacy copy is at `docs/app-store/privacy.html`. The product d
 
 - Tracking: No
 - Data collected: No
-- Profile, trades, Focus entries, and notes: stored locally on device
+- Profile, trades, Focus entries, and notes: stored locally first; private
+  iCloud sync must not be declared until its development verification is complete
 - Third-party advertising and analytics: none
 - IDFA: not used
 
@@ -73,7 +74,7 @@ Confirm the rating produced by App Store Connect's current questionnaire.
 
 ## Review notes
 
-No login, subscription, or external hardware is required. Complete onboarding to reach the Life, Focus, Trade, and History tabs. All current data remains local to the device. Apple Screen Time enforcement and iCloud sync are not part of this build. Optional on-device Focus tag suggestions appear only on supported Apple Intelligence devices; manual classification is always available.
+No Indulge login, subscription, or external hardware is required. Complete onboarding to reach the Life, Focus, Trade, and History tabs. Data saves locally first. Private iCloud sync is prepared but must be described as inactive until its signed two-device verification is recorded. Apple Screen Time enforcement is not part of this build. Optional on-device Focus suggestions and bounded reflection selection appear only on supported Apple Intelligence devices; manual classification and authored reflections are always available.
 
 ## Screenshots
 

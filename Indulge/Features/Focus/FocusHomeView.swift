@@ -50,6 +50,7 @@ struct FocusHomeView: View {
 
               dailySection
               patternSection
+              GroundedReflectionCard(profile: profile)
             }
             .padding(.horizontal, 22)
             .padding(.top, 24)
@@ -278,7 +279,7 @@ struct FocusHomeView: View {
         .foregroundStyle(Color.indulgeText.opacity(0.66))
       case .pattern(_, let reason, let blockage, let averageRecovery, let count):
         Text(
-          "Across \(count) interruptions, \(reason.title.lowercased()) appeared most often. \(blockage.shortTitle) most often slowed the return, with \(FocusTimeText.concise(averageRecovery)) average recovery."
+          "Across \(count) interruptions, \(reason.patternPhrase) appeared most often. \(blockage.shortTitle) most often slowed the return, with \(FocusTimeText.concise(averageRecovery)) average recovery."
         )
         .font(.indulgeBody)
         .foregroundStyle(Color.indulgeText.opacity(0.72))
@@ -591,7 +592,7 @@ private struct FocusReasonSheet: View {
   @State private var note: String
   @State private var suggesting = false
   @State private var errorMessage: String?
-  private let tagSuggester: any FocusTagSuggesting
+  private let intelligenceService: any AppleIntelligenceServing
 
   init(interruption: FocusInterruptionRecord, onSaved: @escaping () -> Void) {
     self.interruption = interruption
@@ -599,7 +600,7 @@ private struct FocusReasonSheet: View {
     _source = State(initialValue: interruption.source)
     _reason = State(initialValue: interruption.reason)
     _note = State(initialValue: interruption.note)
-    tagSuggester = FocusTagSuggesterFactory.make()
+    intelligenceService = AppleIntelligenceServiceFactory.make()
   }
 
   var body: some View {
@@ -658,7 +659,8 @@ private struct FocusReasonSheet: View {
                 in: RoundedRectangle(cornerRadius: 16, style: .continuous)
               )
 
-            if tagSuggester.availability == .available && !note.isEmpty {
+            if intelligenceService.capabilities.onDeviceIntelligence == .available && !note.isEmpty
+            {
               Button {
                 Task { await suggestTags() }
               } label: {
@@ -711,9 +713,15 @@ private struct FocusReasonSheet: View {
   private func suggestTags() async {
     suggesting = true
     defer { suggesting = false }
-    guard let suggestion = await tagSuggester.suggestTags(for: note) else { return }
-    source = suggestion.source
-    reason = suggestion.reason
+    do {
+      guard let suggestion = try await intelligenceService.suggestTags(for: note) else { return }
+      if source == nil { source = suggestion.source }
+      if reason == nil { reason = suggestion.reason }
+    } catch is CancellationError {
+      return
+    } catch {
+      errorMessage = "Suggestions are unavailable right now. Your choices are unchanged."
+    }
   }
 
   private var errorBinding: Binding<Bool> {

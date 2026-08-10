@@ -28,6 +28,8 @@ matching runtime installed on the development Mac (currently iOS 26.4) plus the
 newest installed runtime. The app does not call RealityKit APIs newer than the
 iOS 18 availability boundary.
 
-Planning lives in
-`openspec/changes/build-indulge-visual-proof/`. Operational work is tracked in
+Planning lives under `openspec/changes/`. The Apple-native intelligence, visual
+creation, privacy-lock, and private-sync preparation is tracked in
+[GitHub issue #3](https://github.com/Significant-Hobbies/indulge/issues/3).
+Physical visual-proof work remains tracked in
 [GitHub issue #1](https://github.com/Significant-Hobbies/indulge/issues/1).

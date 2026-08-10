@@ -266,6 +266,27 @@ larger brand lockups pair the symbol with the line **break the loop.**
   character identity, furniture, palette, and rounded white tray remain
   continuous across the handoff.
 
+### Optional Apple-native Layers
+
+- Grounded reflections sit below deterministic Life and Focus content in a
+  quiet Powder Soft card. They always show sample size and an authored,
+  evidence-backed sentence; model work never blocks the summary or exposes
+  prompt mechanics.
+- The future-life card is a personal keepsake below the authored room, not a
+  replacement hero. Creation is a deliberate button into Apple's system sheet,
+  appears functional only when supported, and offers clear replace and
+  destructive-confirmation delete actions.
+- Privacy Lock lives in the existing About sheet. Its system-authentication
+  toggle is off by default, explains passcode fallback, and offers immediate,
+  one-minute, and five-minute relock choices. The locked surface hides its
+  underlying accessibility tree and provides one prominent retry action.
+- Private CloudKit remains infrastructure, not identity UI. Never add an iCloud
+  sign-in imitation, Sign in with Apple, passkey enrollment, sync-success badge,
+  or account wall to onboarding. Local actions remain available when cloud
+  configuration, account state, or network access is unavailable.
+- These layers use Dynamic Type, native VoiceOver semantics, and settled states;
+  no custom motion is required to understand generation, locking, or retention.
+
 ### First Question
 
 - Let “What should we call you?” be the only headline.

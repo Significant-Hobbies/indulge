@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 import UIKit
 
@@ -107,6 +108,7 @@ struct IndulgeAppShell: View {
 }
 
 private struct LifeHomeView: View {
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
   let profile: OnboardingProfile
   let activeTrade: ActiveTrade?
   let openTrade: () -> Void
@@ -117,12 +119,12 @@ private struct LifeHomeView: View {
       NavigationStack {
         ScrollView {
           VStack(spacing: 0) {
-            IndulgeSceneHeader(profile: profile, title: greeting, height: 380)
+            IndulgeSceneHeader(profile: profile, title: greeting, height: sceneHeaderHeight)
 
             VStack(alignment: .leading, spacing: 24) {
               VStack(alignment: .leading, spacing: 8) {
                 Text("Your life, taking shape.")
-                  .font(.indulgeDisplay)
+                  .font(dynamicTypeSize.isAccessibilitySize ? .indulgeTitle : .indulgeDisplay)
                   .foregroundStyle(Color.indulgeText)
                   .fixedSize(horizontal: false, vertical: true)
 
@@ -147,6 +149,12 @@ private struct LifeHomeView: View {
                   FlowingDirectionRow(directions: profile.lifeDirections)
                 }
               }
+
+              if #available(iOS 18.1, *) {
+                FutureLifeCardSection(profile: profile)
+              }
+
+              GroundedReflectionCard(profile: profile)
             }
             .padding(.horizontal, 22)
             .padding(.top, 26)
@@ -167,12 +175,14 @@ private struct LifeHomeView: View {
         .ignoresSafeArea(edges: .top)
         .toolbar {
           ToolbarItem(placement: .topBarTrailing) {
-            Button { showsAbout = true } label: {
-              Image(systemName: "person.crop.circle")
+            Button {
+              showsAbout = true
+            } label: {
+              Image(systemName: "gearshape.circle")
                 .font(.system(size: 20, weight: .semibold))
             }
             .foregroundStyle(Color.indulgeText)
-            .accessibilityLabel("About Indulge")
+            .accessibilityLabel("Privacy and data settings")
           }
         }
         .sheet(isPresented: $showsAbout) {
@@ -184,6 +194,10 @@ private struct LifeHomeView: View {
 
   private var greeting: String {
     profile.displayName == "you" ? "Your room" : "\(profile.displayName)’s room"
+  }
+
+  private var sceneHeaderHeight: CGFloat {
+    dynamicTypeSize.isAccessibilitySize ? 280 : 380
   }
 
   private var patternSentence: String {
@@ -252,6 +266,15 @@ private struct LifeHomeView: View {
 
 private struct IndulgeAboutView: View {
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
+  @AppStorage(PrivacyLockSettingsStore.enabledKey) private var privacyLockEnabled = false
+  @AppStorage(PrivacyLockSettingsStore.relockAfterKey) private var privacyRelockAfter =
+    PrivacyLockSettingsStore.defaultRelockAfter
+  @State private var isUpdatingPrivacyLock = false
+  @State private var privacyMessage: String?
+  @State private var confirmsDataDeletion = false
+  private let authenticationService: any DeviceOwnerAuthenticating =
+    LocalDeviceOwnerAuthenticationService()
 
   var body: some View {
     NavigationStack {
@@ -261,16 +284,60 @@ private struct IndulgeAboutView: View {
             Text("Keep the pleasure. Reclaim the time.")
               .font(.indulgeTitle)
               .foregroundStyle(Color.indulgeText)
-            Text("Your profile, trades, and Focus journal stay on this device.")
-              .font(.indulgeBody)
-              .foregroundStyle(Color.indulgeText.opacity(0.68))
+            Text(
+              "Your profile, trades, and Focus journal are local-first. Private iCloud sync is used only when a supported build is configured for it."
+            )
+            .font(.indulgeBody)
+            .foregroundStyle(Color.indulgeText.opacity(0.68))
           }
           .padding(.vertical, 6)
         }
 
         Section("About") {
-          Link("Privacy", destination: URL(string: "https://indulge.significanthobbies.com/privacy")!)
+          Link(
+            "Privacy", destination: URL(string: "https://indulge.significanthobbies.com/privacy")!)
           Link("Support", destination: URL(string: "https://indulge.significanthobbies.com")!)
+        }
+
+        Section("Your data") {
+          Button("Delete all Indulge data", role: .destructive) {
+            confirmsDataDeletion = true
+          }
+          Text(
+            "Deletes your profile, Focus history, reflections, and generated card. This cannot be undone."
+          )
+          .font(.footnote)
+          .foregroundStyle(.secondary)
+        }
+
+        Section("Privacy Lock") {
+          Toggle(
+            "Require device authentication",
+            isOn: Binding(
+              get: { privacyLockEnabled },
+              set: updatePrivacyLock
+            )
+          )
+          .disabled(
+            isUpdatingPrivacyLock
+              || (!privacyLockEnabled && authenticationService.availability == .unavailable)
+          )
+
+          if privacyLockEnabled {
+            Picker("Lock after leaving", selection: $privacyRelockAfter) {
+              Text("Immediately").tag(TimeInterval(0))
+              Text("1 minute").tag(TimeInterval(60))
+              Text("5 minutes").tag(TimeInterval(300))
+            }
+          }
+
+          Text(
+            authenticationService.availability == .available
+              ? "Uses Face ID, Touch ID, or your device passcode. Indulge stores no biometric data."
+              : "Set up a device passcode or biometric authentication to use Privacy Lock."
+          )
+          .font(.footnote)
+          .foregroundStyle(.secondary)
         }
       }
       .navigationTitle("Indulge")
@@ -283,6 +350,66 @@ private struct IndulgeAboutView: View {
     }
     .presentationDetents([.medium])
     .tint(Color.indulgeCherry)
+    .alert("Privacy Lock", isPresented: privacyMessageBinding) {
+      Button("OK", role: .cancel) {}
+    } message: {
+      Text(privacyMessage ?? "Please try again.")
+    }
+    .confirmationDialog(
+      "Delete all Indulge data?",
+      isPresented: $confirmsDataDeletion,
+      titleVisibility: .visible
+    ) {
+      Button("Delete all data", role: .destructive, action: deleteAllData)
+      Button("Keep my data", role: .cancel) {}
+    } message: {
+      Text(
+        "This removes local records and asks private iCloud sync to remove synchronized copies when configured."
+      )
+    }
+  }
+
+  private func updatePrivacyLock(_ requested: Bool) {
+    guard !isUpdatingPrivacyLock else { return }
+    isUpdatingPrivacyLock = true
+    Task { @MainActor in
+      let outcome = await PrivacyLockSettingsController(
+        authentication: authenticationService,
+        store: PrivacyLockSettingsStore()
+      ).setEnabled(requested)
+      privacyLockEnabled = PrivacyLockSettingsStore().isEnabled
+      isUpdatingPrivacyLock = false
+
+      if requested, outcome != .authenticated {
+        privacyMessage =
+          authenticationService.availability == .unavailable
+          ? "Device authentication is unavailable, so Privacy Lock was not enabled."
+          : "Privacy Lock was not enabled. Your app remains available as before."
+      }
+    }
+  }
+
+  private var privacyMessageBinding: Binding<Bool> {
+    Binding(
+      get: { privacyMessage != nil },
+      set: { if !$0 { privacyMessage = nil } }
+    )
+  }
+
+  private func deleteAllData() {
+    do {
+      try AllIndulgeDataRepository(
+        context: modelContext,
+        cardAssets: FutureLifeCardAssetStore()
+      ).deleteAll()
+      OnboardingProfileStore().delete()
+      privacyLockEnabled = false
+      privacyRelockAfter = PrivacyLockSettingsStore.defaultRelockAfter
+      NotificationCenter.default.post(name: .indulgeAllDataDeleted, object: nil)
+      dismiss()
+    } catch {
+      privacyMessage = "Your data could not be completely deleted. Please try again."
+    }
   }
 }
 

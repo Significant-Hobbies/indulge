@@ -54,6 +54,19 @@ enum FocusInterruptionReason: String, CaseIterable, Codable, Hashable, Sendable 
     }
   }
 
+  var patternPhrase: String {
+    switch self {
+    case .personOrCall: "a person or call reaching me"
+    case .message: "a message or notification"
+    case .difficultTask: "the work becoming difficult"
+    case .randomThought: "a thought pulling me away"
+    case .temptingApp: "opening something tempting"
+    case .noise: "noise or my surroundings"
+    case .bodyNeed: "a body need"
+    case .other: "something else"
+    }
+  }
+
   var icon: String {
     switch self {
     case .personOrCall: "phone.fill"
@@ -116,9 +129,11 @@ enum FocusReturnBlockage: String, CaseIterable, Codable, Hashable, Sendable {
 
 @Model
 final class FocusSessionRecord {
-  @Attribute(.unique) var id: UUID
-  var intention: String
-  var startedAt: Date
+  #Index<FocusSessionRecord>([\.id])
+
+  var id: UUID = UUID()
+  var intention: String = ""
+  var startedAt: Date = Date.now
   var endedAt: Date?
 
   init(
@@ -136,14 +151,16 @@ final class FocusSessionRecord {
 
 @Model
 final class FocusInterruptionRecord {
-  @Attribute(.unique) var id: UUID
-  var sessionID: UUID
-  var interruptedAt: Date
+  #Index<FocusInterruptionRecord>([\.id], [\.sessionID])
+
+  var id: UUID = UUID()
+  var sessionID: UUID = UUID()
+  var interruptedAt: Date = Date.now
   var returnedAt: Date?
   var sourceRawValue: String?
   var reasonRawValue: String?
   var blockageRawValue: String?
-  var note: String
+  var note: String = ""
 
   init(
     id: UUID = UUID(),
@@ -227,21 +244,62 @@ extension FocusInterruptionRecord {
 }
 
 enum FocusModelContainer {
-  static func make(inMemory: Bool = false, storeURL: URL? = nil) throws -> ModelContainer {
+  static let privateCloudKitContainerIdentifier = "iCloud.com.significanthobbies.indulge"
+
+  enum CloudSyncSelection: Equatable, Sendable {
+    case localOnly
+    case privateDatabase(containerIdentifier: String)
+
+    static var applicationDefault: Self {
+      #if targetEnvironment(simulator)
+        .localOnly
+      #else
+        .privateDatabase(containerIdentifier: privateCloudKitContainerIdentifier)
+      #endif
+    }
+  }
+
+  static func make(
+    inMemory: Bool = false,
+    storeURL: URL? = nil,
+    cloudSync: CloudSyncSelection = .applicationDefault
+  ) throws -> ModelContainer {
     let configuration: ModelConfiguration
     if let storeURL {
       configuration = ModelConfiguration(url: storeURL, cloudKitDatabase: .none)
-    } else {
+    } else if inMemory {
       configuration = ModelConfiguration(
-        isStoredInMemoryOnly: inMemory,
+        isStoredInMemoryOnly: true,
         groupContainer: .none,
         cloudKitDatabase: .none
       )
+    } else {
+      let cloudKitDatabase: ModelConfiguration.CloudKitDatabase
+      switch cloudSync {
+      case .localOnly:
+        cloudKitDatabase = .none
+      case .privateDatabase(let containerIdentifier):
+        cloudKitDatabase = .private(containerIdentifier)
+      }
+      configuration = ModelConfiguration(
+        isStoredInMemoryOnly: false,
+        groupContainer: .none,
+        cloudKitDatabase: cloudKitDatabase
+      )
     }
+    let schema = Schema(versionedSchema: IndulgeDataSchemaV1.self)
     return try ModelContainer(
+      for: schema,
+      migrationPlan: IndulgeDataMigrationPlan.self,
+      configurations: configuration
+    )
+  }
+
+  static func makeLegacyStore(at storeURL: URL) throws -> ModelContainer {
+    try ModelContainer(
       for: FocusSessionRecord.self,
       FocusInterruptionRecord.self,
-      configurations: configuration
+      configurations: ModelConfiguration(url: storeURL, cloudKitDatabase: .none)
     )
   }
 }
@@ -326,6 +384,8 @@ struct FocusRepository {
   }
 
   func repairActiveRecords(at date: Date = .now) throws {
+    try deduplicateEvents()
+
     let openSessions = try sessions().filter { $0.endedAt == nil }
     if openSessions.count > 1 {
       let newest = openSessions[0]
@@ -348,5 +408,55 @@ struct FocusRepository {
       context.delete(orphan)
     }
     try context.save()
+  }
+
+  func deduplicateEvents() throws {
+    for duplicates in Dictionary(grouping: try sessions(), by: \FocusSessionRecord.id).values
+    where duplicates.count > 1 {
+      let ordered = duplicates.sorted { lhs, rhs in
+        let lhsScore = (lhs.endedAt == nil ? 0 : 2) + (lhs.intention.isEmpty ? 0 : 1)
+        let rhsScore = (rhs.endedAt == nil ? 0 : 2) + (rhs.intention.isEmpty ? 0 : 1)
+        if lhsScore != rhsScore { return lhsScore > rhsScore }
+        return lhs.startedAt < rhs.startedAt
+      }
+      guard let retained = ordered.first else { continue }
+      for duplicate in ordered.dropFirst() {
+        if retained.intention.isEmpty { retained.intention = duplicate.intention }
+        retained.startedAt = min(retained.startedAt, duplicate.startedAt)
+        if let duplicateEnd = duplicate.endedAt {
+          retained.endedAt = max(retained.endedAt ?? duplicateEnd, duplicateEnd)
+        }
+        context.delete(duplicate)
+      }
+    }
+
+    for duplicates in Dictionary(grouping: try interruptions(), by: \FocusInterruptionRecord.id)
+      .values where duplicates.count > 1
+    {
+      let ordered = duplicates.sorted { lhs, rhs in
+        let lhsScore = [
+          lhs.returnedAt != nil, lhs.source != nil, lhs.reason != nil,
+          lhs.blockage != nil, !lhs.note.isEmpty,
+        ].filter { $0 }.count
+        let rhsScore = [
+          rhs.returnedAt != nil, rhs.source != nil, rhs.reason != nil,
+          rhs.blockage != nil, !rhs.note.isEmpty,
+        ].filter { $0 }.count
+        if lhsScore != rhsScore { return lhsScore > rhsScore }
+        return lhs.interruptedAt < rhs.interruptedAt
+      }
+      guard let retained = ordered.first else { continue }
+      for duplicate in ordered.dropFirst() {
+        retained.interruptedAt = min(retained.interruptedAt, duplicate.interruptedAt)
+        if let duplicateReturn = duplicate.returnedAt {
+          retained.returnedAt = max(retained.returnedAt ?? duplicateReturn, duplicateReturn)
+        }
+        if retained.source == nil { retained.source = duplicate.source }
+        if retained.reason == nil { retained.reason = duplicate.reason }
+        if retained.blockage == nil { retained.blockage = duplicate.blockage }
+        if retained.note.isEmpty { retained.note = duplicate.note }
+        context.delete(duplicate)
+      }
+    }
   }
 }

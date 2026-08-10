@@ -54,7 +54,7 @@ outgrown rather than retained through guilt, streaks, or competitive pressure.
 
 ## Capabilities and Constraints
 
-- Native SwiftUI iPhone app with local-first persistence and no account.
+- Native SwiftUI iPhone app with local-first persistence and no Indulge account wall.
 - Name and gender are optional onboarding context. Gender supports
   self-description and prefer-not-to-say; neither answer is used to infer
   behavior or prescribe a different intervention.
@@ -68,6 +68,23 @@ outgrown rather than retained through guilt, streaks, or competitive pressure.
   work offline without Apple Intelligence. On supported devices, Apple's
   on-device model may suggest bounded tags from an optional note, but the user
   remains authoritative.
+- Grounded reflections use only typed profile choices and calculated Focus
+  aggregates after three complete observations. Apple Foundation Models may
+  choose a bounded emphasis on supported devices; authored wording remains
+  visible during unavailable, cancelled, and failed states, and no model may
+  invent events, causes, diagnoses, durations, or advice.
+- A future-life card is an optional post-onboarding keepsake presented through
+  Apple's system Image Playground sheet. It uses only selected life directions,
+  is copied into app-owned storage after success, and can be replaced or deleted.
+  Generated imagery never replaces the authored character or room.
+- Privacy Lock is off by default. If enabled after successful device-owner
+  authentication, it obscures private profile, Focus, and History content whenever
+  the app leaves the active state, then requires authentication after the selected
+  relock interval. It supports Face ID, Touch ID, or device-passcode fallback.
+- Private CloudKit sync is prepared for properly entitled signed builds and
+  remains local-first. Simulator, preview, test, failed-container, signed-out,
+  and offline paths keep local recording usable. No sync status is claimed until
+  two-device development verification is complete.
 - Screen Time integrations use FamilyControls, DeviceActivity,
   ManagedSettings, and ManagedSettingsUI with manual fallback.
 - Core functionality works offline. Raw Screen Time history, selected app
@@ -98,9 +115,10 @@ outgrown rather than retained through guilt, streaks, or competitive pressure.
   `/Users/sarthak/Downloads/indulge_ios_visual_prd.md`.
 - Significant Hobbies issue #65 records the product boundary and research
   relationship but is reference-only, not Indulge’s operational work queue.
-- No production character art, Rive rig, user research, testimonials,
-  benchmarks, analytics, or App Store assets exist yet and must not be
-  fabricated as evidence.
+- The repository contains authored scene plates, a shipping app icon, and
+  prepared App Store screenshots. No reusable production 3D character rig,
+  user research, testimonials, benchmarks, or analytics exist yet and none may
+  be fabricated as evidence.
 
 ## Product Principles
 
