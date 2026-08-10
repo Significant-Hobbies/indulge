@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#E1F0FC"/>
+
+  <!-- The repeated daily routine. -->
+  <path d="M 808 556 A 252 252 0 1 1 805 250"
+        fill="none"
+        stroke="#0C1C38"
+        stroke-width="72"
+        stroke-linecap="round"/>
+
+  <!-- Repeated actions on the routine. -->
+  <rect x="312" y="378" width="72" height="72" rx="25" fill="#0C1C38" stroke="#E1F0FC" stroke-width="10"/>
+  <rect x="522" y="620" width="72" height="72" rx="25" fill="#0C1C38" stroke="#E1F0FC" stroke-width="10"/>
+
+  <!-- One changed action, then the altered trajectory. -->
+  <path d="M 810 255 C 878 225 932 174 980 118"
+        fill="none"
+        stroke="#0C1C38"
+        stroke-width="72"
+        stroke-linecap="round"/>
+  <path d="M 946 86 L 1040 50 L 1008 143 Z" fill="#0C1C38"/>
+  <rect x="769" y="214" width="82" height="82" rx="28" fill="#DB293B" stroke="#E1F0FC" stroke-width="10"/>
+
+  <text x="600" y="890"
+        text-anchor="middle"
+        fill="#0C1C38"
+        font-family="SF Pro Rounded, -apple-system, BlinkMacSystemFont, sans-serif"
+        font-size="112"
+        font-weight="800"
+        letter-spacing="-3">indulge</text>
+  <text x="600" y="982"
+        text-anchor="middle"
+        fill="#DB293B"
+        font-family="SF Pro Rounded, -apple-system, BlinkMacSystemFont, sans-serif"
+        font-size="58"
+        font-weight="650"
+        letter-spacing="-1">break the loop.</text>
+</svg>

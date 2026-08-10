@@ -1,0 +1,19 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+
+# Local tools
+.DS_Store
+.swiftpm/
+
+# Generated review output
+artifacts/design/after-*.png
+artifacts/DerivedData/
+artifacts/design/evidence/*.trace/
+artifacts/design/evidence/first-screen-correction/phone-scrolling-arrival-v2.mp4
+artifacts/design/evidence/first-screen-correction/phone-scrolling-arrival-v3.mp4
+artifacts/design/review/activities-feminine-motion.mp4
+artifacts/design/review/onboarding-tv-assembly.mov
+artifacts/performance/

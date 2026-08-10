@@ -1,0 +1,84 @@
+# Indulge App Store submission draft
+
+Preparation only. Do not create, upload, publish, or submit an App Store Connect record from this repository.
+
+## Identity
+
+- Name: Indulge
+- Bundle ID: `com.significanthobbies.indulge`
+- SKU: `indulge-ios-1`
+- Version: `0.1.0`
+- Build: `1`
+- Primary language: English (U.S.)
+- Primary category: Health & Fitness
+- Secondary category: Lifestyle
+- Copyright: `2026 Sarthak Agrawal`
+- License: Apple's standard EULA
+- Content rights: Indulge owns or is licensed to use the bundled artwork and app content.
+
+## Store copy
+
+**Subtitle**
+Keep pleasure. Reclaim time.
+
+**Promotional text**
+Notice where attention escapes, keep the pleasures you choose, and trade one small pocket of automatic time for more of the life you want.
+
+**Description**
+Enjoy on purpose.
+
+Indulge is a private, gentle way to notice where time gets pulled away and make room for something you want more. It does not ask you to quit every pleasure, chase a streak, or turn your life into a score.
+
+Begin with a visual conversation about the activities you genuinely enjoy, the moments that run longer than intended, and the life directions you want to make room for. Your choices shape a personal living scene that carries through the app.
+
+• Keep intentional indulgence without shame
+• Make one small, explicit time trade
+• Record Focus interruptions and the path back
+• See daily recovery time without productivity scoring
+• Keep your profile, trades, and journal private on your device
+• Use the core experience offline with no account
+• Explore with VoiceOver, Dynamic Type, and Reduce Motion support
+
+Indulge is a reflective wellbeing tool, not medical care, addiction treatment, or Screen Time enforcement. If a habit is causing serious harm, consider seeking qualified professional support.
+
+**Keywords**
+focus,time,attention,habits,wellbeing,journal,intention,screen time,reflection
+
+## URLs
+
+- Support: `https://indulge.significanthobbies.com`
+- Marketing: `https://indulge.significanthobbies.com`
+- Privacy: `https://indulge.significanthobbies.com/privacy`
+
+The deploy-ready privacy copy is at `docs/app-store/privacy.html`. The product domain and privacy route must resolve over HTTPS before submission.
+
+## App privacy answers
+
+- Tracking: No
+- Data collected: No
+- Profile, trades, Focus entries, and notes: stored locally on device
+- Third-party advertising and analytics: none
+- IDFA: not used
+
+## Age rating draft
+
+- Made for Kids: No
+- Gambling, contests, simulated gambling, loot boxes: None
+- Sexual content, profanity, horror, violence: None
+- Medical or treatment claims: None
+- User-generated content, messaging, unrestricted web access: None
+- Alcohol or tobacco references: Infrequent/Mild, because the optional visual reflection catalog can neutrally mirror a user-selected alcohol context
+
+Confirm the rating produced by App Store Connect's current questionnaire.
+
+## Review notes
+
+No login, subscription, or external hardware is required. Complete onboarding to reach the Life, Focus, Trade, and History tabs. All current data remains local to the device. Apple Screen Time enforcement and iCloud sync are not part of this build. Optional on-device Focus tag suggestions appear only on supported Apple Intelligence devices; manual classification is always available.
+
+## Screenshots
+
+- iPhone 6.9-inch portrait sequence (`1206 × 2622`): `onboarding.png`, `life-clean.png`, `focus.png`, `trade.png`, and `history.png` in `artifacts/app-store/iphone-6.9`
+- iPad 13-inch portrait sequence (`2064 × 2752`): `onboarding.png`, `life.png`, `focus.png`, `trade.png`, and `history.png` in `artifacts/app-store/ipad-13`
+- Both sets use Apple-accepted dimensions and were captured from deterministic simulator routes
+- App previews: omit for version 0.1.0
+- Release: manual

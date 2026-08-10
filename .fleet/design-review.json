@@ -1,0 +1,304 @@
+{
+  "$schema": "fleet.design-review.v1",
+  "version": 1,
+  "project": "induldge",
+  "target": "Daily app shell and Focus interruption journal",
+  "mode": "preserve",
+  "register": "product",
+  "context": {
+    "product": "PRODUCT.md",
+    "design": "DESIGN.md"
+  },
+  "direction": {
+    "references": [
+      "Owner-provided rounded 3D sofa quality benchmark",
+      "Native iOS motion and control conventions",
+      "docs/design/activity-stack-overhaul-brief.md"
+    ],
+    "probes": [
+      "artifacts/design/directions/activity-stack-a-scene-composer.png",
+      "artifacts/design/directions/activity-stack-b-story-deck.png",
+      "artifacts/design/directions/activity-stack-c-room-palette.png",
+      "artifacts/design/directions/activity-stack-d-distilled-shelf.png",
+      "artifacts/design/directions/activity-stack-e1-daylight-cobalt.png",
+      "artifacts/design/directions/activity-stack-e2-powder-cherry.png",
+      "artifacts/design/directions/activity-stack-e3-ink-tangerine.png"
+    ],
+    "selected": "existing-design",
+    "approval": "not-required",
+    "before": "artifacts/design/review/activity-catalog-all-visible-ios27.png"
+  },
+  "evidence": {
+    "historicalScreenshots": [
+      {
+        "width": 942,
+        "path": "artifacts/design/evidence/first-screen-correction/phone-opening-no-skip.png"
+      },
+      {
+        "width": 942,
+        "path": "artifacts/design/evidence/first-screen-correction/phone-keyboard-final.png"
+      },
+      {
+        "width": 942,
+        "path": "artifacts/design/evidence/first-screen-correction/phone-activities-final.png"
+      },
+      {
+        "width": 942,
+        "path": "artifacts/design/evidence/first-screen-correction/phone-scrolling-hand-v2.png"
+      },
+      {
+        "width": 1206,
+        "path": "artifacts/design/evidence/personal-onboarding/phone-opening-tray-final.png"
+      },
+      {
+        "width": 1206,
+        "path": "artifacts/design/evidence/personal-onboarding/phone-activities-tray-final.png"
+      },
+      {
+        "width": 1206,
+        "path": "artifacts/design/evidence/personal-onboarding/phone-time-tray-final.png"
+      },
+      {
+        "width": 1668,
+        "path": "artifacts/design/evidence/personal-onboarding/ipad-opening-tray-final.png"
+      },
+      {
+        "width": 1206,
+        "path": "artifacts/design/evidence/personal-onboarding/phone-opening-large-text-final.png"
+      },
+      {
+        "width": 1206,
+        "path": "artifacts/design/evidence/personal-onboarding/phone-reduce-motion-tray-final.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activities-feminine-402x874.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activities-masculine-402x874.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activities-scroll-affordance-402x874.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activities-complete-cards-402x874.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/hybrid-after-keyboard-focal.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/hybrid-after-purpose.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/hybrid-after-life.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/hybrid-after-time.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/continuity-name-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/continuity-keyboard-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/continuity-activities-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/current-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-full-bleed-deck-final-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-full-bleed-deck-dynamic-type-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-family-watch-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-family-scroll-final-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-family-browse-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-family-game-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-catalog-listen-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-catalog-rest-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-catalog-social-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/activity-catalog-all-visible-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/coherent-app/onboarding-time-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/coherent-app/onboarding-time-accessibility-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/coherent-app/life-final-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/coherent-app/trade-final-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/coherent-app/trade-active-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/coherent-app/history-final-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/coherent-app/onboarding-multiple-moments-ios27.png"
+      },
+      {
+        "width": 441,
+        "path": "artifacts/design/review/coherent-app/trade-visual-exchange-ios27-refined.png"
+      },
+      {
+        "width": 441,
+        "path": "artifacts/design/review/coherent-app/trade-visual-exchange-active-ios27.png"
+      },
+      {
+        "width": 441,
+        "path": "artifacts/design/review/coherent-app/life-width-bound-ios27.png"
+      },
+      {
+        "width": 441,
+        "path": "artifacts/design/review/coherent-app/trade-width-bound-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/focus-journal/idle-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/focus-journal/active-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/focus-journal/interrupted-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/focus-journal/populated-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/focus-journal/pattern-ios27.png"
+      },
+      {
+        "width": 402,
+        "path": "artifacts/design/review/focus-journal/interrupted-accessibility-xl-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/focus-journal/populated-light-current-ios27.png"
+      },
+      {
+        "width": 768,
+        "path": "artifacts/design/review/focus-journal/ipad-populated-dark-ios27.png"
+      },
+      {
+        "width": 1440,
+        "path": "artifacts/design/review/focus-journal/populated-dark-ios27.png"
+      }
+    ],
+    "screenshots": [
+      {
+        "width": 390,
+        "path": "artifacts/design/review/focus-journal/populated-light-current-ios27.png"
+      },
+      {
+        "width": 390,
+        "path": "artifacts/design/review/focus-journal/populated-dark-ios27.png"
+      },
+      {
+        "width": 768,
+        "path": "artifacts/design/review/focus-journal/ipad-populated-dark-ios27.png"
+      },
+      {
+        "width": 1440,
+        "path": "artifacts/design/review/focus-journal/ipad-populated-dark-ios27.png"
+      }
+    ],
+    "projectCheck": {
+      "command": "INDULGE_TEST_DESTINATION='platform=iOS Simulator,id=38FDB30B-69F2-406E-A253-17183F2348BE' ./scripts/test.sh && INDULGE_TEST_DESTINATION='platform=iOS Simulator,id=A86B9324-6FC9-4170-A074-F34A47F13131' ./scripts/test.sh && openspec validate add-focus-interruption-journal --strict && git diff --check",
+      "status": "pass"
+    },
+    "critique": {
+      "score": 39,
+      "maximum": 40
+    },
+    "audit": {
+      "score": 19,
+      "maximum": 20
+    },
+    "unresolved": {
+      "p0": 0,
+      "p1": 0
+    },
+    "detector": {
+      "posture": "advisory",
+      "findings": [
+        "Main-agent review used the installed Impeccable onboarding and craft-floor guidance plus focused feminine and masculine simulator evidence. The common television-phone-drink coupling has four causal image states; the remaining launch recipes use authored selectors until full-room plates are produced.",
+        "Owner found the cropped-card scroll affordance unclear, then rejected partially visible later options. The follow-up shows exactly two complete cards plus a concise 24-choice count and a tappable More choices arrow that advances the native horizontal row.",
+        "Owner proposed a hybrid that keeps scene imagery visible even for long prompts. The latest phone evidence uses a cinematic stage for sparse visual decisions and a persistent compact scene rail for dense answer lists and keyboard entry; the keyboard crop is authored to keep the character's face visible.",
+        "Owner said the screenshots were beautiful but the live app did not carry the quality through. Inspection found four competing booted simulators, eager loading of all large images, and a real scene-continuity defect: the male dark-room opening changed into a feminine blue-room indulgence plate. The current iOS 27 evidence lazy-loads only visible art and uses matching feminine and masculine standing plates so character, clothing, room, camera, and lighting carry into the sofa and prop states.",
+        "The iOS 27 motion proof at artifacts/design/review/onboarding-tv-assembly.mp4 now holds the standing state, assembles the sofa and seated character, brings in the television, and then resolves phone and wine as additive arrivals in the same room.",
+        "The activity beat now extends the authored scene behind the Dynamic Island while keeping controls inside the safe area. A two-by-two paged deck shows four complete choices, explicit page position, and a pinned primary action; accessibility Dynamic Type reflows the deck to one column inside the independently scrolling prompt tray.",
+        "The anonymous six-page catalog proved difficult to navigate and overstated scene coverage. The first replacement kept four scene-backed families visible and temporarily hid unfinished indulgences rather than presenting weak generic fallbacks.",
+        "The complete catalog now keeps all eight families visible in a two-by-four control grid and restores all twenty-four indulgences. The selected family's choices use a two-column grid on standard Dynamic Type so even the five-item Taste family is fully visible without a hidden-scroll dependency.",
+        "Eight new identity-matched room plates cover Listen, Taste, Rest, and Social in feminine and masculine presentations. Together with Watch, Scroll, Browse, and Game, every visible indulgence now resolves to a complete character-and-environment scene; the production generic floating-selector fallback has been removed.",
+        "Owner identified that the polished activity beat and the rest of onboarding looked like different applications. The current preserve pass extends Powder Sky, white material, navy type, Cherry selection, the generated room, and the anchored primary action through text entry, single choice, dense lists, accessibility Dynamic Type, and the reflection.",
+        "Onboarding completion now enters a native Life, Trade, and History shell with the same character and room. Life begins with the scene and the user's stated pattern, Trade creates one local reclaim target, and History remains an instructive empty state instead of fabricating charts.",
+        "Owner asked for the earlier advanced personalization questions to become part of the main onboarding and for repeated pull moments to combine. The current journey contains all twelve questions in one route, and the timing beat uses independent multi-select cards with persistent checks, a selected count, and natural combined reflection language.",
+        "Owner asked how distraction is handled and required different images for what people switch out of. The refined Trade surface keeps V0 reporting manual and non-judgmental, pairs the actual indulgence artwork with one of eight distinct identity-neutral destination vignettes, and carries that selected destination into the active Trade and Life summary.",
+        "Owner reported horizontal bleed on Life. The nested horizontal direction row had been allowed to influence the vertical page's ideal width. Life and Trade now receive an explicit width from the active window; simulator evidence confirms wrapped copy, bounded cards and actions, all three native tab items, and horizontal scrolling only inside the intended rows.",
+        "The Focus journal is now a first-class fourth tab. One tap persists an interruption before classification; a cut thread shows live recovery, the return asks for a bounded blockage, and factual daily rows generalize only after three complete observations.",
+        "The Impeccable finish pass found that the first Focus hero abandoned the selected character and that its live header failed at Accessibility XL. The final surface reuses the onboarding character and room, bounds the hero to the viewport, stacks the session label and timer at accessibility sizes, labels cross-midnight recovery as carried over, and has zero unresolved P0/P1 findings.",
+        "The issue #2 re-audit scored 39/40 with zero product P0/P1/P2 findings after automatic relaunch restoration, adaptive Light/Dark semantic colors, and truthful zero-duration copy. Current phone light/dark and iPad dark evidence is registered; the 768 and 1440 receipt widths are native tablet/wide review equivalents rather than browser viewport claims.",
+        "The bundled Impeccable detector returned no advisory matches for FocusHomeView.swift or IndulgeAppShell.swift. Its generic Swift text scan does not replace the independent rendered/native reviews."
+      ]
+    }
+  },
+  "ownerFeedback": {
+    "decision": "delegated",
+    "note": "The owner asked the agent to complete the open issue sequence and delegated the final implementation judgment. The bounded issue #2 finish review passes at 39/40 critique and 19/20 native audit with zero unresolved P0/P1; current Light, Dark, iPhone, iPad, Dynamic Type, and Focus-state evidence is registered. Issue #1 remains open and is not covered by this delegated closure."
+  }
+}

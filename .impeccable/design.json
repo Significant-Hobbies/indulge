@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-08T00:00:00Z",
+  "title": "Design System: Indulge",
+  "extensions": {
+    "colorMeta": {
+      "scene-deep-teal": {
+        "role": "primary",
+        "displayName": "Scene Deep Teal",
+        "canonical": "#17675F"
+      },
+      "scene-mint": {
+        "role": "secondary",
+        "displayName": "Scene Mint",
+        "canonical": "#7BC8A4"
+      },
+      "character-lilac": {
+        "role": "tertiary",
+        "displayName": "Character Lilac",
+        "canonical": "#9C7DCC"
+      },
+      "lamp-cream": {
+        "role": "neutral",
+        "displayName": "Lamp Cream",
+        "canonical": "#F4E5BE"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Rounded Display",
+        "purpose": "Emotionally important prompts only."
+      },
+      "body": {
+        "displayName": "Native Body",
+        "purpose": "Short explanatory copy using Dynamic Type."
+      }
+    },
+    "shadows": [
+      {
+        "name": "scene-contact",
+        "value": "soft area shadow with a visible downward offset",
+        "purpose": "Makes spawned props feel weighted into the same world."
+      }
+    ],
+    "motion": [
+      {
+        "name": "prop-arrival",
+        "value": "anticipate 80ms, spring overshoot, settle within 700ms",
+        "purpose": "Primary object creation after a user choice."
+      },
+      {
+        "name": "hero-recompose",
+        "value": "interruptible authored transition lasting 1.2–1.8s",
+        "purpose": "Character and room transformations."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "crossfade plus in-place state change",
+        "purpose": "Preserve causal clarity without spatial movement."
+      }
+    ]
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "The Room Assembles Around You",
+    "overview": "An abstract soft-form 3D world where user choices physically compose the character's scene, with quiet native controls around it.",
+    "keyCharacteristics": [
+      "rounded matte 3D forms",
+      "sparse cinematic composition",
+      "causal object spawning",
+      "posture-led character emotion",
+      "native iOS controls"
+    ],
+    "rules": [
+      {
+        "name": "No Moral Lighting",
+        "body": "Growth adds breadth and specificity rather than turning darkness into goodness.",
+        "section": "colors"
+      },
+      {
+        "name": "Contact",
+        "body": "Every spawned object settles through weight, contact shadow, and character response.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Make each choice visibly recompose character, prop, and space.",
+      "Keep no more than three ambient loops active at once."
+    ],
+    "donts": [
+      "Do not trace or ship the supplied quality-reference asset.",
+      "Do not use mascot proportions, hyper-detail, or photoreal materials.",
+      "Do not use generic gamification rewards or scene decay."
+    ]
+  }
+}
