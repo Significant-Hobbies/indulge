@@ -32,11 +32,30 @@ Developer Mode, select it as Xcode's run destination, and press Run. Xcode can
 create the personal provisioning profile automatically when the Apple Account
 is signed in under Xcode > Settings > Accounts.
 
-The current personal-team profile is valid for one year, and a signed archive
-completed successfully. The TestFlight upload reached App Store Connect and
-stopped only because the app record for `com.significanthobbies.indulge` does
-not exist yet. This indicates the personal team can use the paid distribution
-path even though a free Personal Team could not.
+An earlier signed archive predates the selected production icon and is not
+accepted as current readiness evidence. No App Store Connect upload, tester
+invitation, or public release is part of this preparation task.
+
+## Verified local readiness
+
+On 2026-08-11, the generated project completed an unsigned Release build for a
+generic iOS Simulator destination. The 1024×1024 shipping icon is opaque, the
+32px and 64px favicon exports are present, the privacy manifest declares the
+app-local UserDefaults reason, the privacy manifest and export options pass
+`plutil`, and both shell scripts pass `zsh -n`. The prepared opaque JPEG store
+screenshots are 1320×2868 for iPhone 6.9-inch and 2064×2752 for iPad 13-inch.
+
+This check proves local Release compilation and package preparation. The
+current icon also completed an unsigned generic-device archive at
+`build/Indulge-Unsigned.xcarchive`. Its bundle identity is
+`com.significanthobbies.indulge` version `0.1.0` build `1`; its bundled privacy
+manifest passes `plutil`; and its compiled 120px phone and 152px iPad icon
+renditions contain the selected sprout mark. The archive is local evidence only
+and is not signed or distributable.
+
+These checks do not repeat or replace device signing, App Store validation,
+App Store Connect record creation, upload, tester invitation, or release. Those
+remain explicit manual steps below.
 
 ## Beta information
 

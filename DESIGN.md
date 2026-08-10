@@ -198,11 +198,12 @@ native continuous corners and never imitate 3D props.
 
 The current icon makes the product promise literal: a Navy circular routine
 contains repeated daily action points, while one Cherry action redirects the
-path into a clear outward arrow. It represents a life changing through one
-quietly altered daily decision rather than one dramatic transformation. The
-Powder Sky field keeps the mark warm and recognizable. The App Store icon has
-no wordmark or baked-in corner mask; larger brand lockups pair the symbol with
-the line **break the loop.**
+path through a horizontal break and into a small sprout. It represents a life
+changing through one quietly altered daily decision rather than one dramatic
+transformation. The horizontal exit also keeps the compact silhouette distinct
+from a gender symbol. The Powder Sky field keeps the mark warm and
+recognizable. The App Store icon has no wordmark or baked-in corner mask;
+larger brand lockups pair the symbol with the line **break the loop.**
 
 ## Components
 

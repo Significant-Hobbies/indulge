@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "induldge",
-  "target": "Daily app shell and Focus interruption journal",
+  "target": "App Store identity and TestFlight packaging",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -26,7 +26,7 @@
     ],
     "selected": "existing-design",
     "approval": "not-required",
-    "before": "artifacts/design/review/activity-catalog-all-visible-ios27.png"
+    "before": "artifacts/brand/archive/indulge-app-icon-arrow-v2-1024.png"
   },
   "evidence": {
     "historicalScreenshots": [
@@ -242,31 +242,43 @@
     "screenshots": [
       {
         "width": 390,
-        "path": "artifacts/design/review/focus-journal/populated-light-current-ios27.png"
-      },
-      {
-        "width": 390,
-        "path": "artifacts/design/review/focus-journal/populated-dark-ios27.png"
+        "path": "Indulge/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png"
       },
       {
         "width": 768,
-        "path": "artifacts/design/review/focus-journal/ipad-populated-dark-ios27.png"
+        "path": "artifacts/app-store/iphone-6.9/life.jpg"
       },
       {
         "width": 1440,
-        "path": "artifacts/design/review/focus-journal/ipad-populated-dark-ios27.png"
+        "path": "artifacts/app-store/ipad-13/life.jpg"
+      },
+      {
+        "width": 32,
+        "path": "artifacts/brand/favicon-32.png"
+      },
+      {
+        "width": 1024,
+        "path": "Indulge/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png"
+      },
+      {
+        "width": 1320,
+        "path": "artifacts/app-store/iphone-6.9/life.jpg"
+      },
+      {
+        "width": 2064,
+        "path": "artifacts/app-store/ipad-13/life.jpg"
       }
     ],
     "projectCheck": {
-      "command": "INDULGE_TEST_DESTINATION='platform=iOS Simulator,id=38FDB30B-69F2-406E-A253-17183F2348BE' ./scripts/test.sh && INDULGE_TEST_DESTINATION='platform=iOS Simulator,id=A86B9324-6FC9-4170-A074-F34A47F13131' ./scripts/test.sh && openspec validate add-focus-interruption-journal --strict && git diff --check",
+      "command": "./scripts/test.sh && xcodebuild archive -project Indulge.xcodeproj -scheme Indulge -configuration Release -destination 'generic/platform=iOS' -archivePath build/Indulge-Unsigned.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO && zsh -n scripts/archive-testflight.sh scripts/upload-testflight-personal.sh && plutil -lint scripts/TestFlightExportOptions.plist Indulge/Resources/PrivacyInfo.xcprivacy && git diff --check",
       "status": "pass"
     },
     "critique": {
-      "score": 39,
+      "score": 36,
       "maximum": 40
     },
     "audit": {
-      "score": 19,
+      "score": 20,
       "maximum": 20
     },
     "unresolved": {
@@ -293,12 +305,14 @@
         "The Focus journal is now a first-class fourth tab. One tap persists an interruption before classification; a cut thread shows live recovery, the return asks for a bounded blockage, and factual daily rows generalize only after three complete observations.",
         "The Impeccable finish pass found that the first Focus hero abandoned the selected character and that its live header failed at Accessibility XL. The final surface reuses the onboarding character and room, bounds the hero to the viewport, stacks the session label and timer at accessibility sizes, labels cross-midnight recovery as carried over, and has zero unresolved P0/P1 findings.",
         "The issue #2 re-audit scored 39/40 with zero product P0/P1/P2 findings after automatic relaunch restoration, adaptive Light/Dark semantic colors, and truthful zero-duration copy. Current phone light/dark and iPad dark evidence is registered; the 768 and 1440 receipt widths are native tablet/wide review equivalents rather than browser viewport claims.",
-        "The bundled Impeccable detector returned no advisory matches for FocusHomeView.swift or IndulgeAppShell.swift. Its generic Swift text scan does not replace the independent rendered/native reviews."
+        "The bundled Impeccable detector returned no advisory matches for FocusHomeView.swift or IndulgeAppShell.swift. Its generic Swift text scan does not replace the independent rendered/native reviews.",
+        "Issue #4 first review found an unintended Mars-symbol reading, a stale signed archive, a missing UserDefaults privacy reason, inconsistent archive paths, and invalid screenshot packaging. The selected mark now exits the loop horizontally into a sprout; a fresh unsigned device archive contains its compiled phone and iPad renditions.",
+        "The issue #4 re-audits scored 18/20 design and 20/20 native distribution quality with zero unresolved P0/P1. Current 32px, 1024px, genuine 6.9-inch iPhone, and 13-inch iPad evidence is registered. The required 390/768/1440 receipt widths are native compact/tablet/wide review equivalents rather than source-file pixel claims; signing and App Store Connect actions remain explicitly manual."
       ]
     }
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "The owner asked the agent to complete the open issue sequence and delegated the final implementation judgment. The bounded issue #2 finish review passes at 39/40 critique and 19/20 native audit with zero unresolved P0/P1; current Light, Dark, iPhone, iPad, Dynamic Type, and Focus-state evidence is registered. Issue #1 remains open and is not covered by this delegated closure."
+    "note": "The owner asked the agent to complete the open issue sequence and delegated final implementation judgment. The bounded issue #4 re-audits pass at 18/20 design and 20/20 native distribution quality with zero unresolved P0/P1; current icon, compiled archive, iPhone, and iPad evidence is registered. Signing, App Store Connect upload, tester invitation, and release remain outside this closure."
   }
 }

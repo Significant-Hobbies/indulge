@@ -77,8 +77,8 @@ No login, subscription, or external hardware is required. Complete onboarding to
 
 ## Screenshots
 
-- iPhone 6.9-inch portrait sequence (`1206 × 2622`): `onboarding.png`, `life-clean.png`, `focus.png`, `trade.png`, and `history.png` in `artifacts/app-store/iphone-6.9`
-- iPad 13-inch portrait sequence (`2064 × 2752`): `onboarding.png`, `life.png`, `focus.png`, `trade.png`, and `history.png` in `artifacts/app-store/ipad-13`
-- Both sets use Apple-accepted dimensions and were captured from deterministic simulator routes
+- iPhone 6.9-inch portrait sequence (`1320 × 2868`): `onboarding.jpg`, `life.jpg`, `focus.jpg`, `trade.jpg`, and `history.jpg` in `artifacts/app-store/iphone-6.9`
+- iPad 13-inch portrait sequence (`2064 × 2752`): `onboarding.jpg`, `life.jpg`, `focus.jpg`, `trade.jpg`, and `history.jpg` in `artifacts/app-store/ipad-13`
+- Both sets use Apple-accepted dimensions, contain no alpha channel, and were captured from deterministic simulator routes
 - App previews: omit for version 0.1.0
 - Release: manual

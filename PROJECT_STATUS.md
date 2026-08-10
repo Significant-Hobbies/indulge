@@ -39,6 +39,11 @@ not as punishment, streaks, or productivity metrics.
   passed their native and design gates. Completed onboarding now restores on
   relaunch, unfinished Focus sessions reopen visibly, and the shell adapts to
   Light and Dark appearances.
+- **2026-08-11:** Distribution preparation completed with an opaque Powder
+  Sky/navy/cherry App Store icon, reusable favicon exports, honest beta notes,
+  draft App Store metadata and screenshot evidence, and a successful unsigned
+  Release build and unsigned device archive. Archive signing and every App
+  Store Connect action remain manual release steps.
 
 ## Products
 
@@ -57,6 +62,8 @@ not as punishment, streaks, or productivity metrics.
   daily summaries, and evidence-gated aggregate patterns.
 - Offline manual behavior, optional availability-gated on-device tag
   suggestions, Reduce Motion, Dynamic Type, VoiceOver, and Light/Dark support.
+- App Store identity assets and a reviewable TestFlight preparation package,
+  including internal-only export safeguards and manual release boundaries.
 
 ## Work queue
 
