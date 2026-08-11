@@ -298,7 +298,7 @@ struct IndulgeOnboardingView: View {
                 .background(Color.indulgePowderSoft, in: RoundedRectangle(cornerRadius: IndulgeTheme.cornerRadius, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: IndulgeTheme.cornerRadius).stroke(focusedField == .name ? Color.indulgeCherry : Color.indulgePaleBorder, lineWidth: 1.5))
 
-            Label("Optional · private on this iPhone", systemImage: "lock.fill")
+            Label("Optional · private on this device", systemImage: "lock.fill")
                 .font(.indulgeCaption)
                 .foregroundStyle(Color.indulgeNavy.opacity(0.58))
         }

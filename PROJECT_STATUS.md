@@ -1,10 +1,10 @@
 # Indulge — Project Status
 
-Last updated: 2026-08-11
+Last updated: 2026-08-12
 
 ## Why / What
 
-Indulge is a private, local-first native iPhone application that helps people
+Indulge is a private, local-first native iPhone and iPad application that helps people
 keep intentional digital pleasure while trading automatic time loss for
 meaningful alternatives. Progress appears as an expanding animated life scene,
 not as punishment, streaks, or productivity metrics.
@@ -22,6 +22,9 @@ not as punishment, streaks, or productivity metrics.
 
 ## Timeline
 
+- **2026-08-12:** Aligned the universal iPhone/iPad build's private onboarding
+  label and durable product documentation, then refreshed the personal-team
+  distribution export.
 - **2026-08-08:** Product direction, original soft-form 3D visual world, OpenSpec
   visual-proof change, private GitHub repository, and native project scaffold
   established.
@@ -56,7 +59,7 @@ not as punishment, streaks, or productivity metrics.
 
 ## Products
 
-- **Indulge for iPhone:** the primary consumer experience.
+- **Indulge for iPhone and iPad:** the primary consumer experience.
 - **Indulge public site:** the product, trust, support, beta-status, and
   machine-readable discovery surface at
   `https://indulge.significanthobbies.com`.

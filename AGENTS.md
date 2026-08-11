@@ -11,7 +11,7 @@ Follow `/Users/sarthak/Desktop/fleet/AGENTS.md` and the project truth in
 
 ## Native boundaries
 
-- The primary product is a native iPhone app built with SwiftUI and RealityKit.
+- The primary product is a native iPhone and iPad app built with SwiftUI and RealityKit.
 - Keep the animated world in RealityKit and native controls/accessibility in
   SwiftUI.
 - Add no production dependency without explicit approval.
