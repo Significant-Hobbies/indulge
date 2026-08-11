@@ -14,16 +14,6 @@ on:
       - ".github/workflows/web-ci.yml"
   push:
     branches: [main]
-    paths:
-      - "src/**"
-      - "public/**"
-      - "scripts/check-site.mjs"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "astro.config.mjs"
-      - "tsconfig.json"
-      - "wrangler.jsonc"
-      - ".github/workflows/web-ci.yml"
 
 permissions:
   contents: read
