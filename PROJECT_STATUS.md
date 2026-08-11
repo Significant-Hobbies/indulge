@@ -15,6 +15,8 @@ not as punishment, streaks, or productivity metrics.
 - RealityKit for the persistent modular 3D character and world.
 - XcodeGen for deterministic local project generation; it is a development
   tool, not an app runtime dependency.
+- Astro for the static public product and trust surface, with Cloudflare Pages
+  as its manually promoted production host.
 - Apple Screen Time frameworks are planned after the visual proof and are not
   active dependencies yet.
 
@@ -41,13 +43,19 @@ not as punishment, streaks, or productivity metrics.
   Light and Dark appearances.
 - **2026-08-11:** Distribution preparation completed with an opaque Powder
   Sky/navy/cherry App Store icon, reusable favicon exports, honest beta notes,
-  draft App Store metadata and screenshot evidence, and a successful unsigned
-  Release build and unsigned device archive. Archive signing and every App
-  Store Connect action remain manual release steps.
+  draft App Store metadata and screenshot evidence, and a personal-team signed
+  archive. The first internal-only transport reached App Store Connect and
+  confirmed that the Indulge app record must be created before upload.
+- **2026-08-11:** The Life Room landing and its privacy, support, terms,
+  accessibility, TestFlight status, Markdown, and agent-indexing surfaces
+  passed CI and design review and were promoted to the `indulge` Cloudflare
+  Pages production project at `indulge.pages.dev`.
 
 ## Products
 
 - **Indulge for iPhone:** the primary consumer experience.
+- **Indulge public site:** the product, trust, support, beta-status, and
+  machine-readable discovery surface.
 - **Attention thread events:** the same-product local event source for manually
   reported flow interruptions and recovery.
 
@@ -64,6 +72,9 @@ not as punishment, streaks, or productivity metrics.
   suggestions, Reduce Motion, Dynamic Type, VoiceOver, and Light/Dark support.
 - App Store identity assets and a reviewable TestFlight preparation package,
   including internal-only export safeguards and manual release boundaries.
+- A responsive, zero-client-JavaScript public site with real app proof,
+  plain-language privacy and support, truthful beta availability, and stable
+  Markdown, `llms.txt`, and `/api/ai` product truth.
 
 ## Work queue
 

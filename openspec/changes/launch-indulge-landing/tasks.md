@@ -26,7 +26,7 @@
 ## 5. Repository And Production
 
 - [x] 5.1 Add path-scoped GitHub Actions CI and a guarded repository-local Pages deploy command
-- [ ] 5.2 Commit the focused change on an agent branch, push it, and open a pull request linked with `Closes #5`
-- [ ] 5.3 Merge after green CI, synchronize clean `main`, create or reuse the single `indulge` Pages target, and pass the Fleet deploy guard
+- [x] 5.2 Commit the focused change on an agent branch, push it, and open a pull request linked with `Closes #5`
+- [x] 5.3 Merge after green CI, synchronize clean `main`, create or reuse the single `indulge` Pages target, and pass the Fleet deploy guard
 - [ ] 5.4 Deploy to Cloudflare Pages, connect `indulge.significanthobbies.com`, and smoke-test every required production route
 - [ ] 5.5 Archive the OpenSpec change and update `PROJECT_STATUS.md` with shipped public-product truth
