@@ -50,12 +50,16 @@ not as punishment, streaks, or productivity metrics.
   accessibility, TestFlight status, Markdown, and agent-indexing surfaces
   passed CI and design review and were promoted to the `indulge` Cloudflare
   Pages production project at `indulge.pages.dev`.
+- **2026-08-11:** The public site and native release links adopted
+  `indulge.significanthobbies.com` as the product-owned canonical hostname
+  while retaining `indulge.pages.dev` as the Cloudflare provider origin.
 
 ## Products
 
 - **Indulge for iPhone:** the primary consumer experience.
 - **Indulge public site:** the product, trust, support, beta-status, and
-  machine-readable discovery surface.
+  machine-readable discovery surface at
+  `https://indulge.significanthobbies.com`.
 - **Attention thread events:** the same-product local event source for manually
   reported flow interruptions and recovery.
 
