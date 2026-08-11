@@ -68,13 +68,23 @@ invitations are sent.
 ## Age rating draft
 
 - Made for Kids: No
-- Gambling, contests, simulated gambling, loot boxes: None
-- Sexual content, profanity, horror, violence: None
-- Medical or treatment claims: None
-- User-generated content, messaging, unrestricted web access: None
-- Alcohol or tobacco references: Infrequent/Mild, because the optional visual reflection catalog can neutrally mirror a user-selected alcohol context
+- In-app parental controls or age assurance: None
+- Unrestricted web access, broadly distributed user-generated content, social
+  media, messaging/chat, and advertising: No
+- Health or Wellness Topics: Yes — attention, habits, reflection, and self-care
+- Medical or Treatment Information: None — the app explicitly does not provide
+  addiction treatment or medical guidance
+- Alcohol, Tobacco, or Drug Use or References: Infrequent — the optional visual
+  reflection catalog can neutrally mirror a user-selected alcohol context
+- Sexuality or nudity, profanity, horror, violence, gambling, contests,
+  simulated gambling, and loot boxes: None
 
 Confirm the rating produced by App Store Connect's current questionnaire.
+
+## Regulated medical device declaration
+
+- Regulated medical device in the EU/EEA, UK, or U.S.: No
+- Use statement or medical-device safety information: Not applicable
 
 ## Review notes
 
