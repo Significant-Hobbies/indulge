@@ -10,6 +10,7 @@ to the App Store without a separate decision.
 - SKU: `indulge-ios-1`
 - Version: `0.1.0`
 - Build: `1`
+- Minimum iOS: 18.0
 - Primary language: English (U.S.)
 - Primary category: Health & Fitness
 - Secondary category: Lifestyle
