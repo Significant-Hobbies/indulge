@@ -16,6 +16,16 @@ colors:
   dusk-aubergine: "#402033"
   clay: "#452923"
   ink: "#17211F"
+  web-sun: "#FFF7CF"
+  web-leaf: "#78A889"
+  web-leaf-soft: "#91B99E"
+  web-blush: "#F4D9DD"
+  web-navy-light: "#D7E2F3"
+  web-cherry-light: "#FF98A7"
+  web-sun-glow: "rgba(255, 247, 207, .9)"
+  web-window-frame: "rgba(255,255,255,.65)"
+  web-window-tint: "rgba(122,173,208,.12)"
+  web-deep-shadow: "rgba(0,0,0,.28)"
 typography:
   display:
     fontFamily: "SF Pro Rounded, SF Pro Display, sans-serif"
@@ -33,6 +43,16 @@ rounded:
   control: "16pt"
   sheet: "28pt"
   scene-object: "continuous"
+  web-scene-detail: "9px"
+  web-window-base: "18px"
+  web-brand-mobile: "31px"
+  web-device-inner: "35px"
+  web-brand-compact: "40px"
+  web-device: "42px"
+  web-phone-hero: "50px"
+  web-brand-inner: "52px"
+  web-brand-outer: "72px"
+  web-window-arch: "150px"
 spacing:
   xs: "4pt"
   sm: "8pt"
@@ -119,6 +139,16 @@ objects, but they do not define the surrounding interface.
 ### Neutral
 
 - **Ink** (#17211F): high-contrast controls and primary copy on light material.
+
+### Web scene extensions
+
+The public landing surface extends the same room with **Sun** (#FFF7CF),
+**Leaf** (#78A889), **Leaf Soft** (#91B99E), **Blush** (#F4D9DD), **Navy
+Light** (#D7E2F3), and **Cherry Light** (#FF98A7). Its sun, window, and depth
+effects use the documented translucent values in the frontmatter. These colors
+belong to scene atmosphere and tinted copy only; Cherry remains the sole action
+accent. Device, window, shelf, and brand-preview radii in the frontmatter are
+web illustration geometry rather than reusable control radii.
 
 **The No Moral Lighting Rule.** Possible-life scenes gain breadth, activity,
 and specificity—not a simplistic dark-to-bright transformation.

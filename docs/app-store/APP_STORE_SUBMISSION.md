@@ -1,6 +1,7 @@
 # Indulge App Store submission draft
 
-Preparation only. Do not create, upload, publish, or submit an App Store Connect record from this repository.
+Prepared for invite-only TestFlight testing. Do not submit or release this build
+to the App Store without a separate decision.
 
 ## Identity
 
@@ -46,11 +47,13 @@ focus,time,attention,habits,wellbeing,journal,intention,screen time,reflection
 
 ## URLs
 
-- Support: `https://indulge.significanthobbies.com`
+- Support: `https://indulge.significanthobbies.com/support/`
 - Marketing: `https://indulge.significanthobbies.com`
-- Privacy: `https://indulge.significanthobbies.com/privacy`
+- Privacy: `https://indulge.significanthobbies.com/privacy/`
 
-The deploy-ready privacy copy is at `docs/app-store/privacy.html`. The product domain and privacy route must resolve over HTTPS before submission.
+The canonical public privacy copy is generated from `src/pages/privacy.astro`.
+The product, privacy, and support routes must resolve over HTTPS before testing
+invitations are sent.
 
 ## App privacy answers
 
