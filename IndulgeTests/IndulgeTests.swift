@@ -1,4 +1,5 @@
 import Foundation
+import RealityKit
 import Testing
 
 @testable import Indulge
@@ -518,5 +519,50 @@ struct IndulgeTests {
     let graduation = LifeSceneCoordinator.composition(for: .graduated)
     #expect(graduation.possibleProgress == 1)
     #expect(graduation.semanticSummary.contains("steps beyond"))
+  }
+
+  @Test @MainActor func proceduralSceneKeepsEveryRequiredRoleAndConnectedJointChain() throws {
+    let root = SoftFormScene.makeRoot()
+    let loader = SceneAssetRoleLoader(root: root)
+
+    #expect(loader.containsEveryRequiredRole())
+
+    let leftForearm = try #require(loader.entity(for: .leftForearm))
+    let rightForearm = try #require(loader.entity(for: .rightForearm))
+    let leftHand = try #require(loader.entity(for: .leftHand))
+    let rightHand = try #require(loader.entity(for: .rightHand))
+    let leftKnee = try #require(loader.entity(for: .leftKnee))
+    let rightKnee = try #require(loader.entity(for: .rightKnee))
+    let wineGlass = try #require(loader.entity(for: .wineGlass))
+
+    #expect(leftForearm.parent?.name == SoftFormScene.Role.leftArm.rawValue)
+    #expect(rightForearm.parent?.name == SoftFormScene.Role.rightArm.rawValue)
+    #expect(leftHand.parent === leftForearm)
+    #expect(rightHand.parent === rightForearm)
+    #expect(leftKnee.parent?.name == SoftFormScene.Role.leftLeg.rawValue)
+    #expect(rightKnee.parent?.name == SoftFormScene.Role.rightLeg.rawValue)
+    #expect(wineGlass.parent?.name == SoftFormScene.Role.rightHandSocket.rawValue)
+  }
+
+  @Test @MainActor func proceduralSceneGroundsObjectsAndUsesLayeredLighting() {
+    let root = SoftFormScene.makeRoot()
+
+    for contactShadow in [
+      "sofa-contact-shadow",
+      "television-contact-shadow",
+      "lamp-contact-shadow",
+      SoftFormScene.Role.avatarShadow.rawValue,
+      "arch-contact-shadow",
+      "books-contact-shadow",
+      "making-contact-shadow",
+      "plant-contact-shadow",
+      "connection-contact-shadow",
+    ] {
+      #expect(root.findEntity(named: contactShadow) != nil)
+    }
+
+    for light in ["key-light", "sky-fill", "warm-rim"] {
+      #expect(root.findEntity(named: light) != nil)
+    }
   }
 }

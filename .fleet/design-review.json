@@ -1,50 +1,42 @@
 {
   "$schema": "fleet.design-review.v1",
   "version": 1,
-  "project": "induldge",
-  "target": "Indulge public landing, trust, discovery, and TestFlight status surface (#5)",
+  "project": "indulge-issue-1",
+  "target": "Procedural RealityKit visual proof craft pass (#1)",
   "mode": "preserve",
-  "register": "brand",
+  "register": "product",
   "context": {
     "product": "PRODUCT.md",
     "design": "DESIGN.md"
   },
   "direction": {
-    "references": [
-      "Existing Indulge Life room and break-the-loop brand system",
-      "Apple Journal owned-product storytelling",
-      "Brick mechanism-first product demonstration"
-    ],
-    "probes": [
-      "artifacts/design/landing/probe-life-room.png",
-      "artifacts/design/landing/probe-word-room.png",
-      "artifacts/design/landing/probe-attention-thread.png"
-    ],
-    "selected": "life-room",
-    "approval": "delegated",
-    "before": "artifacts/app-store/iphone-6.9/life.jpg"
+    "references": [],
+    "probes": [],
+    "selected": "existing-design",
+    "approval": "not-required",
+    "before": "artifacts/design/review/realitykit-craft/before-phone-26.4.png"
   },
   "evidence": {
     "screenshots": [
       {
         "width": 390,
-        "path": "artifacts/design/review/landing/home-390.png"
+        "path": "artifacts/design/review/realitykit-craft/after-phone-26.4.png"
       },
       {
         "width": 768,
-        "path": "artifacts/design/review/landing/home-768.png"
+        "path": "artifacts/design/review/realitykit-craft/after-tablet-27.0-possible.png"
       },
       {
         "width": 1440,
-        "path": "artifacts/design/review/landing/home-1440.png"
+        "path": "artifacts/design/review/realitykit-craft/after-wide-26.4-reduced.png"
       }
     ],
     "projectCheck": {
-      "command": "pnpm check && pnpm audit --audit-level high && openspec validate launch-indulge-landing --strict && git diff --check && node ../.agents/skills/impeccable/scripts/detect.mjs --json src/pages/index.astro",
+      "command": "./scripts/test.sh on iOS 26.4 and iOS 27.0; ./scripts/build.sh; openspec validate build-indulge-visual-proof --strict; git diff --check",
       "status": "pass"
     },
     "critique": {
-      "score": 33,
+      "score": 32,
       "maximum": 40
     },
     "audit": {
@@ -57,17 +49,11 @@
     },
     "detector": {
       "posture": "advisory",
-      "findings": [
-        "The pre-polish dual-agent critique scored 20/28 applicable points and found three P1 issues: a discontinuous Life Room, a misleading beta CTA state, and repetitive feature pacing. The preserve pass resolved all three before finish review.",
-        "The final dual-agent finish review passed at 33/40 design and 17/20 technical quality with zero P0/P1. Follow-up polish aligned beta copy, lazy-loaded below-fold captures, reduced the shared mark from 372 KiB to targeted 4 KiB and 44 KiB renditions, and enlarged secondary touch targets.",
-        "Current 390, 768, and 1440 browser evidence was regenerated after the final source changes using real scroll behavior so lazy-loaded app captures are present.",
-        "The bundled Impeccable detector returned an empty finding list after the web scene tokens and geometry were documented in DESIGN.md.",
-        "The remaining mobile-length observation is a P2 pacing tradeoff: all four real product spaces remain visible because feature parity and truthful product proof are part of the approved launch scope. Red controls inside owned app screenshots are a non-blocking P3 artifact of real product evidence."
-      ]
+      "findings": []
     }
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "The owner explicitly requested a super-beautiful landing and delegated implementation judgment after approving the Indulge preparation direction. The selected Life Room preserves the established app world, and the final independent review clears the required 32/40 design and 16/20 audit floors with zero unresolved P0/P1."
+    "note": "The owner delegated implementation judgment through the all-open-issues sequence. The preserve-lane craft pass and bounded re-audit have zero unresolved P0/P1. Physical hardware frame pacing, thermal, and battery proof remains external because the available local provisioning profile lacks the target's checked-in iCloud and Push capabilities."
   }
 }

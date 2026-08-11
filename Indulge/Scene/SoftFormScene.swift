@@ -21,14 +21,20 @@ enum SoftFormScene {
         case television
         case lamp
         case avatar
+        case avatarShadow
         case torso
+        case pelvis
         case head
         case leftArm
         case rightArm
+        case leftForearm
+        case rightForearm
         case leftHand
         case rightHand
         case leftLeg
         case rightLeg
+        case leftKnee
+        case rightKnee
         case leftHandSocket
         case rightHandSocket
         case mug
@@ -47,10 +53,11 @@ enum SoftFormScene {
         root.addChild(makeSofa())
         root.addChild(makeTelevision())
         root.addChild(makeLamp())
+        root.addChild(makeAvatarShadow())
         root.addChild(makeAvatar())
         root.addChild(makePossibleWorld())
         root.addChild(makeCamera())
-        root.addChild(makeLight())
+        root.addChild(makeLighting())
 
         apply(
             root: root,
@@ -87,7 +94,7 @@ enum SoftFormScene {
 
         let sofaVisible = assembly.rawValue >= SceneAssemblyStage.sofaArrived.rawValue
         let sofaPosition = simd_mix(
-            SIMD3<Float>(-0.65, sofaVisible ? -0.20 : -1.22, 0.16),
+            SIMD3<Float>(-0.65, sofaVisible ? -0.43 : -1.22, 0.16),
             SIMD3<Float>(-1.08, -0.43, -0.52),
             SIMD3<Float>(repeating: progress)
         )
@@ -97,15 +104,15 @@ enum SoftFormScene {
             transform: transform(
                 position: sofaPosition,
                 rotation: simd_quatf(angle: -0.10, axis: [0, 1, 0]),
-                scale: sofaVisible ? max(0.04, 1 - progress * 0.58) : 0.04
+                scale: sofaVisible ? max(0.04, 1 - progress * 0.96) : 0.04
             ),
             duration: duration
         )
 
         let televisionVisible = assembly.rawValue >= SceneAssemblyStage.televisionArrived.rawValue
         let televisionPosition = simd_mix(
-            SIMD3<Float>(1.18, televisionVisible ? -0.18 : 0.55, -0.22),
-            SIMD3<Float>(1.42, -0.38, -0.58),
+            SIMD3<Float>(1.18, televisionVisible ? -0.66 : 0.55, -0.22),
+            SIMD3<Float>(1.42, -0.66, -0.58),
             SIMD3<Float>(repeating: progress)
         )
         set(
@@ -114,7 +121,7 @@ enum SoftFormScene {
             transform: transform(
                 position: televisionPosition,
                 rotation: simd_quatf(angle: -0.34, axis: [0, 1, 0]),
-                scale: televisionVisible ? max(0.04, 1 - progress * 0.72) : 0.04
+                scale: televisionVisible ? max(0.04, 1 - progress * 0.96) : 0.04
             ),
             duration: duration
         )
@@ -124,8 +131,8 @@ enum SoftFormScene {
             role: .lamp,
             in: root,
             transform: transform(
-                position: [-1.48, lampVisible ? -0.20 : 0.45, 0.12],
-                scale: lampVisible ? max(0.04, 1 - progress * 0.74) : 0.04
+                position: [-1.48, lampVisible ? -0.475 : 0.45, 0.12],
+                scale: lampVisible ? max(0.04, 1 - progress * 0.96) : 0.04
             ),
             duration: duration
         )
@@ -135,6 +142,7 @@ enum SoftFormScene {
             seated: assembly.rawValue >= SceneAssemblyStage.seated.rawValue,
             possibleProgress: progress,
             ambientPulse: ambientPulse,
+            holdingCompanion: companion != nil,
             duration: duration
         )
         applyCompanion(root: root, companion: companion, seated: sofaVisible, duration: duration)
@@ -159,7 +167,7 @@ enum SoftFormScene {
         possibleProgress: Double
     ) -> String {
         if possibleProgress > 0.75 {
-            return "Your character stands in a brighter life with books, movement, creativity, plants, and connection."
+            return "Your character stands with more room for books, movement, creativity, plants, and connection."
         }
 
         let action = assembly.rawValue >= SceneAssemblyStage.seated.rawValue
@@ -185,26 +193,69 @@ enum SoftFormScene {
         seated: Bool,
         possibleProgress: Float,
         ambientPulse: Float,
+        holdingCompanion: Bool,
         duration: TimeInterval
     ) {
         guard let avatar = root.findEntity(named: Role.avatar.rawValue) else { return }
-        let basePosition: SIMD3<Float> = seated ? [-0.53, -0.04, 0.43] : [-0.30, -0.48, 0.08]
-        let possiblePosition = SIMD3<Float>(0.05, -0.48, -0.05)
+        let basePosition: SIMD3<Float> = seated ? [-0.53, -0.40, 0.43] : [-0.30, -0.17, 0.08]
+        let possiblePosition = SIMD3<Float>(0.05, -0.17, -0.05)
         var position = simd_mix(basePosition, possiblePosition, SIMD3<Float>(repeating: possibleProgress))
         position.y += ambientPulse * 0.012 * (1 - possibleProgress)
         move(avatar, to: transform(position: position), duration: duration)
 
-        let legAngle: Float = seated ? -Float.goldenHalfPi * (1 - possibleProgress) : -0.06
-        let armAngle: Float = seated ? -0.42 * (1 - possibleProgress) : -0.14
-        rotate(role: .leftLeg, in: avatar, angle: legAngle, axis: [1, 0, 0], duration: duration)
-        rotate(role: .rightLeg, in: avatar, angle: legAngle + 0.08, axis: [1, 0, 0], duration: duration)
-        rotate(role: .leftArm, in: avatar, angle: armAngle, axis: [1, 0, 0], duration: duration)
-        rotate(role: .rightArm, in: avatar, angle: armAngle - 0.12, axis: [1, 0, 0], duration: duration)
-
-        if possibleProgress > 0 {
-            rotate(role: .leftArm, in: avatar, angle: -0.65 * possibleProgress, axis: [0, 0, 1], duration: 0)
-            rotate(role: .rightArm, in: avatar, angle: 0.65 * possibleProgress, axis: [0, 0, 1], duration: 0)
+        if let shadow = root.findEntity(named: Role.avatarShadow.rawValue) {
+            let shadowPosition = simd_mix(
+                SIMD3<Float>(basePosition.x, -0.715, basePosition.z + 0.03),
+                SIMD3<Float>(possiblePosition.x, -0.715, possiblePosition.z + 0.03),
+                SIMD3<Float>(repeating: possibleProgress)
+            )
+            move(
+                shadow,
+                to: transform(position: shadowPosition, scale: 1.08 - possibleProgress * 0.20),
+                duration: duration
+            )
         }
+
+        let seatedWeight: Float = seated ? 1 - possibleProgress : 0
+        let standingWeight = 1 - seatedWeight
+        let leftHip = rotation(x: -1.25 * seatedWeight - 0.04 * standingWeight, z: -0.035)
+        let rightHip = rotation(x: -1.18 * seatedWeight - 0.03 * standingWeight, z: 0.035)
+        setRotation(role: .leftLeg, in: avatar, rotation: leftHip, duration: duration)
+        setRotation(role: .rightLeg, in: avatar, rotation: rightHip, duration: duration)
+        setRotation(role: .leftKnee, in: avatar, rotation: rotation(x: 1.12 * seatedWeight), duration: duration)
+        setRotation(role: .rightKnee, in: avatar, rotation: rotation(x: 1.06 * seatedWeight), duration: duration)
+
+        let openArm = 0.62 * possibleProgress
+        let heldOffset: Float = holdingCompanion ? 0.12 * seatedWeight : 0
+        setRotation(
+            role: .leftArm,
+            in: avatar,
+            rotation: rotation(x: -0.58 * seatedWeight - 0.10 * standingWeight, z: -openArm - 0.04),
+            duration: duration
+        )
+        setRotation(
+            role: .rightArm,
+            in: avatar,
+            rotation: rotation(x: -0.66 * seatedWeight - 0.10 * standingWeight - heldOffset, z: openArm + 0.04),
+            duration: duration
+        )
+        setRotation(
+            role: .leftForearm,
+            in: avatar,
+            rotation: rotation(x: 0.34 * seatedWeight, z: -0.16 * seatedWeight),
+            duration: duration
+        )
+        setRotation(
+            role: .rightForearm,
+            in: avatar,
+            rotation: rotation(
+                x: (holdingCompanion ? 0.52 : 0.34) * seatedWeight,
+                z: (holdingCompanion ? 0.42 : 0.18) * seatedWeight
+            ),
+            duration: duration
+        )
+        setRotation(role: .torso, in: avatar, rotation: rotation(x: -0.08 * seatedWeight), duration: duration)
+        setRotation(role: .head, in: avatar, rotation: rotation(y: -0.16 * seatedWeight), duration: duration)
     }
 
     private static func applyCompanion(
@@ -225,12 +276,34 @@ enum SoftFormScene {
             guard let entity = root.findEntity(named: role.rawValue) else { continue }
             let visible = role == visibleRole
             let position: SIMD3<Float> = switch role {
-            case .smoking: [-0.72, seated ? 0.68 : 0.94, 0.42]
-            default: [-0.22, seated ? 0.60 : 0.89, 0.30]
+            case .wineGlass: [0, -0.02, 0.045]
+            case .mug: [0, 0.015, 0.045]
+            case .smoking: [0, 0.005, 0.10]
+            case .phone: [0, 0.01, 0.055]
+            default: .zero
+            }
+            let visibleScale: Float = switch role {
+            case .wineGlass: 0.72
+            case .mug: 0.84
+            case .smoking: 0.76
+            case .phone: 0.82
+            default: 1
+            }
+            let propRotation: simd_quatf = switch role {
+            case .wineGlass, .mug:
+                rotation(z: seated ? -0.42 : 0)
+            case .phone:
+                rotation(x: -0.16, z: seated ? -0.32 : 0)
+            default:
+                rotation(z: seated ? -0.42 : 0)
             }
             move(
                 entity,
-                to: transform(position: position, scale: visible ? 1 : 0.001),
+                to: transform(
+                    position: position,
+                    rotation: propRotation,
+                    scale: visible ? visibleScale : 0.001
+                ),
                 duration: duration
             )
             entity.components.set(OpacityComponent(opacity: visible ? 1 : 0))
@@ -241,7 +314,6 @@ enum SoftFormScene {
         let stage = Entity()
         stage.name = Role.stage.rawValue
         stage.addChild(box(size: [3.75, 0.18, 2.42], radius: 0.09, material: Materials.stage, position: .zero))
-        stage.addChild(oval(size: [0.55, 0.018, 0.30], material: Materials.shadow, position: [-0.30, 0.11, 0.02]))
         return stage
     }
 
@@ -256,6 +328,9 @@ enum SoftFormScene {
         sofa.addChild(box(size: [0.76, 0.18, 0.58], radius: 0.09, material: Materials.cushion, position: [0.43, 0.35, -0.03]))
         sofa.addChild(box(size: [0.10, 0.28, 0.10], radius: 0.04, material: Materials.wood, position: [-0.70, -0.16, 0]))
         sofa.addChild(box(size: [0.10, 0.28, 0.10], radius: 0.04, material: Materials.wood, position: [0.70, -0.16, 0]))
+        let shadow = oval(size: [1.62, 0.018, 0.58], material: Materials.shadow, position: [0, -0.305, 0.02])
+        shadow.name = "sofa-contact-shadow"
+        sofa.addChild(shadow)
         return sofa
     }
 
@@ -266,6 +341,9 @@ enum SoftFormScene {
         television.addChild(box(size: [0.96, 0.55, 0.02], radius: 0.04, material: Materials.screen, position: [0, 0.66, 0.061]))
         television.addChild(box(size: [0.10, 0.52, 0.10], radius: 0.04, material: Materials.wood, position: [0, 0.22, 0]))
         television.addChild(box(size: [0.70, 0.10, 0.38], radius: 0.04, material: Materials.wood, position: [0, -0.02, 0]))
+        let shadow = oval(size: [0.74, 0.016, 0.42], material: Materials.shadow, position: [0, -0.075, 0.01])
+        shadow.name = "television-contact-shadow"
+        television.addChild(shadow)
         return television
     }
 
@@ -275,64 +353,61 @@ enum SoftFormScene {
         lamp.addChild(box(size: [0.08, 1.16, 0.08], radius: 0.03, material: Materials.brass, position: [0, 0.34, 0]))
         lamp.addChild(box(size: [0.42, 0.34, 0.42], radius: 0.11, material: Materials.lampShade, position: [0, 0.96, 0]))
         lamp.addChild(box(size: [0.42, 0.07, 0.42], radius: 0.03, material: Materials.brass, position: [0, -0.22, 0]))
+        let shadow = oval(size: [0.48, 0.016, 0.46], material: Materials.shadow, position: [0, -0.26, 0])
+        shadow.name = "lamp-contact-shadow"
+        lamp.addChild(shadow)
         return lamp
+    }
+
+    private static func makeAvatarShadow() -> Entity {
+        let shadow = oval(size: [0.62, 0.016, 0.38], material: Materials.shadow, position: .zero)
+        shadow.name = Role.avatarShadow.rawValue
+        return shadow
     }
 
     private static func makeAvatar() -> Entity {
         let avatar = Entity()
         avatar.name = Role.avatar.rawValue
 
-        let torso = oval(size: [0.48, 0.62, 0.30], material: Materials.shirt, position: [0, 0.67, 0])
+        let pelvis = oval(size: [0.40, 0.27, 0.29], material: Materials.trousers, position: [0, 0.47, 0])
+        pelvis.name = Role.pelvis.rawValue
+        avatar.addChild(pelvis)
+
+        let torso = oval(size: [0.52, 0.64, 0.31], material: Materials.shirt, position: [0, 0.84, 0])
         torso.name = Role.torso.rawValue
         avatar.addChild(torso)
 
-        let head = oval(size: [0.34, 0.39, 0.34], material: Materials.skin, position: [0, 1.22, 0])
+        avatar.addChild(oval(size: [0.16, 0.18, 0.16], material: Materials.skin, position: [0, 1.14, 0]))
+
+        let head = Entity()
         head.name = Role.head.rawValue
+        head.position = [0, 1.30, 0]
+        head.addChild(oval(size: [0.34, 0.40, 0.34], material: Materials.skin, position: .zero))
+        head.addChild(oval(size: [0.35, 0.17, 0.33], material: Materials.hair, position: [0, 0.17, -0.01]))
+        head.addChild(oval(size: [0.052, 0.066, 0.024], material: Materials.dark, position: [-0.07, 0.025, 0.17]))
+        head.addChild(oval(size: [0.052, 0.066, 0.024], material: Materials.dark, position: [0.07, 0.025, 0.17]))
+        head.addChild(oval(size: [0.073, 0.032, 0.024], material: Materials.coral, position: [0, -0.085, 0.17]))
         avatar.addChild(head)
-        avatar.addChild(oval(size: [0.34, 0.16, 0.32], material: Materials.hair, position: [0, 1.39, -0.01]))
-        avatar.addChild(oval(size: [0.055, 0.070, 0.025], material: Materials.dark, position: [-0.07, 1.25, 0.17]))
-        avatar.addChild(oval(size: [0.055, 0.070, 0.025], material: Materials.dark, position: [0.07, 1.25, 0.17]))
-        avatar.addChild(oval(size: [0.075, 0.035, 0.025], material: Materials.coral, position: [0, 1.14, 0.17]))
 
-        avatar.addChild(oval(size: [0.24, 0.25, 0.24], material: Materials.shirt, position: [-0.27, 0.85, 0]))
-        avatar.addChild(oval(size: [0.24, 0.25, 0.24], material: Materials.shirt, position: [0.27, 0.85, 0]))
+        avatar.addChild(makeArm(side: -1))
+        avatar.addChild(makeArm(side: 1))
+        avatar.addChild(makeLeg(side: -1))
+        avatar.addChild(makeLeg(side: 1))
 
-        avatar.addChild(limb(name: Role.leftArm.rawValue, size: [0.15, 0.52, 0.15], position: [-0.33, 0.72, 0.02], material: Materials.skin))
-        avatar.addChild(limb(name: Role.rightArm.rawValue, size: [0.15, 0.52, 0.15], position: [0.33, 0.72, 0.02], material: Materials.skin))
-        avatar.addChild(limb(name: Role.leftLeg.rawValue, size: [0.19, 0.66, 0.19], position: [-0.15, 0.14, 0], material: Materials.trousers))
-        avatar.addChild(limb(name: Role.rightLeg.rawValue, size: [0.19, 0.66, 0.19], position: [0.15, 0.14, 0], material: Materials.trousers))
-
-        avatar.addChild(oval(size: [0.26, 0.12, 0.40], material: Materials.shoe, position: [-0.15, -0.23, 0.10]))
-        avatar.addChild(oval(size: [0.26, 0.12, 0.40], material: Materials.shoe, position: [0.15, -0.23, 0.10]))
-
-        let leftHand = oval(size: [0.15, 0.15, 0.15], material: Materials.skin, position: [-0.33, 0.40, 0.02])
-        leftHand.name = Role.leftHand.rawValue
-        avatar.addChild(leftHand)
-        let rightHand = oval(size: [0.15, 0.15, 0.15], material: Materials.skin, position: [0.33, 0.40, 0.02])
-        rightHand.name = Role.rightHand.rawValue
-        avatar.addChild(rightHand)
-
-        let leftSocket = Entity()
-        leftSocket.name = Role.leftHandSocket.rawValue
-        leftSocket.position = [-0.33, 0.40, 0.12]
-        avatar.addChild(leftSocket)
-        let rightSocket = Entity()
-        rightSocket.name = Role.rightHandSocket.rawValue
-        rightSocket.position = [0.33, 0.40, 0.12]
-        avatar.addChild(rightSocket)
-
-        let mug = makeMug()
-        mug.name = Role.mug.rawValue
-        avatar.addChild(mug)
-        let wine = makeWineGlass()
-        wine.name = Role.wineGlass.rawValue
-        avatar.addChild(wine)
-        let smoking = box(size: [0.025, 0.025, 0.23], radius: 0.01, material: Materials.paper, position: .zero)
-        smoking.name = Role.smoking.rawValue
-        avatar.addChild(smoking)
-        let phone = box(size: [0.15, 0.28, 0.025], radius: 0.03, material: Materials.phone, position: .zero)
-        phone.name = Role.phone.rawValue
-        avatar.addChild(phone)
+        if let socket = avatar.findEntity(named: Role.rightHandSocket.rawValue) {
+            let mug = makeMug()
+            mug.name = Role.mug.rawValue
+            socket.addChild(mug)
+            let wine = makeWineGlass()
+            wine.name = Role.wineGlass.rawValue
+            socket.addChild(wine)
+            let smoking = box(size: [0.025, 0.025, 0.23], radius: 0.01, material: Materials.paper, position: .zero)
+            smoking.name = Role.smoking.rawValue
+            socket.addChild(smoking)
+            let phone = box(size: [0.15, 0.28, 0.025], radius: 0.03, material: Materials.phone, position: .zero)
+            phone.name = Role.phone.rawValue
+            socket.addChild(phone)
+        }
 
         return avatar
     }
@@ -342,35 +417,52 @@ enum SoftFormScene {
         world.name = Role.possibleWorld.rawValue
 
         let arch = Entity()
-        arch.addChild(box(size: [0.16, 1.45, 0.16], radius: 0.07, material: Materials.sun, position: [-1.25, 0.08, -0.35]))
-        arch.addChild(box(size: [0.16, 1.45, 0.16], radius: 0.07, material: Materials.sun, position: [1.25, 0.08, -0.35]))
-        arch.addChild(box(size: [2.66, 0.16, 0.16], radius: 0.07, material: Materials.sun, position: [0, 0.79, -0.35]))
+        arch.addChild(box(size: [0.16, 1.45, 0.16], radius: 0.07, material: Materials.sun, position: [-1.25, -0.065, -0.35]))
+        arch.addChild(box(size: [0.16, 1.45, 0.16], radius: 0.07, material: Materials.sun, position: [1.25, -0.065, -0.35]))
+        arch.addChild(box(size: [2.66, 0.16, 0.16], radius: 0.07, material: Materials.sun, position: [0, 0.645, -0.35]))
+        arch.addChild(possibleContactShadow(name: "arch-contact-shadow", size: [2.72, 0.014, 0.25], position: [0, -0.795, -0.35]))
         world.addChild(arch)
 
         let bookStack = Entity()
-        bookStack.addChild(box(size: [0.48, 0.10, 0.34], radius: 0.03, material: Materials.coral, position: [-1.02, -0.48, 0.15]))
-        bookStack.addChild(box(size: [0.42, 0.10, 0.32], radius: 0.03, material: Materials.sun, position: [-1.02, -0.37, 0.15]))
-        bookStack.addChild(box(size: [0.46, 0.10, 0.34], radius: 0.03, material: Materials.sky, position: [-1.02, -0.26, 0.15]))
+        bookStack.addChild(box(size: [0.48, 0.10, 0.34], radius: 0.03, material: Materials.coral, position: [-1.02, -0.74, 0.15]))
+        bookStack.addChild(box(size: [0.42, 0.10, 0.32], radius: 0.03, material: Materials.sun, position: [-1.02, -0.63, 0.15]))
+        bookStack.addChild(box(size: [0.46, 0.10, 0.34], radius: 0.03, material: Materials.sky, position: [-1.02, -0.52, 0.15]))
+        bookStack.addChild(possibleContactShadow(name: "books-contact-shadow", size: [0.56, 0.014, 0.40], position: [-1.02, -0.795, 0.15]))
         world.addChild(bookStack)
 
-        world.addChild(box(size: [0.78, 0.035, 1.20], radius: 0.02, material: Materials.yoga, position: [0.98, -0.66, 0.12]))
-        world.addChild(box(size: [0.08, 0.95, 0.08], radius: 0.03, material: Materials.wood, position: [0.78, -0.12, -0.12]))
-        world.addChild(box(size: [0.76, 0.62, 0.06], radius: 0.03, material: Materials.canvas, position: [0.78, 0.22, -0.10]))
+        let making = Entity()
+        making.addChild(box(size: [0.78, 0.035, 1.20], radius: 0.02, material: Materials.yoga, position: [0.98, -0.7725, 0.12]))
+        making.addChild(box(size: [0.08, 0.95, 0.08], radius: 0.03, material: Materials.wood, position: [0.78, -0.315, -0.12]))
+        making.addChild(box(size: [0.76, 0.62, 0.06], radius: 0.03, material: Materials.canvas, position: [0.78, 0.025, -0.10]))
+        making.addChild(possibleContactShadow(name: "making-contact-shadow", size: [0.92, 0.014, 1.28], position: [0.92, -0.795, 0.08]))
+        world.addChild(making)
 
         let plant = Entity()
-        plant.addChild(box(size: [0.30, 0.28, 0.30], radius: 0.08, material: Materials.coral, position: [-1.18, -0.52, -0.42]))
-        plant.addChild(oval(size: [0.22, 0.55, 0.12], material: Materials.plant, position: [-1.30, -0.12, -0.42]))
-        plant.addChild(oval(size: [0.22, 0.50, 0.12], material: Materials.plant, position: [-1.05, -0.15, -0.42]))
+        plant.addChild(box(size: [0.30, 0.28, 0.30], radius: 0.08, material: Materials.coral, position: [-1.18, -0.65, -0.42]))
+        plant.addChild(oval(size: [0.22, 0.55, 0.12], material: Materials.plant, position: [-1.30, -0.25, -0.42]))
+        plant.addChild(oval(size: [0.22, 0.50, 0.12], material: Materials.plant, position: [-1.05, -0.28, -0.42]))
+        plant.addChild(possibleContactShadow(name: "plant-contact-shadow", size: [0.42, 0.014, 0.38], position: [-1.18, -0.795, -0.42]))
         world.addChild(plant)
 
         let connection = Entity()
-        connection.addChild(oval(size: [0.20, 0.25, 0.20], material: Materials.skin, position: [-1.30, 0.04, -0.48]))
-        connection.addChild(oval(size: [0.27, 0.39, 0.22], material: Materials.sky, position: [-1.30, -0.25, -0.48]))
-        connection.addChild(oval(size: [0.20, 0.25, 0.20], material: Materials.skin, position: [-0.98, 0.04, -0.48]))
-        connection.addChild(oval(size: [0.27, 0.39, 0.22], material: Materials.coral, position: [-0.98, -0.25, -0.48]))
+        connection.addChild(oval(size: [0.20, 0.25, 0.20], material: Materials.skin, position: [-1.30, -0.275, -0.48]))
+        connection.addChild(oval(size: [0.27, 0.39, 0.22], material: Materials.sky, position: [-1.30, -0.595, -0.48]))
+        connection.addChild(oval(size: [0.20, 0.25, 0.20], material: Materials.skin, position: [-0.98, -0.275, -0.48]))
+        connection.addChild(oval(size: [0.27, 0.39, 0.22], material: Materials.coral, position: [-0.98, -0.595, -0.48]))
+        connection.addChild(possibleContactShadow(name: "connection-contact-shadow", size: [0.68, 0.014, 0.30], position: [-1.14, -0.795, -0.48]))
         world.addChild(connection)
 
         return world
+    }
+
+    private static func possibleContactShadow(
+        name: String,
+        size: SIMD3<Float>,
+        position: SIMD3<Float>
+    ) -> Entity {
+        let shadow = oval(size: size, material: Materials.shadow, position: position)
+        shadow.name = name
+        return shadow
     }
 
     private static func makeCamera() -> Entity {
@@ -381,13 +473,34 @@ enum SoftFormScene {
         return camera
     }
 
-    private static func makeLight() -> Entity {
-        let light = DirectionalLight()
-        light.name = "key-light"
-        light.light.color = .init(red: 1.0, green: 0.92, blue: 0.80, alpha: 1)
-        light.light.intensity = 3_300
-        light.look(at: [0, 0, 0], from: [-2.5, 4.8, 4.0], relativeTo: nil)
-        return light
+    private static func makeLighting() -> Entity {
+        let lighting = Entity()
+        lighting.name = "scene-lighting"
+        lighting.addChild(
+            directionalLight(
+                name: "key-light",
+                color: .init(red: 1.0, green: 0.92, blue: 0.80, alpha: 1),
+                intensity: 3_000,
+                from: [-2.5, 4.8, 4.0]
+            )
+        )
+        lighting.addChild(
+            directionalLight(
+                name: "sky-fill",
+                color: .init(red: 0.66, green: 0.86, blue: 0.96, alpha: 1),
+                intensity: 920,
+                from: [3.4, 2.2, 4.8]
+            )
+        )
+        lighting.addChild(
+            directionalLight(
+                name: "warm-rim",
+                color: .init(red: 1.0, green: 0.70, blue: 0.42, alpha: 1),
+                intensity: 640,
+                from: [-1.0, 2.4, -4.0]
+            )
+        )
+        return lighting
     }
 
     private static func makeMug() -> Entity {
@@ -405,12 +518,58 @@ enum SoftFormScene {
         return glass
     }
 
-    private static func limb(name: String, size: SIMD3<Float>, position: SIMD3<Float>, material: SimpleMaterial) -> Entity {
-        let pivot = Entity()
-        pivot.name = name
-        pivot.position = position
-        pivot.addChild(oval(size: size, material: material, position: [0, -size.y * 0.33, 0]))
-        return pivot
+    private static func makeArm(side: Float) -> Entity {
+        let shoulder = Entity()
+        shoulder.name = side < 0 ? Role.leftArm.rawValue : Role.rightArm.rawValue
+        shoulder.position = [side * 0.29, 0.99, 0]
+        shoulder.addChild(oval(size: [0.22, 0.22, 0.23], material: Materials.shirt, position: [0, -0.06, 0]))
+        shoulder.addChild(oval(size: [0.15, 0.34, 0.15], material: Materials.skin, position: [0, -0.21, 0]))
+
+        let forearm = Entity()
+        forearm.name = side < 0 ? Role.leftForearm.rawValue : Role.rightForearm.rawValue
+        forearm.position = [0, -0.38, 0]
+        forearm.addChild(oval(size: [0.14, 0.32, 0.14], material: Materials.skin, position: [0, -0.16, 0]))
+        forearm.addChild(oval(size: [0.155, 0.155, 0.155], material: Materials.skin, position: [0, -0.34, 0]))
+
+        let hand = Entity()
+        hand.name = side < 0 ? Role.leftHand.rawValue : Role.rightHand.rawValue
+        hand.position = [0, -0.34, 0]
+        let socket = Entity()
+        socket.name = side < 0 ? Role.leftHandSocket.rawValue : Role.rightHandSocket.rawValue
+        socket.position = [0, 0, 0.11]
+        hand.addChild(socket)
+        forearm.addChild(hand)
+        shoulder.addChild(forearm)
+        return shoulder
+    }
+
+    private static func makeLeg(side: Float) -> Entity {
+        let hip = Entity()
+        hip.name = side < 0 ? Role.leftLeg.rawValue : Role.rightLeg.rawValue
+        hip.position = [side * 0.15, 0.48, 0]
+        hip.addChild(oval(size: [0.20, 0.38, 0.21], material: Materials.trousers, position: [0, -0.18, 0]))
+
+        let knee = Entity()
+        knee.name = side < 0 ? Role.leftKnee.rawValue : Role.rightKnee.rawValue
+        knee.position = [0, -0.38, 0]
+        knee.addChild(oval(size: [0.18, 0.62, 0.18], material: Materials.trousers, position: [0, -0.30, 0]))
+        knee.addChild(oval(size: [0.25, 0.13, 0.40], material: Materials.shoe, position: [0, -0.65, 0.12]))
+        hip.addChild(knee)
+        return hip
+    }
+
+    private static func directionalLight(
+        name: String,
+        color: UIColor,
+        intensity: Float,
+        from: SIMD3<Float>
+    ) -> DirectionalLight {
+        let light = DirectionalLight()
+        light.name = name
+        light.light.color = color
+        light.light.intensity = intensity
+        light.look(at: [0, 0, 0], from: from, relativeTo: nil)
+        return light
     }
 
     private static func box(
@@ -438,17 +597,22 @@ enum SoftFormScene {
         return entity
     }
 
-    private static func rotate(
+    private static func setRotation(
         role: Role,
         in root: Entity,
-        angle: Float,
-        axis: SIMD3<Float>,
+        rotation: simd_quatf,
         duration: TimeInterval
     ) {
         guard let entity = root.findEntity(named: role.rawValue) else { return }
         var target = entity.transform
-        target.rotation = simd_quatf(angle: angle, axis: axis)
+        target.rotation = rotation
         move(entity, to: target, duration: duration)
+    }
+
+    private static func rotation(x: Float = 0, y: Float = 0, z: Float = 0) -> simd_quatf {
+        simd_quatf(angle: z, axis: [0, 0, 1])
+            * simd_quatf(angle: y, axis: [0, 1, 0])
+            * simd_quatf(angle: x, axis: [1, 0, 0])
     }
 
     private static func set(role: Role, in root: Entity, transform: Transform, duration: TimeInterval) {
@@ -471,10 +635,6 @@ enum SoftFormScene {
     ) -> Transform {
         Transform(scale: SIMD3<Float>(repeating: scale), rotation: rotation, translation: position)
     }
-}
-
-private extension Float {
-    static let goldenHalfPi: Float = 1.25
 }
 
 @MainActor
