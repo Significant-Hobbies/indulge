@@ -47,9 +47,9 @@ focus,time,attention,habits,wellbeing,journal,intention,screen time,reflection
 
 ## URLs
 
-- Support: `https://indulge.significanthobbies.com/support/`
-- Marketing: `https://indulge.significanthobbies.com`
-- Privacy: `https://indulge.significanthobbies.com/privacy/`
+- Support: `https://indulge.pages.dev/support/`
+- Marketing: `https://indulge.pages.dev`
+- Privacy: `https://indulge.pages.dev/privacy/`
 
 The canonical public privacy copy is generated from `src/pages/privacy.astro`.
 The product, privacy, and support routes must resolve over HTTPS before testing
