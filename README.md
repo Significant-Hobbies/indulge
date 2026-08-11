@@ -33,3 +33,22 @@ creation, privacy-lock, and private-sync preparation is tracked in
 [GitHub issue #3](https://github.com/Significant-Hobbies/indulge/issues/3).
 Physical visual-proof work remains tracked in
 [GitHub issue #1](https://github.com/Significant-Hobbies/indulge/issues/1).
+
+## Public site
+
+The static Astro site under `src/` is the product, privacy, support,
+accessibility, terms, and TestFlight surface for
+`https://indulge.significanthobbies.com`. It ships no client-side JavaScript
+and deploys to the `indulge` Cloudflare Pages project only after current-main CI
+passes.
+
+```bash
+pnpm install
+pnpm check
+pnpm build
+pnpm dev
+```
+
+When a verified public TestFlight URL exists, set `PUBLIC_TESTFLIGHT_URL` only
+in the build environment. Without it, the site deliberately shows the honest
+invite-only beta state.

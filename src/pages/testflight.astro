@@ -1,0 +1,22 @@
+---
+import LegalPage from "../components/LegalPage.astro";
+
+const configuredBetaUrl = import.meta.env.PUBLIC_TESTFLIGHT_URL?.trim();
+const hasVerifiedBetaUrl = configuredBetaUrl?.startsWith("https://testflight.apple.com/");
+---
+<LegalPage title="The beta is taking shape." lede="Indulge is moving through invite-only TestFlight testing. We will only link to Apple after the enrollment URL is verified." path="/testflight/">
+  {hasVerifiedBetaUrl ? (
+    <section>
+      <h2>Join through Apple</h2>
+      <p>The verified enrollment link is ready. <a href={configuredBetaUrl}>Open Indulge in TestFlight</a>.</p>
+    </section>
+  ) : (
+    <section>
+      <h2>Invite-only for now</h2>
+      <p>Invite-only internal TestFlight testing is underway. There is no public enrollment link yet, and this page will not pretend otherwise. Check back after invitations open.</p>
+    </section>
+  )}
+  <section><h2>What you will test</h2><p>Complete the visual onboarding, explore the Life room, record an interruption and return in Focus, make a small Trade, and confirm that History reflects your choices after relaunching.</p></section>
+  <section><h2>What is not in this beta</h2><p>Screen Time authorization and automatic activity history are not included. Data stays local. Optional Apple Intelligence and Image Playground features only appear on supported devices.</p></section>
+  <section><h2>Testing boundary</h2><p>Current quality checks use the iOS Simulator and TestFlight. We are not treating a tethered physical-device run as a prerequisite for this testing phase.</p></section>
+</LegalPage>

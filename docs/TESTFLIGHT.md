@@ -33,8 +33,8 @@ create the personal provisioning profile automatically when the Apple Account
 is signed in under Xcode > Settings > Accounts.
 
 An earlier signed archive predates the selected production icon and is not
-accepted as current readiness evidence. No App Store Connect upload, tester
-invitation, or public release is part of this preparation task.
+accepted as current readiness evidence. TestFlight upload is now authorized;
+App Store submission and public release are not.
 
 ## Verified local readiness
 
@@ -53,9 +53,17 @@ manifest passes `plutil`; and its compiled 120px phone and 152px iPad icon
 renditions contain the selected sprout mark. The archive is local evidence only
 and is not signed or distributable.
 
-These checks do not repeat or replace device signing, App Store validation,
-App Store Connect record creation, upload, tester invitation, or release. Those
-remain explicit manual steps below.
+These checks do not replace App Store Connect record creation, upload
+processing, tester invitation, or release. Those remain separate steps below.
+
+## Current upload state
+
+On 2026-08-11, Xcode reached App Store Connect with the signed personal-team
+archive and returned `App record with bundle identifier
+"com.significanthobbies.indulge" not found`. The archive and export settings
+passed the local personal-team boundary before transport. Create the Indulge
+app record in the personal App Store Connect provider, then rerun the upload
+script. Do not substitute another developer team.
 
 ## Beta information
 
@@ -133,10 +141,9 @@ INDULGE_ALLOW_PROVISIONING_UPDATES=YES \
 ./scripts/archive-testflight.sh
 ```
 
-The archive is written to `build/Indulge.xcarchive`. Open it in Xcode Organizer,
-run Validate App, and choose Distribute App > TestFlight Internal Only (or App
-Store Connect) when the App Store Connect record and test information are ready.
-Uploading is deliberately a manual release step.
+The archive is written to `build/Indulge.xcarchive`. Open it in Xcode Organizer
+to inspect it if needed. The scripted upload below remains locked to TestFlight
+Internal Only and cannot submit a build for App Store review.
 
 After the app record exists, upload the already signed personal-team archive as
 an internal-only build with:
