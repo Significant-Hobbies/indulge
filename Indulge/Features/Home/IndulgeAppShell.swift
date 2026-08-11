@@ -294,8 +294,12 @@ private struct IndulgeAboutView: View {
         }
 
         Section("About") {
-          Link("Privacy", destination: URL(string: "https://indulge.pages.dev/privacy/")!)
-          Link("Support", destination: URL(string: "https://indulge.pages.dev/support/")!)
+          Link(
+            "Privacy",
+            destination: URL(string: "https://indulge.significanthobbies.com/privacy/")!)
+          Link(
+            "Support",
+            destination: URL(string: "https://indulge.significanthobbies.com/support/")!)
         }
 
         Section("Your data") {
