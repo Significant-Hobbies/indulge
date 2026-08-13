@@ -1,0 +1,59 @@
+{
+  "$schema": "fleet.design-review.v1",
+  "version": 1,
+  "project": "indulge-issue-1",
+  "target": "Procedural RealityKit visual proof craft pass (#1)",
+  "mode": "preserve",
+  "register": "product",
+  "context": {
+    "product": "PRODUCT.md",
+    "design": "DESIGN.md"
+  },
+  "direction": {
+    "references": [],
+    "probes": [],
+    "selected": "existing-design",
+    "approval": "not-required",
+    "before": "artifacts/design/review/realitykit-craft/before-phone-26.4.png"
+  },
+  "evidence": {
+    "screenshots": [
+      {
+        "width": 390,
+        "path": "artifacts/design/review/realitykit-craft/after-phone-26.4.png"
+      },
+      {
+        "width": 768,
+        "path": "artifacts/design/review/realitykit-craft/after-tablet-27.0-possible.png"
+      },
+      {
+        "width": 1440,
+        "path": "artifacts/design/review/realitykit-craft/after-wide-26.4-reduced.png"
+      }
+    ],
+    "projectCheck": {
+      "command": "./scripts/test.sh on iOS 26.4 and iOS 27.0; ./scripts/build.sh; openspec validate build-indulge-visual-proof --strict; git diff --check",
+      "status": "pass"
+    },
+    "critique": {
+      "score": 32,
+      "maximum": 40
+    },
+    "audit": {
+      "score": 19,
+      "maximum": 20
+    },
+    "unresolved": {
+      "p0": 0,
+      "p1": 0
+    },
+    "detector": {
+      "posture": "advisory",
+      "findings": []
+    }
+  },
+  "ownerFeedback": {
+    "decision": "delegated",
+    "note": "The owner delegated implementation judgment through the all-open-issues sequence. The preserve-lane craft pass and bounded re-audit have zero unresolved P0/P1. Physical hardware frame pacing, thermal, and battery proof remains external because the available local provisioning profile lacks the target's checked-in iCloud and Push capabilities."
+  }
+}

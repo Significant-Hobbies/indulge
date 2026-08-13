@@ -173,7 +173,7 @@ const chapters = [
   .beta-note { margin-top: 14px; color: var(--navy-soft); font-size: .82rem; }
   .hero-device { align-self: end; justify-self: center; width: min(100%, 370px); }
   .phone-shell { overflow: hidden; padding: 8px; border-radius: 50px; background: var(--navy); box-shadow: 0 36px 80px rgba(12,28,56,.26), 0 9px 0 rgba(12,28,56,.1); transform: rotate(2.2deg); }
-  .phone-shell img { width: 100%; border-radius: 42px; }
+  .phone-shell img { width: 100%; height: auto; border-radius: 42px; }
   .hero-device figcaption { max-width: 30ch; margin: 18px auto 0; color: var(--navy-soft); font-size: .8rem; text-align: center; }
   .tension { display: grid; grid-template-columns: 1.15fr .65fr; gap: clamp(44px, 9vw, 130px); align-items: end; padding-top: 130px; padding-bottom: 130px; }
   .statement { font-family: var(--display); font-size: clamp(2.7rem, 6vw, 5.7rem); font-weight: 760; line-height: .96; letter-spacing: -.035em; }
@@ -196,7 +196,7 @@ const chapters = [
   .chapter-copy > p:last-child { max-width: 38ch; margin-top: 22px; color: var(--navy-soft); font-size: 1.05rem; line-height: 1.7; }
   .screen-frame { justify-self: center; width: min(100%, 295px); padding: 7px; border-radius: 42px; background: var(--navy); box-shadow: var(--shadow); transform: rotate(-1.5deg); }
   .chapter-reverse .screen-frame { transform: rotate(1.5deg); }
-  .screen-frame img { border-radius: 35px; }
+  .screen-frame img { width: 100%; height: auto; border-radius: 35px; }
   .fit-section { padding: 130px 0; background: var(--paper); }
   .fit-grid { display: grid; grid-template-columns: 1fr .68fr; gap: 80px; }
   .fit-copy p { color: var(--navy-soft); font-size: 1.06rem; line-height: 1.75; }
@@ -235,17 +235,21 @@ const chapters = [
     .hero { padding-top: 122px; padding-bottom: 0; }
     .hero-grid { grid-template-columns: 1fr; }
     h1 { font-size: clamp(4.2rem, 22vw, 6rem); }
-    .hero-device { width: 78%; margin-top: 28px; }
+    .hero-device { justify-self: end; width: min(58%, 205px); margin: 24px clamp(12px, 8vw, 32px) 0 0; }
+    .hero-device figcaption { max-width: 24ch; margin-top: 14px; }
     .sun { right: -40px; width: 130px; height: 130px; }
     .window { display: none; }
     .path { left: 9%; bottom: -2%; width: 500px; height: 180px; }
     .tension { padding-top: 90px; padding-bottom: 90px; }
     .wide-only { display: none; }
     .chapter-intro { padding-top: 88px; padding-bottom: 56px; }
-    .chapter { min-height: 0; padding: 54px 0; }
-    .chapter-grid, .chapter-reverse .chapter-grid { grid-template-columns: 1fr; gap: 40px; }
-    .chapter-reverse .chapter-copy { order: initial; }
-    .screen-frame { width: min(58%, 270px); }
+    .chapter { min-height: 0; padding: 42px 0; }
+    .chapter-grid { grid-template-columns: minmax(0, 1fr) minmax(112px, 34%); gap: clamp(18px, 6vw, 28px); }
+    .chapter-reverse .chapter-grid { grid-template-columns: minmax(112px, 34%) minmax(0, 1fr); }
+    .chapter-reverse .chapter-copy { order: 2; }
+    .chapter-copy h3 { font-size: clamp(2rem, 9vw, 2.7rem); }
+    .chapter-copy > p:last-child { margin-top: 16px; font-size: .95rem; line-height: 1.55; }
+    .screen-frame { width: 100%; max-width: 150px; }
     .fit-section, .faq { padding-top: 92px; padding-bottom: 92px; }
     .privacy-section { padding: 90px 0; }
     .privacy-grid { grid-template-columns: 1fr; }
