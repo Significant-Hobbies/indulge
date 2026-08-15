@@ -39,7 +39,11 @@ for (const prohibitedClaim of ["cure addiction", "treat addiction", "guaranteed 
   if (home.toLowerCase().includes(prohibitedClaim)) throw new Error(`Prohibited product claim found: ${prohibitedClaim}`);
 }
 
-if (home.includes("<script")) throw new Error("The static landing unexpectedly ships client-side JavaScript.");
+// The only allowed client-side script is the PostHog analytics snippet.
+const scriptCount = (home.match(/<script/g) ?? []).length;
+if (scriptCount > 1 || (scriptCount === 1 && !home.includes("posthog.init"))) {
+  throw new Error("The static landing unexpectedly ships client-side JavaScript beyond the PostHog analytics snippet.");
+}
 
 const localHrefs = [...home.matchAll(/href="(\/[^"]*)"/g)]
   .map((match) => match[1].split("#")[0])
