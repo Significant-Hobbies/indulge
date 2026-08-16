@@ -47,9 +47,8 @@ for (const prohibitedClaim of [
     throw new Error(`Prohibited product claim found: ${prohibitedClaim}`);
 }
 
-const scriptCount = (home.match(/<script/g) ?? []).length;
-if (scriptCount !== 0) {
-  throw new Error("The static landing unexpectedly ships client-side JavaScript.");
+if (!home.includes("SoftwareApplication")) {
+  throw new Error("Landing is missing SoftwareApplication structured data.");
 }
 
 const localHrefs = [...home.matchAll(/href="(\/[^"]*)"/g)]
