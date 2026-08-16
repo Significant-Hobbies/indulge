@@ -51,6 +51,14 @@ if (!home.includes("SoftwareApplication")) {
   throw new Error("Landing is missing SoftwareApplication structured data.");
 }
 
+if (!home.includes("look-inside")) {
+  throw new Error("Landing is missing the screenshot gallery.");
+}
+
+if (home.includes("Download on the App Store") && !home.includes("https://apps.apple.com/")) {
+  throw new Error("App Store badge copy appeared without a verified apps.apple.com URL.");
+}
+
 const localHrefs = [...home.matchAll(/href="(\/[^"]*)"/g)]
   .map((match) => match[1].split("#")[0])
   .filter((href, index, all) => href && all.indexOf(href) === index);

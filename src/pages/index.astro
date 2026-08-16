@@ -20,6 +20,14 @@ const chapters = [
   { name: "Trade", title: "Make one honest trade.", copy: "Keep the pleasure you chose. Reclaim a small pocket of the time that tends to disappear, then give it somewhere to go.", image: "/images/screens/trade.jpg", alt: "Indulge Trade screen showing an intentional time exchange" },
   { name: "History", title: "Notice what changes.", copy: "Look back at the choices you actually made, without streaks, shame, or a scoreboard for your life.", image: "/images/screens/history.jpg", alt: "Indulge History screen showing completed trades" }
 ];
+
+const gallery = [
+  { src: "/images/screens/onboarding.jpg", alt: "Indulge onboarding on iPhone" },
+  { src: "/images/screens/life.jpg", alt: "Indulge Life room on iPhone" },
+  { src: "/images/screens/trade.jpg", alt: "Indulge Trade screen on iPhone" },
+  { src: "/images/screens/focus.jpg", alt: "Indulge scene entry on iPhone" },
+  { src: "/images/screens/history.jpg", alt: "Indulge History on iPhone" }
+];
 ---
 <SiteLayout>
   <section class="hero">
@@ -37,7 +45,7 @@ const chapters = [
         <p class="hero-lede">Trade the time you lose for more of the life you want—gently, privately, and one choice at a time.</p>
         <div class="hero-actions">
           <a class="button" href={betaHref}>{betaLabel} <span aria-hidden="true">{hasVerifiedBetaUrl ? "↗" : "→"}</span></a>
-          <a class="text-link" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
+          <a class="text-link" href="#look-inside">See the screens <span aria-hidden="true">↓</span></a>
         </div>
         <p class="beta-note">Invite-only iPhone testing is underway. No account required.</p>
       </div>
@@ -47,6 +55,22 @@ const chapters = [
         </div>
         <figcaption>Your Life room changes with the choices you make.</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <section id="look-inside" class="gallery" aria-labelledby="gallery-title">
+    <div class="shell">
+      <p class="chapter-kicker">Look inside</p>
+      <h2 id="gallery-title">The real iPhone screens.</h2>
+    </div>
+    <div class="gallery-track">
+      {gallery.map((shot) => (
+        <figure class="gallery-phone">
+          <div class="phone-shell">
+            <img src={shot.src} width="390" height="844" alt={shot.alt} loading="lazy" decoding="async" />
+          </div>
+        </figure>
+      ))}
     </div>
   </section>
 
@@ -108,7 +132,7 @@ const chapters = [
       <div>
         <p class="chapter-kicker">Private by default</p>
         <h2 id="privacy-title">Your inner life stays yours.</h2>
-        <p>There is no Indulge account, no advertising SDK, no cross-app tracking, and no third-party analytics. Your profile, trades, and history stay inside Apple’s app and private-storage boundary.</p>
+        <p>The iPhone app has no Indulge account, no advertising SDK, and no analytics in the journal path. Your profile, trades, and history stay inside Apple’s app and private-storage boundary. This website records anonymous page views.</p>
         <a class="text-link" href="/privacy/">Read the plain-language privacy policy <span aria-hidden="true">→</span></a>
       </div>
     </div>
@@ -128,6 +152,10 @@ const chapters = [
       <details>
         <summary>Where is my data stored?</summary>
         <p>Your profile, trades, and history are local-first. Supported signed builds may use your private iCloud database; TestFlight may provide Apple-managed beta diagnostics under Apple’s terms.</p>
+      </details>
+      <details>
+        <summary>Is Indulge on the App Store?</summary>
+        <p>Not yet. This site will not show Apple’s App Store badge until a live apps.apple.com listing exists.</p>
       </details>
       <details>
         <summary>Can I join now?</summary>
@@ -174,6 +202,11 @@ const chapters = [
   .phone-shell { overflow: hidden; padding: 8px; border-radius: 50px; background: var(--navy); box-shadow: 0 36px 80px rgba(12,28,56,.26), 0 9px 0 rgba(12,28,56,.1); transform: rotate(2.2deg); }
   .phone-shell img { width: 100%; height: auto; border-radius: 42px; }
   .hero-device figcaption { max-width: 30ch; margin: 18px auto 0; color: var(--navy-soft); font-size: .8rem; text-align: center; }
+  .gallery { padding: 88px 0 28px; background: var(--paper); }
+  .gallery h2 { font-size: clamp(2.8rem, 6vw, 5.2rem); letter-spacing: -.035em; line-height: .94; }
+  .gallery-track { display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 36px max(20px, calc((100% - 1180px) / 2 + 20px)) 56px; }
+  .gallery-phone { flex: 0 0 min(240px, 70vw); scroll-snap-align: start; }
+  .gallery-phone .phone-shell { transform: none; }
   .tension { display: grid; grid-template-columns: 1.15fr .65fr; gap: clamp(44px, 9vw, 130px); align-items: end; padding-top: 130px; padding-bottom: 130px; }
   .statement { font-family: var(--display); font-size: clamp(2.7rem, 6vw, 5.7rem); font-weight: 760; line-height: .96; letter-spacing: -.035em; }
   .tension-copy h2 { margin-bottom: 15px; font-size: 1.35rem; }
@@ -260,6 +293,6 @@ const chapters = [
     .closing img { width: 230px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .phone-shell, .screen-frame, .chapter-reverse .screen-frame, .privacy-mark { transform: none; }
+    .phone-shell, .screen-frame, .chapter-reverse .screen-frame, .privacy-mark, .gallery-phone .phone-shell { transform: none; }
   }
 </style>

@@ -13,7 +13,7 @@ export const siteSummary = {
   ],
   boundaries: [
     "No Indulge account",
-    "No advertising, cross-app tracking, or third-party analytics",
+    "The iPhone app has no advertising, cross-app tracking, or analytics in the journal path",
     "No Screen Time authorization or app blocking in the current beta",
     "Not medical care or addiction treatment",
     "Core data is local-first; supported signed builds may use private iCloud storage"
@@ -26,5 +26,26 @@ export const siteSummary = {
     accessibility: "https://indulge.significanthobbies.com/accessibility/",
     testflight: "https://indulge.significanthobbies.com/testflight/"
   },
-  lastUpdated: "2026-08-16"
+  lastUpdated: "2026-08-17",
+  screenshots: [
+    "/images/screens/onboarding.jpg",
+    "/images/screens/life.jpg",
+    "/images/screens/trade.jpg",
+    "/images/screens/focus.jpg",
+    "/images/screens/history.jpg"
+  ],
+  faqs: [
+    {
+      question: "Does Indulge block apps or use Screen Time?",
+      answer: "No. This beta does not request Screen Time authorization or enforce limits."
+    },
+    {
+      question: "Do I need an account or internet connection?",
+      answer: "No account is required, and the core experience works offline."
+    },
+    {
+      question: "Is Indulge on the App Store?",
+      answer: "Not yet. This site will not show Apple’s App Store badge until a live apps.apple.com listing exists."
+    }
+  ]
 } as const;

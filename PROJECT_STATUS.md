@@ -1,6 +1,6 @@
 # Indulge — Project Status
 
-Last updated: 2026-08-16
+Last updated: 2026-08-17
 
 ## Why / What
 
@@ -22,6 +22,9 @@ not as punishment, streaks, or productivity metrics.
 
 ## Timeline
 
+- **2026-08-17:** Landing gained a real-screenshot filmstrip, App Store-safe
+  structured data, and an honest split between the iPhone app (no analytics)
+  and this website (anonymous page views).
 - **2026-08-16:** Completed the customer Life → Trade → History loop with a
   versioned SwiftData trade record, deliberate replacement, start and finish,
   three non-judgmental outcomes, relaunch persistence, honest totals, and

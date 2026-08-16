@@ -1,4 +1,5 @@
 ---
+import { siteSummary } from "../content";
 import "../styles/global.css";
 
 interface Props {
@@ -46,13 +47,26 @@ const betaHref = hasVerifiedBetaUrl ? configuredBetaUrl : "/testflight/";
     <meta name="robots" content="index,follow" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      name: "Indulge",
-      operatingSystem: "iOS",
-      applicationCategory: "LifestyleApplication",
-      description,
-      url: String(canonical),
-      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" }
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          name: "Indulge",
+          operatingSystem: "iOS",
+          applicationCategory: "LifestyleApplication",
+          description,
+          url: String(canonical),
+          screenshot: siteSummary.screenshots.map((path) => new URL(path, Astro.site).href),
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" }
+        },
+        {
+          "@type": "FAQPage",
+          mainEntity: siteSummary.faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: { "@type": "Answer", text: faq.answer }
+          }))
+        }
+      ]
     })} />
     <title>{title}</title>
     <script is:inline>
