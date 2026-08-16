@@ -27,5 +27,7 @@ export function GET() {
     `Last updated: ${siteSummary.lastUpdated}`,
     ""
   ];
-  return new Response(lines.join("\n"), { headers: { "content-type": "text/markdown; charset=utf-8" } });
+  return new Response(lines.join("\n"), {
+    headers: { "content-type": "text/markdown; charset=utf-8" }
+  });
 }

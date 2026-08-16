@@ -59,6 +59,11 @@ pnpm build
 pnpm dev
 ```
 
+Fleet-facing quality scripts live in the root `package.json`: `format:check`,
+`lint`, `typecheck`, `test`, `test:coverage`, `knip`, and the `quality:*`
+wrappers. Landing types stay on `astro check`. Native tests and coverage stay
+on `./scripts/test.sh` / XCTest.
+
 When a verified public TestFlight URL exists, set `PUBLIC_TESTFLIGHT_URL` only
 in the build environment. Without it, the site deliberately shows the honest
 invite-only beta state.
