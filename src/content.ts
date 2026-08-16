@@ -2,7 +2,8 @@ export const siteSummary = {
   name: "Indulge",
   url: "https://indulge.significanthobbies.com",
   tagline: "Enjoy on purpose.",
-  summary: "A private, local-first iPhone app for keeping the pleasures you choose, reclaiming time that runs longer than intended, and making room for more of the life you want.",
+  summary:
+    "A private, local-first iPhone app for keeping the pleasures you choose, reclaiming time that runs longer than intended, and making room for more of the life you want.",
   status: "Invite-only TestFlight beta preparation",
   platforms: ["iPhone"],
   capabilities: [

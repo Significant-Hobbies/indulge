@@ -7,6 +7,9 @@ Follow `/Users/sarthak/Desktop/fleet/AGENTS.md` and the project truth in
 
 - Generate the Xcode project: `xcodegen generate`
 - Build the app: `./scripts/build.sh`
+- Native tests: `./scripts/test.sh` or `pnpm test`
+- Landing types: `pnpm typecheck` (`astro check`)
+- Quality inventory: `pnpm format:check`, `pnpm lint`, `pnpm quality`
 - Validate the active change: `openspec validate build-indulge-visual-proof --strict`
 
 ## Native boundaries
