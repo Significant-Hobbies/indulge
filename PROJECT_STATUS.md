@@ -80,12 +80,11 @@ not as punishment, streaks, or productivity metrics.
 - **2026-08-16:** Reconciled and archived the original hosted-landing plan. The
   main launch-surface contract now requires deterministic provider-neutral
   output and makes no deployment, DNS, or public-availability claim.
-- **2026-08-16:** Uploaded Indulge 0.1.0 build 3 to App Store Connect for
-  internal TestFlight processing on personal team `8F7LXHTJZR`. The inspected
-  IPA is Apple Distribution signed with production push and CloudKit
-  entitlements, `get-task-allow=false`, a valid privacy manifest, and no
-  embedded third-party frameworks. Apple accepted the upload and reported it
-  processing; `Ready to Test` still requires portal confirmation.
+- **2026-08-16:** Uploaded Indulge 0.1.0 to internal TestFlight on personal
+  team `8F7LXHTJZR`. The inspected IPA is Apple Distribution signed with
+  production push and CloudKit entitlements, `get-task-allow=false`, a valid
+  privacy manifest, and no embedded third-party frameworks. Internal testers
+  only. No App Store submission.
 
 ## Products
 
@@ -107,9 +106,9 @@ not as punishment, streaks, or productivity metrics.
   three humane outcomes, a causal completion pocket, and real History totals.
 - Offline manual behavior, optional availability-gated Apple Image Playground,
   Reduce Motion, Dynamic Type, VoiceOver, and Light/Dark support.
-- App Store identity assets plus an inspected build-3 distribution package.
-  Build 3 has been uploaded for internal TestFlight processing; external beta
-  testing and App Store review remain separate, unauthorized actions.
+- App Store identity assets plus an inspected distribution package on
+  internal TestFlight. External beta testing and App Store review remain
+  separate, unauthorized actions.
 - A responsive, zero-client-JavaScript static launch artifact with real app
   proof, plain-language privacy and support, truthful beta availability, and
   stable Markdown, `llms.txt`, and `/api/ai` product truth. Hosting is outside
