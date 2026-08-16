@@ -8,6 +8,22 @@ import Testing
 struct PrivacyLockTests {
   @Test func nativePolicyIncludesTheDevicePasscodeFallback() {
     #expect(LocalDeviceOwnerAuthenticationService.policy == .deviceOwnerAuthentication)
+    #expect(!PrivacyLockSettingsController.unlockReason.localizedCaseInsensitiveContains("focus"))
+  }
+
+  @Test func physicalHardwareExposesDeviceOwnerAuthenticationWhenAvailable() {
+    #if !targetEnvironment(simulator)
+      #expect(LocalDeviceOwnerAuthenticationService().availability == .available)
+    #endif
+  }
+
+  @Test func explicitlyRequestedPhysicalAuthenticationCompletes() async {
+    #if !targetEnvironment(simulator) && INDULGE_PHYSICAL_AUTH_TEST
+      let outcome = await LocalDeviceOwnerAuthenticationService().authenticate(
+        reason: "Verify that Indulge Privacy Lock works on this iPhone."
+      )
+      #expect(outcome == .authenticated)
+    #endif
   }
 
   @Test func enablingRequiresSuccessfulDeviceOwnerAuthentication() async {

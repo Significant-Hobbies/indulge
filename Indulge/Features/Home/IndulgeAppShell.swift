@@ -4,14 +4,12 @@ import UIKit
 
 enum IndulgeAppTab: String, CaseIterable, Equatable, Sendable {
   case life
-  case focus
   case trade
   case history
 
   var title: String {
     switch self {
     case .life: "Life"
-    case .focus: "Focus"
     case .trade: "Trade"
     case .history: "History"
     }
@@ -20,52 +18,30 @@ enum IndulgeAppTab: String, CaseIterable, Equatable, Sendable {
   var icon: String {
     switch self {
     case .life: "house.fill"
-    case .focus: "circle.dotted.circle.fill"
     case .trade: "arrow.left.arrow.right"
     case .history: "clock.fill"
     }
   }
 }
 
-enum ReclaimTarget: Int, CaseIterable, Equatable, Sendable {
-  case fifteen = 15
-  case thirty = 30
-  case fortyFive = 45
-
-  var title: String { "\(rawValue) min" }
-
-  static func suggested(for time: DailyTime?) -> Self {
-    switch time {
-    case .underThirty, .none: .fifteen
-    case .aboutOneHour: .fifteen
-    case .twoHours: .thirty
-    case .threePlus: .fortyFive
-    }
-  }
-}
-
-struct ActiveTrade: Equatable, Sendable {
-  let indulgence: IndulgenceChoice
-  let reclaimTarget: ReclaimTarget
-  let destination: LifeDirection
-}
-
 struct IndulgeAppShell: View {
+  @Environment(\.modelContext) private var modelContext
+  @Query(sort: \TradeRecord.updatedAt, order: .reverse) private var tradeRecords: [TradeRecord]
   let profile: OnboardingProfile
-  let focusPreviewPreset: FocusPreviewPreset?
+  private let startsWithActiveTrade: Bool
+  private let startsWithCompletedTrade: Bool
   @State private var selectedTab: IndulgeAppTab
-  @State private var activeTrade: ActiveTrade?
+  @State private var didPrepareStore = false
 
   init(
     profile: OnboardingProfile, initialTab: IndulgeAppTab = .life,
     startsWithActiveTrade: Bool = false,
-    focusPreviewPreset: FocusPreviewPreset? = nil
+    startsWithCompletedTrade: Bool = false
   ) {
     self.profile = profile
-    self.focusPreviewPreset = focusPreviewPreset
+    self.startsWithActiveTrade = startsWithActiveTrade
+    self.startsWithCompletedTrade = startsWithCompletedTrade
     _selectedTab = State(initialValue: initialTab)
-    _activeTrade = State(
-      initialValue: startsWithActiveTrade ? Self.makeSuggestedTrade(for: profile) : nil)
   }
 
   var body: some View {
@@ -76,15 +52,15 @@ struct IndulgeAppShell: View {
       .tag(IndulgeAppTab.life)
       .tabItem { Label(IndulgeAppTab.life.title, systemImage: IndulgeAppTab.life.icon) }
 
-      FocusHomeView(profile: profile, previewPreset: focusPreviewPreset)
-        .tag(IndulgeAppTab.focus)
-        .tabItem { Label(IndulgeAppTab.focus.title, systemImage: IndulgeAppTab.focus.icon) }
-
-      TradeHomeView(profile: profile, activeTrade: $activeTrade)
+      TradeHomeView(profile: profile, activeRecord: activeRecord)
         .tag(IndulgeAppTab.trade)
         .tabItem { Label(IndulgeAppTab.trade.title, systemImage: IndulgeAppTab.trade.icon) }
 
-      HistoryHomeView(profile: profile, activeTrade: activeTrade) {
+      HistoryHomeView(
+        profile: profile,
+        activeTrade: activeTrade,
+        completedRecords: completedRecords
+      ) {
         selectedTab = .trade
       }
       .tag(IndulgeAppTab.history)
@@ -93,6 +69,58 @@ struct IndulgeAppShell: View {
     .tint(Color.indulgeCherry)
     .toolbarBackground(.visible, for: .tabBar)
     .toolbarBackground(Color.indulgeSurface, for: .tabBar)
+    .task {
+      guard !didPrepareStore else { return }
+      didPrepareStore = true
+      do {
+        let repository = TradeRepository(context: modelContext)
+        let retained = try repository.active()
+        if retained == nil,
+          startsWithActiveTrade,
+          let suggested = Self.makeSuggestedTrade(for: profile)
+        {
+          try repository.create(
+            indulgence: suggested.indulgence,
+            reclaimTarget: suggested.reclaimTarget,
+            destination: suggested.destination,
+            at: suggested.createdAt
+          )
+        }
+        if startsWithCompletedTrade, try repository.completed().isEmpty,
+          let suggested = Self.makeSuggestedTrade(for: profile)
+        {
+          let record = try repository.create(
+            indulgence: suggested.indulgence,
+            reclaimTarget: suggested.reclaimTarget,
+            destination: suggested.destination,
+            replacingActive: retained != nil,
+            at: suggested.createdAt
+          )
+          try repository.begin(record, at: suggested.createdAt.addingTimeInterval(1))
+          try repository.complete(
+            record,
+            outcome: .madeRoom,
+            at: suggested.createdAt.addingTimeInterval(2)
+          )
+        }
+      } catch {
+        // The visible product remains usable; Trade surfaces any subsequent write error.
+      }
+    }
+  }
+
+  private var activeRecord: TradeRecord? {
+    tradeRecords.first(where: \.isActive)
+  }
+
+  private var activeTrade: ActiveTrade? {
+    activeRecord?.activeValue
+  }
+
+  private var completedRecords: [TradeRecord] {
+    tradeRecords
+      .filter { $0.completedAt != nil && $0.supersededAt == nil }
+      .sorted { ($0.completedAt ?? .distantPast) > ($1.completedAt ?? .distantPast) }
   }
 
   static func makeSuggestedTrade(for profile: OnboardingProfile) -> ActiveTrade? {
@@ -100,15 +128,19 @@ struct IndulgeAppShell: View {
     let destination =
       LifeDirection.allCases.first(where: profile.lifeDirections.contains) ?? .presence
     return ActiveTrade(
+      id: UUID(),
       indulgence: indulgence,
       reclaimTarget: .suggested(for: profile.dailyTime),
-      destination: destination
+      destination: destination,
+      createdAt: .now,
+      startedAt: nil
     )
   }
 }
 
 private struct LifeHomeView: View {
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   let profile: OnboardingProfile
   let activeTrade: ActiveTrade?
   let openTrade: () -> Void
@@ -119,7 +151,32 @@ private struct LifeHomeView: View {
       NavigationStack {
         ScrollView {
           VStack(spacing: 0) {
-            IndulgeSceneHeader(profile: profile, title: greeting, height: sceneHeaderHeight)
+            Button(action: openTrade) {
+              ZStack(alignment: .bottomTrailing) {
+                IndulgeSceneHeader(profile: profile, title: greeting, height: sceneHeaderHeight)
+
+                LinearGradient(
+                  colors: [.clear, Color.indulgeNavy.opacity(0.58)],
+                  startPoint: .top,
+                  endPoint: .bottom
+                )
+                .frame(height: 112)
+                .allowsHitTesting(false)
+
+                Label("Tap the room when it starts", systemImage: "hand.tap.fill")
+                  .font(.indulgeLabel)
+                  .foregroundStyle(.white)
+                  .shadow(color: Color.indulgeNavy.opacity(0.55), radius: 8, y: 3)
+                  .padding(.horizontal, 20)
+                  .padding(.bottom, 38)
+              }
+              .contentShape(Rectangle())
+            }
+            .buttonStyle(InteractiveSceneButtonStyle())
+            .accessibilityLabel("Shape this indulgence")
+            .accessibilityHint(
+              "Opens a trade for \(profile.primaryIndulgence?.title.lowercased() ?? "your selected indulgence")"
+            )
 
             VStack(alignment: .leading, spacing: 24) {
               VStack(alignment: .leading, spacing: 8) {
@@ -154,7 +211,6 @@ private struct LifeHomeView: View {
                 FutureLifeCardSection(profile: profile)
               }
 
-              GroundedReflectionCard(profile: profile)
             }
             .padding(.horizontal, 22)
             .padding(.top, 26)
@@ -172,7 +228,8 @@ private struct LifeHomeView: View {
           .frame(width: viewport.size.width)
         }
         .background(Color.indulgePowderSoft)
-        .ignoresSafeArea(edges: .top)
+        .ignoresSafeArea(edges: horizontalSizeClass == .compact ? .top : [])
+        .scrollIndicators(.visible)
         .toolbar {
           ToolbarItem(placement: .topBarTrailing) {
             Button {
@@ -285,7 +342,7 @@ private struct IndulgeAboutView: View {
               .font(.indulgeTitle)
               .foregroundStyle(Color.indulgeText)
             Text(
-              "Your profile, trades, and Focus journal are local-first. Private iCloud sync is used only when a supported build is configured for it."
+              "Your profile, trades, and reflections are local-first. Private iCloud sync is used only when a supported build is configured for it."
             )
             .font(.indulgeBody)
             .foregroundStyle(Color.indulgeText.opacity(0.68))
@@ -307,7 +364,7 @@ private struct IndulgeAboutView: View {
             confirmsDataDeletion = true
           }
           Text(
-            "Deletes your profile, Focus history, reflections, and generated card. This cannot be undone."
+            "Deletes your profile, trades, reflections, and generated card. This cannot be undone."
           )
           .font(.footnote)
           .foregroundStyle(.secondary)
@@ -417,21 +474,28 @@ private struct IndulgeAboutView: View {
 }
 
 private struct TradeHomeView: View {
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   let profile: OnboardingProfile
-  @Binding var activeTrade: ActiveTrade?
+  let activeRecord: TradeRecord?
   @State private var target: ReclaimTarget
   @State private var destination: LifeDirection
   @State private var destinationFeedbackToken = 0
+  @State private var isEditingReplacement = false
+  @State private var confirmsCompletion = false
+  @State private var isSaving = false
+  @State private var persistenceMessage: String?
+  @State private var completionMoment: CompletionMoment?
 
-  init(profile: OnboardingProfile, activeTrade: Binding<ActiveTrade?>) {
+  init(profile: OnboardingProfile, activeRecord: TradeRecord?) {
     self.profile = profile
-    _activeTrade = activeTrade
+    self.activeRecord = activeRecord
     _target = State(
-      initialValue: activeTrade.wrappedValue?.reclaimTarget ?? .suggested(for: profile.dailyTime))
+      initialValue: activeRecord?.reclaimTarget ?? .suggested(for: profile.dailyTime))
     let firstDirection =
       LifeDirection.allCases.first(where: profile.lifeDirections.contains) ?? .presence
-    _destination = State(initialValue: activeTrade.wrappedValue?.destination ?? firstDirection)
+    _destination = State(initialValue: activeRecord?.destination ?? firstDirection)
   }
 
   var body: some View {
@@ -468,70 +532,10 @@ private struct TradeHomeView: View {
                 reclaimTarget: activeTrade?.reclaimTarget ?? target
               )
 
-              if activeTrade == nil {
-                VStack(alignment: .leading, spacing: 12) {
-                  Text("What should that time become?")
-                    .font(.indulgeTitle)
-                    .foregroundStyle(Color.indulgeText)
-
-                  ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                      ForEach(availableDestinations, id: \.self) { option in
-                        destinationChoice(option)
-                      }
-                    }
-                  }
-                  .contentMargins(.horizontal, 1, for: .scrollContent)
-                }
-
-                VStack(alignment: .leading, spacing: 12) {
-                  Text("How much starts there?")
-                    .font(.indulgeTitle)
-                    .foregroundStyle(Color.indulgeText)
-
-                  HStack(spacing: 9) {
-                    ForEach(ReclaimTarget.allCases, id: \.rawValue) { option in
-                      Button {
-                        target = option
-                      } label: {
-                        Text(option.title)
-                          .font(.indulgeLabel)
-                          .foregroundStyle(target == option ? .white : Color.indulgeText)
-                          .frame(maxWidth: .infinity, minHeight: 48)
-                          .background(
-                            target == option ? Color.indulgeNavy : Color.indulgePowder,
-                            in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                      }
-                      .buttonStyle(IndulgePressableButtonStyle())
-                      .accessibilityAddTraits(target == option ? .isSelected : [])
-                    }
-                  }
-                }
-
-                Button("Create this trade") {
-                  guard let indulgence = profile.primaryIndulgence else { return }
-                  withAnimation(.smooth(duration: 0.42)) {
-                    activeTrade = ActiveTrade(
-                      indulgence: indulgence,
-                      reclaimTarget: target,
-                      destination: destination
-                    )
-                  }
-                }
-                .buttonStyle(IndulgePrimaryLightButtonStyle())
-                .disabled(profile.primaryIndulgence == nil)
-              } else if let activeTrade {
-                Label(
-                  "Guide \(activeTrade.reclaimTarget.title) toward \(activeTrade.destination.title.lowercased()) when the time stops feeling chosen.",
-                  systemImage: "checkmark.circle.fill"
-                )
-                .font(.indulgeControl)
-                .foregroundStyle(Color.indulgeText)
-                .padding(17)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                  Color.indulgeCherry.opacity(0.08),
-                  in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+              if activeTrade == nil || isEditingReplacement {
+                tradeEditor
+              } else if let activeTrade, let activeRecord {
+                activeTradeControls(activeTrade, record: activeRecord)
               }
             }
             .padding(.horizontal, 22)
@@ -550,10 +554,182 @@ private struct TradeHomeView: View {
           .frame(width: viewport.size.width)
         }
         .background(Color.indulgePowderSoft)
-        .ignoresSafeArea(edges: .top)
+        .ignoresSafeArea(edges: horizontalSizeClass == .compact ? .top : [])
+        .scrollIndicators(.visible)
       }
     }
     .sensoryFeedback(.selection, trigger: destinationFeedbackToken)
+    .confirmationDialog(
+      "How did this trade go?",
+      isPresented: $confirmsCompletion,
+      titleVisibility: .visible
+    ) {
+      ForEach(TradeOutcome.allCases, id: \.self) { outcome in
+        Button(outcome.title) { completeTrade(outcome) }
+      }
+      Button("Keep it active", role: .cancel) {}
+    } message: {
+      Text("Every answer belongs in your history. There is no failure state here.")
+    }
+    .alert("Trade not saved", isPresented: persistenceMessageBinding) {
+      Button("OK", role: .cancel) {}
+    } message: {
+      Text(persistenceMessage ?? "Please try again.")
+    }
+    .fullScreenCover(item: $completionMoment) { moment in
+      TradeCompletionMomentView(moment: moment) {
+        completionMoment = nil
+      }
+    }
+  }
+
+  private var activeTrade: ActiveTrade? {
+    activeRecord?.activeValue
+  }
+
+  private var tradeEditor: some View {
+    VStack(alignment: .leading, spacing: 20) {
+      VStack(alignment: .leading, spacing: 12) {
+        Text("What should that time become?")
+          .font(.indulgeTitle)
+          .foregroundStyle(Color.indulgeText)
+
+        LazyVGrid(
+          columns: [GridItem(.adaptive(minimum: 132), spacing: 10)],
+          spacing: 10
+        ) {
+          ForEach(availableDestinations, id: \.self) { option in
+            destinationChoice(option)
+          }
+        }
+      }
+
+      VStack(alignment: .leading, spacing: 12) {
+        Text("How much starts there?")
+          .font(.indulgeTitle)
+          .foregroundStyle(Color.indulgeText)
+
+        HStack(spacing: 9) {
+          ForEach(ReclaimTarget.allCases, id: \.rawValue) { option in
+            Button {
+              target = option
+            } label: {
+              Text(option.title)
+                .font(.indulgeLabel)
+                .foregroundStyle(target == option ? .white : Color.indulgeText)
+                .frame(maxWidth: .infinity, minHeight: 48)
+                .background(
+                  target == option ? Color.indulgeNavy : Color.indulgePowder,
+                  in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            }
+            .buttonStyle(IndulgePressableButtonStyle())
+            .accessibilityAddTraits(target == option ? .isSelected : [])
+          }
+        }
+      }
+
+      Button(isEditingReplacement ? "Replace active trade" : "Create this trade") {
+        saveTrade(replacingActive: isEditingReplacement)
+      }
+      .buttonStyle(IndulgePrimaryLightButtonStyle())
+      .disabled(profile.primaryIndulgence == nil || isSaving)
+
+      if isEditingReplacement {
+        Button("Keep my current trade") {
+          isEditingReplacement = false
+        }
+        .buttonStyle(.bordered)
+        .tint(Color.indulgeNavy)
+        .frame(maxWidth: .infinity)
+      }
+    }
+  }
+
+  private func activeTradeControls(_ trade: ActiveTrade, record: TradeRecord) -> some View {
+    VStack(alignment: .leading, spacing: 14) {
+      Label(
+        trade.hasStarted
+          ? "This trade is in motion. Finish it whenever the moment has passed."
+          : "Guide \(trade.reclaimTarget.title) toward \(trade.destination.title.lowercased()) when the time stops feeling chosen.",
+        systemImage: trade.hasStarted ? "hourglass.circle.fill" : "checkmark.circle.fill"
+      )
+      .font(.indulgeControl)
+      .foregroundStyle(Color.indulgeText)
+      .padding(17)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .background(
+        Color.indulgeCherry.opacity(0.08),
+        in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+
+      Button(trade.hasStarted ? "Finish this trade" : "Begin this trade") {
+        if trade.hasStarted {
+          confirmsCompletion = true
+        } else {
+          beginTrade(record)
+        }
+      }
+      .buttonStyle(IndulgePrimaryLightButtonStyle())
+      .disabled(isSaving)
+
+      Button("Choose a different trade") {
+        target = trade.reclaimTarget
+        destination = trade.destination
+        isEditingReplacement = true
+      }
+      .font(.indulgeControl)
+      .foregroundStyle(Color.indulgeText.opacity(0.72))
+      .frame(maxWidth: .infinity, minHeight: 48)
+      .disabled(isSaving)
+    }
+  }
+
+  private func saveTrade(replacingActive: Bool) {
+    guard !isSaving, let indulgence = profile.primaryIndulgence else { return }
+    isSaving = true
+    do {
+      try TradeRepository(context: modelContext).create(
+        indulgence: indulgence,
+        reclaimTarget: target,
+        destination: destination,
+        replacingActive: replacingActive
+      )
+      withAnimation(.smooth(duration: 0.42)) {
+        isEditingReplacement = false
+      }
+    } catch {
+      persistenceMessage = "Your trade is still visible, but the new choice could not be saved."
+    }
+    isSaving = false
+  }
+
+  private func beginTrade(_ record: TradeRecord) {
+    guard !isSaving else { return }
+    isSaving = true
+    do {
+      try TradeRepository(context: modelContext).begin(record)
+    } catch {
+      persistenceMessage = "This trade could not be started. Nothing was removed."
+    }
+    isSaving = false
+  }
+
+  private func completeTrade(_ outcome: TradeOutcome) {
+    guard !isSaving, let record = activeRecord, let trade = record.activeValue else { return }
+    isSaving = true
+    do {
+      try TradeRepository(context: modelContext).complete(record, outcome: outcome)
+      completionMoment = CompletionMoment(trade: trade, outcome: outcome)
+    } catch {
+      persistenceMessage = "This result could not be saved. Your trade remains available to finish."
+    }
+    isSaving = false
+  }
+
+  private var persistenceMessageBinding: Binding<Bool> {
+    Binding(
+      get: { persistenceMessage != nil },
+      set: { if !$0 { persistenceMessage = nil } }
+    )
   }
 
   private var availableDestinations: [LifeDirection] {
@@ -590,7 +766,7 @@ private struct TradeHomeView: View {
           .font(.indulgeCaption)
           .foregroundStyle(Color.indulgeText)
           .lineLimit(2)
-          .frame(width: 100, alignment: .leading)
+          .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(8)
       .background(
@@ -603,6 +779,82 @@ private struct TradeHomeView: View {
     }
     .buttonStyle(IndulgePressableButtonStyle())
     .accessibilityAddTraits(selected ? .isSelected : [])
+  }
+}
+
+private struct CompletionMoment: Identifiable {
+  let id = UUID()
+  let trade: ActiveTrade
+  let outcome: TradeOutcome
+}
+
+private struct TradeCompletionMomentView: View {
+  let moment: CompletionMoment
+  let dismiss: () -> Void
+
+  var body: some View {
+    ZStack {
+      Color.indulgePowderSoft.ignoresSafeArea()
+
+      ScrollView {
+        VStack(spacing: 24) {
+          ZStack(alignment: .bottom) {
+            AuthoredScenePresenter(
+              assetName: moment.trade.destination.artworkAssetName,
+              semanticLabel: "A glimpse of \(moment.trade.destination.title.lowercased())"
+            )
+            .frame(height: 390)
+            .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
+
+            LinearGradient(
+              colors: [.clear, Color.indulgeNavy.opacity(0.82)],
+              startPoint: .center,
+              endPoint: .bottom
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
+
+            VStack(spacing: 8) {
+              Image(systemName: moment.outcome.systemImage)
+                .font(.system(size: 30, weight: .bold))
+              Text(moment.outcome.historyTitle)
+                .font(.indulgeDisplay)
+              Text(completionSentence)
+                .font(.indulgeBody)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+            .foregroundStyle(.white)
+            .padding(26)
+          }
+
+          Text("The pleasure stays part of the picture. This simply records what you chose today.")
+            .font(.indulgeBody)
+            .foregroundStyle(Color.indulgeText.opacity(0.68))
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+
+          Button("Done", action: dismiss)
+            .buttonStyle(IndulgePrimaryLightButtonStyle())
+        }
+        .padding(.horizontal, 22)
+        .padding(.top, 56)
+        .padding(.bottom, 36)
+        .frame(maxWidth: 620)
+        .frame(maxWidth: .infinity)
+      }
+    }
+    .accessibilityElement(children: .contain)
+  }
+
+  private var completionSentence: String {
+    switch moment.outcome {
+    case .madeRoom:
+      "You guided \(moment.trade.reclaimTarget.title) toward \(moment.trade.destination.title.lowercased())."
+    case .choseIndulgence:
+      "You deliberately chose more time with \(moment.trade.indulgence.title.lowercased())."
+    case .anotherDay:
+      "You left this trade for another day. That is useful history too."
+    }
   }
 }
 
@@ -700,63 +952,140 @@ private struct TradeArtworkImage: View {
 }
 
 private struct HistoryHomeView: View {
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   let profile: OnboardingProfile
   let activeTrade: ActiveTrade?
+  let completedRecords: [TradeRecord]
   let openTrade: () -> Void
 
   var body: some View {
     NavigationStack {
-      VStack(spacing: 0) {
-        IndulgeSceneHeader(profile: profile, title: "Your history", height: 310)
+      ScrollView {
+        VStack(spacing: 0) {
+          IndulgeSceneHeader(profile: profile, title: "Your history", height: 310)
 
-        VStack(alignment: .leading, spacing: 18) {
-          Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
-            .font(.system(size: 28, weight: .bold))
-            .foregroundStyle(Color.indulgeCherry)
+          VStack(alignment: .leading, spacing: 20) {
+            if completedRecords.isEmpty {
+              emptyHistory
+            } else {
+              VStack(alignment: .leading, spacing: 8) {
+                Text("The choices you actually made.")
+                  .font(.indulgeDisplay)
+                  .foregroundStyle(Color.indulgeText)
+                  .fixedSize(horizontal: false, vertical: true)
+                Text(historySummary)
+                  .font(.indulgeBody)
+                  .foregroundStyle(Color.indulgeText.opacity(0.66))
+                  .fixedSize(horizontal: false, vertical: true)
+              }
 
-          Text("Your history starts with a real trade.")
-            .font(.indulgeDisplay)
-            .foregroundStyle(Color.indulgeText)
-            .fixedSize(horizontal: false, vertical: true)
-
-          Text(
-            activeTrade == nil
-              ? "After your first trade, this is where you’ll see what you chose, what you reclaimed, and how the room changed. We won’t invent a chart before there is something true to show."
-              : "Your trade is ready. When you complete it for the first time, its real story will appear here."
-          )
-          .font(.indulgeBody)
-          .foregroundStyle(Color.indulgeText.opacity(0.66))
-          .fixedSize(horizontal: false, vertical: true)
-
-          if activeTrade == nil {
-            Button("Create my first trade", action: openTrade)
-              .buttonStyle(IndulgePrimaryLightButtonStyle())
-          } else {
-            Label("Waiting for your first completed trade", systemImage: "hourglass")
-              .font(.indulgeControl)
-              .foregroundStyle(Color.indulgeText)
-              .padding(16)
-              .frame(maxWidth: .infinity, alignment: .leading)
-              .background(
-                Color.indulgePowderSoft, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+              LazyVStack(spacing: 12) {
+                ForEach(completedRecords, id: \.id) { record in
+                  historyRow(record)
+                }
+              }
+            }
           }
-          Spacer(minLength: 0)
+          .padding(.horizontal, 22)
+          .padding(.top, 28)
+          .padding(.bottom, 120)
+          .frame(maxWidth: 680, minHeight: 420, alignment: .topLeading)
+          .frame(maxWidth: .infinity)
+          .background(Color.indulgeSurface)
+          .clipShape(
+            UnevenRoundedRectangle(
+              topLeadingRadius: 30, bottomLeadingRadius: 0, bottomTrailingRadius: 0,
+              topTrailingRadius: 30, style: .continuous)
+          )
+          .offset(y: -22)
         }
-        .padding(.horizontal, 24)
-        .padding(.top, 28)
-        .frame(maxWidth: 680, maxHeight: .infinity, alignment: .topLeading)
-        .frame(maxWidth: .infinity)
-        .background(Color.indulgeSurface)
-        .clipShape(
-          UnevenRoundedRectangle(
-            topLeadingRadius: 30, bottomLeadingRadius: 0, bottomTrailingRadius: 0,
-            topTrailingRadius: 30, style: .continuous)
-        )
-        .offset(y: -22)
       }
       .background(Color.indulgePowderSoft)
-      .ignoresSafeArea(edges: .top)
+      .ignoresSafeArea(edges: horizontalSizeClass == .compact ? .top : [])
+      .scrollIndicators(.visible)
     }
+  }
+
+  private var emptyHistory: some View {
+    VStack(alignment: .leading, spacing: 18) {
+      Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+        .font(.system(size: 28, weight: .bold))
+        .foregroundStyle(Color.indulgeCherry)
+
+      Text("Your history starts with a real trade.")
+        .font(.indulgeDisplay)
+        .foregroundStyle(Color.indulgeText)
+        .fixedSize(horizontal: false, vertical: true)
+
+      Text(
+        activeTrade == nil
+          ? "After your first trade, this is where you’ll see what you chose and what you reclaimed. We won’t invent a chart before there is something true to show."
+          : "Your trade is ready. When you finish it, the choice you actually made will appear here."
+      )
+      .font(.indulgeBody)
+      .foregroundStyle(Color.indulgeText.opacity(0.66))
+      .fixedSize(horizontal: false, vertical: true)
+
+      if activeTrade == nil {
+        Button("Create my first trade", action: openTrade)
+          .buttonStyle(IndulgePrimaryLightButtonStyle())
+      } else {
+        Label("Waiting for your first completed trade", systemImage: "hourglass")
+          .font(.indulgeControl)
+          .foregroundStyle(Color.indulgeText)
+          .padding(16)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .background(
+            Color.indulgePowderSoft, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+      }
+    }
+  }
+
+  private var historySummary: String {
+    let madeRoom = completedRecords.filter { $0.outcome == .madeRoom }
+    let minutes = madeRoom.reduce(0) { $0 + $1.reclaimMinutes }
+    if minutes == 0 {
+      return
+        "\(completedRecords.count.formatted()) completed \(completedRecords.count == 1 ? "trade" : "trades"). No reclaimed time is assumed."
+    }
+    return
+      "\(completedRecords.count.formatted()) completed \(completedRecords.count == 1 ? "trade" : "trades") · \(minutes.formatted()) minutes you said became room for something else."
+  }
+
+  private func historyRow(_ record: TradeRecord) -> some View {
+    HStack(spacing: 14) {
+      TradeArtworkImage(assetName: record.destination.artworkAssetName)
+        .frame(width: 82, height: 82)
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+
+      VStack(alignment: .leading, spacing: 5) {
+        Label(
+          record.outcome?.historyTitle ?? "Completed",
+          systemImage: record.outcome?.systemImage ?? "checkmark"
+        )
+        .font(.indulgeControl)
+        .foregroundStyle(Color.indulgeText)
+        Text(
+          "\(record.indulgence.title) · \(record.reclaimTarget.title) toward \(record.destination.title.lowercased())"
+        )
+        .font(.indulgeCaption)
+        .foregroundStyle(Color.indulgeText.opacity(0.66))
+        .fixedSize(horizontal: false, vertical: true)
+        if let completedAt = record.completedAt {
+          Text(completedAt.formatted(date: .abbreviated, time: .shortened))
+            .font(.caption)
+            .foregroundStyle(Color.indulgeText.opacity(0.5))
+        }
+      }
+      Spacer(minLength: 0)
+    }
+    .padding(12)
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .background(Color.indulgePowderSoft, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+    .overlay(
+      RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(Color.indulgePaleBorder)
+    )
+    .accessibilityElement(children: .combine)
   }
 }
 
@@ -768,26 +1097,56 @@ private struct IndulgeSceneHeader: View {
   var body: some View {
     GeometryReader { proxy in
       ZStack {
-        sceneImage
-          .resizable()
-          .scaledToFill()
-          .frame(width: proxy.size.width, height: proxy.size.height)
-          .clipped()
+        if portraitSceneExists {
+          AuthoredScenePresenter(
+            assetName: "\(sceneAssetName)Portrait",
+            semanticLabel: accessibilityValue
+          )
+        } else if isTelevisionScene {
+          AuthoredScenePresenter(
+            assetName: sceneAssetName,
+            semanticLabel: accessibilityValue,
+            ambientMotion: false
+          )
+          .blur(radius: 24)
+          .scaleEffect(1.08)
+
+          AuthoredScenePresenter(
+            assetName: sceneAssetName,
+            contentMode: .fit,
+            semanticLabel: accessibilityValue
+          )
+        } else {
+          AuthoredScenePresenter(
+            assetName: sceneAssetName,
+            semanticLabel: accessibilityValue
+          )
+        }
       }
+      .frame(width: proxy.size.width, height: proxy.size.height)
+      .clipped()
     }
     .frame(height: height)
     .accessibilityElement(children: .ignore)
     .accessibilityLabel(title)
-    .accessibilityValue(
-      profile.primaryIndulgence.map { "Your scene for \($0.title.lowercased())" } ?? "Your room")
+    .accessibilityValue(accessibilityValue)
   }
 
-  private var sceneImage: Image {
-    let assetName = profile.visualState.sceneAssetName(for: profile.characterPresentation)
-    guard let source = UIImage(named: assetName, in: .main, compatibleWith: nil) else {
-      return Image(systemName: "photo")
-    }
-    return Image(uiImage: source)
+  private var accessibilityValue: String {
+    profile.visualState.semanticSummary
+  }
+
+  private var portraitSceneExists: Bool {
+    UIImage(named: "\(sceneAssetName)Portrait", in: .main, compatibleWith: nil) != nil
+  }
+
+  private var sceneAssetName: String {
+    profile.visualState.sceneAssetName(for: profile.characterPresentation)
+  }
+
+  private var isTelevisionScene: Bool {
+    if case .watchingTelevision = profile.visualState { return true }
+    return false
   }
 }
 
@@ -795,16 +1154,15 @@ private struct FlowingDirectionRow: View {
   let directions: Set<LifeDirection>
 
   var body: some View {
-    ScrollView(.horizontal, showsIndicators: false) {
-      HStack(spacing: 9) {
-        ForEach(directions.sorted { $0.rawValue < $1.rawValue }, id: \.self) { direction in
-          Label(direction.title, systemImage: direction.icon)
-            .font(.indulgeLabel)
-            .foregroundStyle(Color.indulgeText)
-            .padding(.horizontal, 13)
-            .frame(minHeight: 44)
-            .background(Color.indulgePowder, in: Capsule())
-        }
+    LazyVGrid(columns: [GridItem(.adaptive(minimum: 132), spacing: 9)], spacing: 9) {
+      ForEach(directions.sorted { $0.rawValue < $1.rawValue }, id: \.self) { direction in
+        Label(direction.title, systemImage: direction.icon)
+          .font(.indulgeLabel)
+          .foregroundStyle(Color.indulgeText)
+          .padding(.horizontal, 13)
+          .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+          .background(
+            Color.indulgePowder, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
       }
     }
   }
@@ -826,6 +1184,20 @@ private struct IndulgePrimaryLightButtonStyle: ButtonStyle {
       .opacity(isEnabled ? 1 : 0.42)
       .scaleEffect(configuration.isPressed && !reduceMotion ? 0.985 : 1)
       .animation(.easeOut(duration: 0.16), value: configuration.isPressed)
+  }
+}
+
+private struct InteractiveSceneButtonStyle: ButtonStyle {
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .scaleEffect(configuration.isPressed && !reduceMotion ? 1.018 : 1)
+      .brightness(configuration.isPressed ? 0.035 : 0)
+      .animation(
+        reduceMotion ? nil : .timingCurve(0.18, 0.82, 0.22, 1, duration: 0.22),
+        value: configuration.isPressed
+      )
   }
 }
 

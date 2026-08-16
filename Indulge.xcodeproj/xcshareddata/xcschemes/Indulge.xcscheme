@@ -51,6 +51,17 @@
                ReferencedContainer = "container:Indulge.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "639270FD70AE395E308250BD"
+               BuildableName = "IndulgeUITests.xctest"
+               BlueprintName = "IndulgeUITests"
+               ReferencedContainer = "container:Indulge.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

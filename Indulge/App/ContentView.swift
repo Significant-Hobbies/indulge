@@ -6,13 +6,12 @@ struct ContentView: View {
   private let route: IndulgeLaunchRoute
   private let profileStore: OnboardingProfileStore
   private let authenticationService: any DeviceOwnerAuthenticating
+  private let resetsTestingData: Bool
   @Environment(\.modelContext) private var modelContext
   @Environment(\.scenePhase) private var scenePhase
   @AppStorage(PrivacyLockSettingsStore.enabledKey) private var privacyLockEnabled = false
   @AppStorage(PrivacyLockSettingsStore.relockAfterKey) private var privacyRelockAfter =
     PrivacyLockSettingsStore.defaultRelockAfter
-  @Query(filter: #Predicate<FocusSessionRecord> { $0.endedAt == nil })
-  private var activeFocusSessions: [FocusSessionRecord]
   @Query(sort: \OnboardingProfileRecord.updatedAt, order: .reverse)
   private var profileRecords: [OnboardingProfileRecord]
   @State private var completedProfile: OnboardingProfile?
@@ -24,11 +23,13 @@ struct ContentView: View {
     route: IndulgeLaunchRoute = .launchArguments,
     profileStore: OnboardingProfileStore = OnboardingProfileStore(),
     authenticationService: any DeviceOwnerAuthenticating =
-      LocalDeviceOwnerAuthenticationService()
+      LocalDeviceOwnerAuthenticationService(),
+    resetsTestingData: Bool = ProcessInfo.processInfo.arguments.contains("--reset-testing-data")
   ) {
     self.route = route
     self.profileStore = profileStore
     self.authenticationService = authenticationService
+    self.resetsTestingData = resetsTestingData
     let restoredProfile = route == .automatic ? profileStore.load() : nil
     _completedProfile = State(
       initialValue: route.opensApplication ? .appPreview : restoredProfile
@@ -49,7 +50,7 @@ struct ContentView: View {
             profile: displayedProfile,
             initialTab: initialTab,
             startsWithActiveTrade: route.startsWithActiveTrade,
-            focusPreviewPreset: route.focusPreviewPreset
+            startsWithCompletedTrade: route.startsWithCompletedTrade
           )
         } else {
           IndulgeOnboardingView { profile in
@@ -74,6 +75,16 @@ struct ContentView: View {
       }
     }
     .task {
+      if resetsTestingData {
+        try? AllIndulgeDataRepository(
+          context: modelContext,
+          cardAssets: FutureLifeCardAssetStore()
+        ).deleteAll()
+        profileStore.delete()
+        privacyLockEnabled = false
+        privacyLifecycle.privacyLockWasDisabled()
+        completedProfile = nil
+      }
       guard route == .automatic, profileRecords.isEmpty, let completedProfile else { return }
       try? OnboardingProfileRepository(context: modelContext).save(completedProfile)
     }
@@ -118,7 +129,7 @@ struct ContentView: View {
     privacyMessage = nil
     Task { @MainActor in
       let outcome = await authenticationService.authenticate(
-        reason: "Unlock your private Indulge profile, Focus journal, and history."
+        reason: "Unlock your private Indulge profile, trades, and history."
       )
       privacyLifecycle.authenticationCompleted(outcome)
       isAuthenticating = false
@@ -135,7 +146,7 @@ struct ContentView: View {
   }
 
   private var initialTab: IndulgeAppTab {
-    route.initialTab(hasActiveFocusSession: !activeFocusSessions.isEmpty)
+    route.initialTab
   }
 }
 
@@ -186,7 +197,8 @@ extension SwiftUI.ScenePhase {
 enum IndulgeLaunchRoute: Equatable, Sendable {
   case automatic
   case onboarding
-  case application(tab: IndulgeAppTab, activeTrade: Bool, focusPreview: FocusPreviewPreset? = nil)
+  case application(tab: IndulgeAppTab, activeTrade: Bool)
+  case completedHistory
   case review
 
   static var launchArguments: Self {
@@ -195,25 +207,14 @@ enum IndulgeLaunchRoute: Equatable, Sendable {
 
   static func resolve(arguments: [String]) -> Self {
     if arguments.contains("--review") { return .review }
-    if arguments.contains("--app-focus-pattern") {
-      return .application(tab: .focus, activeTrade: false, focusPreview: .pattern)
-    }
-    if arguments.contains("--app-focus-populated") {
-      return .application(tab: .focus, activeTrade: false, focusPreview: .populated)
-    }
-    if arguments.contains("--app-focus-interrupted") {
-      return .application(tab: .focus, activeTrade: false, focusPreview: .interrupted)
-    }
-    if arguments.contains("--app-focus-active") {
-      return .application(tab: .focus, activeTrade: false, focusPreview: .active)
-    }
-    if arguments.contains("--app-focus") {
-      return .application(tab: .focus, activeTrade: false, focusPreview: .idle)
+    if arguments.contains(where: { $0.hasPrefix("--app-focus") }) {
+      return .application(tab: .life, activeTrade: false)
     }
     if arguments.contains("--app-trade-active") {
       return .application(tab: .trade, activeTrade: true)
     }
     if arguments.contains("--app-trade") { return .application(tab: .trade, activeTrade: false) }
+    if arguments.contains("--app-history-complete") { return .completedHistory }
     if arguments.contains("--app-history") {
       return .application(tab: .history, activeTrade: false)
     }
@@ -224,27 +225,23 @@ enum IndulgeLaunchRoute: Equatable, Sendable {
 
   var opensApplication: Bool {
     if case .application = self { return true }
+    if self == .completedHistory { return true }
     return false
   }
 
   var initialTab: IndulgeAppTab {
-    if case .application(let tab, _, _) = self { return tab }
+    if case .application(let tab, _) = self { return tab }
+    if self == .completedHistory { return .history }
     return .life
   }
 
-  func initialTab(hasActiveFocusSession: Bool) -> IndulgeAppTab {
-    if self == .automatic, hasActiveFocusSession { return .focus }
-    return initialTab
-  }
-
   var startsWithActiveTrade: Bool {
-    if case .application(_, let activeTrade, _) = self { return activeTrade }
+    if case .application(_, let activeTrade) = self { return activeTrade }
     return false
   }
 
-  var focusPreviewPreset: FocusPreviewPreset? {
-    if case .application(_, _, let preset) = self { return preset }
-    return nil
+  var startsWithCompletedTrade: Bool {
+    self == .completedHistory
   }
 }
 
@@ -281,8 +278,4 @@ extension Notification.Name {
 
 #Preview("Life") {
   ContentView(route: .application(tab: .life, activeTrade: false))
-}
-
-#Preview("Focus pattern") {
-  ContentView(route: .application(tab: .focus, activeTrade: false, focusPreview: .pattern))
 }

@@ -8,11 +8,13 @@ for permissions or suggests any intervention.
 
 ### Requirement: Onboarding unfolds as a personal conversation
 The application SHALL present one clear question per beat. Its first-value
-journey SHALL include preferred name, enjoyable activities, primary indulgence,
-approximate time spent, the purpose the indulgence serves, desired life changes, and a personalized
-reflection. It SHALL offer optional deeper personalization containing gender
-identity, common time of day, how the indulgence begins, what need it serves,
-how chosen the time still feels, and preferred pace of change after that first reflection.
+journey SHALL include preferred name, gender presentation, time-sapping
+activities, primary indulgence, approximate time spent, the purpose the
+indulgence serves, desired life changes, and a personalized reflection. It SHALL
+ask gender before showing feminine or masculine character artwork. It SHALL
+offer optional deeper personalization containing common time of day, how the
+indulgence begins, how chosen the time still feels, and preferred pace of change
+after that first reflection.
 
 #### Scenario: Person completes the core conversation
 - **WHEN** a person advances through onboarding
@@ -32,14 +34,15 @@ how chosen the time still feels, and preferred pace of change after that first r
 - **WHEN** a person uses Back and changes a prior answer
 - **THEN** subsequent personalized copy and the final reflection use the updated answer
 
-### Requirement: Identity questions are inclusive and optional
-The application SHALL allow a preferred name to be skipped, SHALL offer
+### Requirement: Identity questions are inclusive and private
+The application SHALL allow a preferred name to be empty, SHALL offer
 inclusive gender choices including self-description and “Prefer not to say,”
-and SHALL explain that identity answers personalize language or character
-presentation rather than determine eligibility or judgment.
+and SHALL use gender only for character presentation rather than eligibility or
+judgment. It SHALL require an explicit inclusive choice before proceeding so it
+never infers gender from behavior.
 
 #### Scenario: Person declines identity information
-- **WHEN** the person skips their name or selects “Prefer not to say” for gender
+- **WHEN** the person leaves their name empty or selects “Prefer not to say” for gender
 - **THEN** onboarding remains complete and uses neutral language without reducing functionality
 
 #### Scenario: Person supplies a self-described identity

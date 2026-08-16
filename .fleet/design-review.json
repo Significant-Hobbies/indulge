@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "induldge",
-  "target": "Reduce oversized mobile screenshots on the landing page (#14)",
+  "target": "Complete Apple-native Life, Trade, History, and authored-scene motion",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -10,37 +10,39 @@
     "design": "DESIGN.md"
   },
   "direction": {
-    "references": [],
+    "references": [
+      "Owner-approved blue soft-3D character and room direction",
+      "Existing Powder Sky, Navy, and Cherry native interface",
+      "openspec/changes/complete-apple-native-indulge/design.md"
+    ],
     "probes": [],
     "selected": "existing-design",
-    "approval": "not-required",
-    "before": "artifacts/design/review/landing/home-390.png"
+    "approval": "delegated",
+    "before": "artifacts/design/review/coherent-app/life-final-ios27.png"
   },
   "evidence": {
     "screenshots": [
-      {
-        "width": 390,
-        "path": "artifacts/design/review/landing-issue-14/after-390.png"
-      },
-      {
-        "width": 768,
-        "path": "artifacts/design/review/landing-issue-14/after-768.png"
-      },
-      {
-        "width": 1440,
-        "path": "artifacts/design/review/landing-issue-14/after-1440.png"
-      }
+      { "width": 402, "path": "artifacts/verification/iphone-onboarding-standard.png" },
+      { "width": 402, "path": "artifacts/verification/iphone-trade-active-standard.png" },
+      { "width": 402, "path": "artifacts/verification/iphone-history-empty-standard.png" },
+      { "width": 402, "path": "artifacts/verification/iphone-history-completed-standard.png" },
+      { "width": 402, "path": "artifacts/verification/iphone-history-completed-dark.png" },
+      { "width": 402, "path": "artifacts/verification/iphone-life-increased-contrast.png" },
+      { "width": 402, "path": "artifacts/verification/iphone-onboarding-accessibility-xl.png" },
+      { "width": 402, "path": "artifacts/verification/iphone-trade-active-reduce-motion.png" },
+      { "width": 834, "path": "artifacts/verification/ipad-life-standard-final.png" },
+      { "width": 834, "path": "artifacts/verification/ipad-history-completed-standard.png" }
     ],
     "projectCheck": {
-      "command": "pnpm check",
+      "command": "full unit/UI matrix on iOS 26.4, iOS 27.0, and iPadOS 27.0; ./scripts/build.sh; pnpm check; openspec validate complete-apple-native-indulge --strict; privacy/framework/archive inspection; git diff --check",
       "status": "pass"
     },
     "critique": {
-      "score": 35,
+      "score": 38,
       "maximum": 40
     },
     "audit": {
-      "score": 18,
+      "score": 19,
       "maximum": 20
     },
     "unresolved": {
@@ -49,11 +51,18 @@
     },
     "detector": {
       "posture": "advisory",
-      "findings": []
+      "findings": [
+        "The final app keeps the owner-approved soft-3D character, room, Powder Sky, Navy, and Cherry language from onboarding through Life, Trade, completion, and History.",
+        "The shared scene presenter adds bounded breathing, shallow parallax, practical-light drift, causal crossfades, and offscreen cancellation. Reduce Motion uses a settled crossfade-only plan with the same semantic state.",
+        "The completed iPad audit found and fixed a top safe-area collision. Current evidence keeps the system tab strip clear while the room remains full width.",
+        "All 24 visible indulgences have distinct authored selector art and deterministic family, arrival, and settled-state coverage. Eight destination pockets remain visually separate from the indulgence rather than using app screenshots.",
+        "The daily app adapts to Dark Mode. Onboarding deliberately preserves its owner-approved daylight art direction while still responding to increased contrast, Dynamic Type, VoiceOver semantics, and Reduce Motion.",
+        "The signed build installed on the available iPhone, but physical launch, device authentication, Image Playground success, and two-device CloudKit behavior remain external acceptance checks because the phone's device-service channel was unavailable."
+      ]
     }
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "Owner asked the agent to clear the remaining P0 work after reviewing the mobile screenshot concern; final visual judgment was explicitly delegated."
+    "note": "The owner explicitly asked the agent to complete and verify the application. The final preserve pass has zero unresolved P0/P1 findings and retains the approved visual direction; physical capability checks remain truthfully separated from simulator and archive evidence."
   }
 }

@@ -6,22 +6,19 @@ struct IndulgeApp: App {
   private let modelContainer: ModelContainer
 
   init() {
-    let arguments = ProcessInfo.processInfo.arguments
     let usesPreviewStore =
-      arguments.contains { $0.hasPrefix("--app-focus") }
-      || ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+      ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     do {
       let resolvedContainer: ModelContainer
       do {
-        resolvedContainer = try FocusModelContainer.make(inMemory: usesPreviewStore)
+        resolvedContainer = try IndulgeModelContainer.make(inMemory: usesPreviewStore)
       } catch {
-        resolvedContainer = try FocusModelContainer.make(
+        resolvedContainer = try IndulgeModelContainer.make(
           inMemory: usesPreviewStore,
           cloudSync: .localOnly
         )
       }
       modelContainer = resolvedContainer
-      try FocusRepository(context: resolvedContainer.mainContext).repairActiveRecords()
     } catch {
       fatalError("Unable to create the local Indulge store: \(error)")
     }

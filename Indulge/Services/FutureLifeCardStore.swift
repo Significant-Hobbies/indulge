@@ -116,14 +116,15 @@ struct FutureLifeCardAssetStore {
   }
 
   private func ownedURL(for fileName: String) throws -> URL {
-    guard fileName == URL(fileURLWithPath: fileName).lastPathComponent else {
+    let ownedNamePattern =
+      #"^future-life-card-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.[a-z0-9]{1,5}$"#
+    guard
+      fileName.range(of: ownedNamePattern, options: .regularExpression) != nil,
+      fileName == URL(fileURLWithPath: fileName).lastPathComponent
+    else {
       throw FutureLifeCardStoreError.invalidOwnedFileName
     }
-    let candidate = rootURL.appendingPathComponent(fileName).standardizedFileURL
-    guard candidate.deletingLastPathComponent() == rootURL else {
-      throw FutureLifeCardStoreError.invalidOwnedFileName
-    }
-    return candidate
+    return rootURL.appendingPathComponent(fileName, isDirectory: false)
   }
 }
 

@@ -10,7 +10,6 @@ on:
       - "pnpm-lock.yaml"
       - "astro.config.mjs"
       - "tsconfig.json"
-      - "wrangler.jsonc"
       - ".github/workflows/web-ci.yml"
   push:
     branches: [main]

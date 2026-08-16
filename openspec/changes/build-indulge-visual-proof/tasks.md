@@ -1,3 +1,9 @@
+> Current-release reconciliation (2026-08-16): the visual proof is integrated
+> into the Life → Trade → History product and verified across the installed
+> simulator matrix. Task 6.2 remains open because frame pacing, memory, and
+> thermal measurements were not captured. Task 6.6 remains open until the owner
+> records a final keep/close/wrong-lane decision.
+
 ## 1. Project and Review Scaffold
 
 - [x] 1.1 Confirm the owning GitHub organization and repository visibility,

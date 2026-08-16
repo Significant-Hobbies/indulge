@@ -11,14 +11,13 @@ what they genuinely want their life to feel like.
 - Replace the short proof onboarding with an adaptive, one-question-at-a-time
   conversation split into a fast first-value journey and voluntary deeper
   personalization.
-- Make identity questions optional and inclusive, explain why each sensitive
-  answer is useful, and keep all answers local for this milestone.
+- Keep the optional name and inclusive gender choices private, and ask gender
+  before resolving the abstract character into feminine or masculine artwork.
 - Let the indulgence selection transform the scene immediately, then use the
   essential answers in a first reflection before asking for additional detail.
-- Keep optional gender identity, common moment, trigger, emotional need, and
-  change pace available after the first reflection rather than making all of
-  them prerequisites for value.
-- Use progressive disclosure, comfortable pacing, back/skip controls, keyboard
+- Keep common moment, trigger, intentionality, and change pace available after
+  the first reflection rather than making all of them prerequisites for value.
+- Use progressive disclosure, comfortable pacing, reversible navigation, keyboard
   handling, haptics, and a first-class Reduce Motion path.
 - Preserve the indulgence-first boundary: the flow learns the present pattern
   before mentioning replacements, restrictions, or good habits.

@@ -5,6 +5,11 @@ import UIKit
 
 @testable import Indulge
 
+#if canImport(ImagePlayground)
+  import ImagePlayground
+  import SwiftUI
+#endif
+
 @MainActor
 struct FutureLifeCardTests {
   @Test func conceptsAreBoundedToPersistedLifeDirections() {
@@ -42,8 +47,22 @@ struct FutureLifeCardTests {
       ))
   }
 
+  @Test func physicalImagePlaygroundCapabilityStateIsReadable() {
+    #if canImport(ImagePlayground) && !targetEnvironment(simulator)
+      if #available(iOS 18.1, *) {
+        let supportsSystemSheet = EnvironmentValues().supportsImagePlayground
+        print("INDULGE_IMAGE_PLAYGROUND_SUPPORTED=\(supportsSystemSheet)")
+        #expect(
+          FutureLifeCardAvailability.isActionVisible(
+            supportsSystemSheet: supportsSystemSheet,
+            lifeDirections: [.calm]
+          ) == supportsSystemSheet)
+      }
+    #endif
+  }
+
   @Test func cancellationStateCreatesNoPlaceholder() throws {
-    let container = try FocusModelContainer.make(inMemory: true)
+    let container = try IndulgeModelContainer.make(inMemory: true)
     var state = FutureLifeCardCreationState.presenting
 
     state = .cancelled
@@ -55,7 +74,7 @@ struct FutureLifeCardTests {
   @Test func successfulImageIsCopiedIntoOwnedStorageWithMetadata() throws {
     let fixture = try Fixture()
     defer { fixture.remove() }
-    let container = try FocusModelContainer.make(inMemory: true)
+    let container = try IndulgeModelContainer.make(inMemory: true)
     let repository = FutureLifeCardRepository(
       context: container.mainContext,
       assets: try FutureLifeCardAssetStore(rootURL: fixture.ownedDirectory)
@@ -78,7 +97,7 @@ struct FutureLifeCardTests {
   @Test func replacementRetainsOneRecordAndRemovesThePreviousAsset() throws {
     let fixture = try Fixture()
     defer { fixture.remove() }
-    let container = try FocusModelContainer.make(inMemory: true)
+    let container = try IndulgeModelContainer.make(inMemory: true)
     let assets = try FutureLifeCardAssetStore(rootURL: fixture.ownedDirectory)
     let repository = FutureLifeCardRepository(context: container.mainContext, assets: assets)
     let first = try repository.retain(imageAt: fixture.firstImage, lifeDirections: [.calm])
@@ -100,7 +119,7 @@ struct FutureLifeCardTests {
   @Test func confirmedDeletionRemovesImageAndMetadata() throws {
     let fixture = try Fixture()
     defer { fixture.remove() }
-    let container = try FocusModelContainer.make(inMemory: true)
+    let container = try IndulgeModelContainer.make(inMemory: true)
     let assets = try FutureLifeCardAssetStore(rootURL: fixture.ownedDirectory)
     let repository = FutureLifeCardRepository(context: container.mainContext, assets: assets)
     let record = try repository.retain(imageAt: fixture.firstImage, lifeDirections: [.sleep])

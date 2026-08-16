@@ -99,9 +99,32 @@ enum IndulgeDataSchemaV1: VersionedSchema {
   }
 }
 
+enum IndulgeDataSchemaV2: VersionedSchema {
+  static let versionIdentifier = Schema.Version(2, 0, 0)
+  static var models: [any PersistentModel.Type] {
+    [
+      FocusSessionRecord.self,
+      FocusInterruptionRecord.self,
+      OnboardingProfileRecord.self,
+      GeneratedReflectionRecord.self,
+      FutureLifeCardRecord.self,
+      TradeRecord.self,
+    ]
+  }
+}
+
 enum IndulgeDataMigrationPlan: SchemaMigrationPlan {
-  static var schemas: [any VersionedSchema.Type] { [IndulgeDataSchemaV1.self] }
-  static var stages: [MigrationStage] { [] }
+  static var schemas: [any VersionedSchema.Type] {
+    [IndulgeDataSchemaV1.self, IndulgeDataSchemaV2.self]
+  }
+  static var stages: [MigrationStage] {
+    [
+      .lightweight(
+        fromVersion: IndulgeDataSchemaV1.self,
+        toVersion: IndulgeDataSchemaV2.self
+      )
+    ]
+  }
 }
 
 @MainActor
@@ -137,62 +160,6 @@ struct OnboardingProfileRepository {
 }
 
 @MainActor
-struct GeneratedStateRepository {
-  let context: ModelContext
-
-  func reflection(for evidenceRevision: String) throws -> PersonalReflection? {
-    let revision = evidenceRevision
-    var descriptor = FetchDescriptor<GeneratedReflectionRecord>(
-      predicate: #Predicate { $0.evidenceRevision == revision },
-      sortBy: [SortDescriptor(\GeneratedReflectionRecord.createdAt, order: .reverse)]
-    )
-    descriptor.fetchLimit = 1
-    guard let record = try context.fetch(descriptor).first else { return nil }
-    return PersonalReflection(
-      evidenceRevision: record.evidenceRevision,
-      headline: record.headline,
-      observation: record.observation,
-      question: record.question
-    )
-  }
-
-  func saveReflection(_ reflection: PersonalReflection, at date: Date = .now) throws {
-    let records = try context.fetch(FetchDescriptor<GeneratedReflectionRecord>())
-    for record in records { context.delete(record) }
-    context.insert(
-      GeneratedReflectionRecord(
-        evidenceRevision: reflection.evidenceRevision,
-        headline: reflection.headline,
-        observation: reflection.observation,
-        question: reflection.question,
-        createdAt: date
-      )
-    )
-    try context.save()
-  }
-
-  func invalidateReflections(except evidenceRevision: String) throws {
-    let records = try context.fetch(FetchDescriptor<GeneratedReflectionRecord>())
-    var changed = false
-    for record in records where record.evidenceRevision != evidenceRevision {
-      context.delete(record)
-      changed = true
-    }
-    if changed { try context.save() }
-  }
-
-  func deleteReflection(_ record: GeneratedReflectionRecord) throws {
-    context.delete(record)
-    try context.save()
-  }
-
-  func deleteCard(_ record: FutureLifeCardRecord) throws {
-    context.delete(record)
-    try context.save()
-  }
-}
-
-@MainActor
 struct AllIndulgeDataRepository {
   let context: ModelContext
   let cardAssets: FutureLifeCardAssetStore
@@ -210,6 +177,9 @@ struct AllIndulgeDataRepository {
       context.delete(record)
     }
     for record in try context.fetch(FetchDescriptor<GeneratedReflectionRecord>()) {
+      context.delete(record)
+    }
+    for record in try context.fetch(FetchDescriptor<TradeRecord>()) {
       context.delete(record)
     }
     for record in cards { context.delete(record) }

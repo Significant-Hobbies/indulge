@@ -17,9 +17,8 @@ const betaLabel = hasVerifiedBetaUrl ? "Join the TestFlight beta" : "See TestFli
 
 const chapters = [
   { name: "Life", title: "See what you’re making room for.", copy: "Your room becomes a quiet picture of the creativity, movement, people, and rest you want more of.", image: "/images/screens/life.jpg", alt: "Indulge Life screen showing a blue living room assembled around a seated character" },
-  { name: "Focus", title: "Find the path back.", copy: "When attention slips, record the interruption and the return—without turning your day into a productivity score.", image: "/images/screens/focus.jpg", alt: "Indulge Focus journal showing a private reflection flow" },
   { name: "Trade", title: "Make one honest trade.", copy: "Keep the pleasure you chose. Reclaim a small pocket of the time that tends to disappear, then give it somewhere to go.", image: "/images/screens/trade.jpg", alt: "Indulge Trade screen showing an intentional time exchange" },
-  { name: "History", title: "Notice what changes.", copy: "Look back at the choices and returns that mattered, without streaks, shame, or a scoreboard for your life.", image: "/images/screens/history.jpg", alt: "Indulge History screen showing past attention and recovery entries" }
+  { name: "History", title: "Notice what changes.", copy: "Look back at the choices you actually made, without streaks, shame, or a scoreboard for your life.", image: "/images/screens/history.jpg", alt: "Indulge History screen showing completed trades" }
 ];
 ---
 <SiteLayout>
@@ -65,7 +64,7 @@ const chapters = [
         <p class="chapter-kicker">One continuous loop</p>
         <h2 id="chapters-title">A fuller life assembles around you.</h2>
       </div>
-      <p>Indulge connects the moment you notice with the thing you want to return to. Four simple spaces hold that story.</p>
+      <p>Indulge connects the moment you notice with the thing you want to make room for. Three simple spaces hold that story.</p>
     </div>
     <div class="chapter-track">
       <svg class="chapter-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -109,7 +108,7 @@ const chapters = [
       <div>
         <p class="chapter-kicker">Private by default</p>
         <h2 id="privacy-title">Your inner life stays yours.</h2>
-        <p>There is no Indulge account, no advertising SDK, no cross-app tracking, and no third-party analytics. Your profile, trades, Focus entries, and history stay in the app’s local container.</p>
+        <p>There is no Indulge account, no advertising SDK, no cross-app tracking, and no third-party analytics. Your profile, trades, and history stay inside Apple’s app and private-storage boundary.</p>
         <a class="text-link" href="/privacy/">Read the plain-language privacy policy <span aria-hidden="true">→</span></a>
       </div>
     </div>
@@ -128,7 +127,7 @@ const chapters = [
       </details>
       <details>
         <summary>Where is my data stored?</summary>
-        <p>Your profile, trades, Focus notes, and history remain in the app’s local container. TestFlight itself may provide Apple-managed beta diagnostics under Apple’s terms.</p>
+        <p>Your profile, trades, and history are local-first. Supported signed builds may use your private iCloud database; TestFlight may provide Apple-managed beta diagnostics under Apple’s terms.</p>
       </details>
       <details>
         <summary>Can I join now?</summary>

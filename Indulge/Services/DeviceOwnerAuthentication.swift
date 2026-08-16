@@ -85,6 +85,8 @@ final class PrivacyLockSettingsStore: PrivacyLockStoring {
 
 @MainActor
 struct PrivacyLockSettingsController {
+  static let unlockReason = "Unlock your private Indulge profile, trades, and history."
+
   let authentication: any DeviceOwnerAuthenticating
   let store: any PrivacyLockStoring
 
@@ -98,9 +100,7 @@ struct PrivacyLockSettingsController {
       return .failed
     }
 
-    let outcome = await authentication.authenticate(
-      reason: "Unlock your private Indulge profile, Focus journal, and history."
-    )
+    let outcome = await authentication.authenticate(reason: Self.unlockReason)
     store.isEnabled = outcome == .authenticated
     return outcome
   }

@@ -38,11 +38,12 @@ than runtime question administration.
 ### Open on the first question and split value from deeper personalization
 
 The flow opens directly on the preferred-name question. Its first-value journey
-contains name, activities, primary indulgence, daily time, intentionality, life
-direction, and a personalized reflection. From that reflection, the person can
-start using the product or voluntarily answer gender, common moment, starting
-pattern, underlying need, and change pace before returning to a richer
-reflection. Optional questions can be skipped. A separate editorial welcome
+contains name, gender presentation, activities, primary indulgence, daily time,
+underlying need, life direction, and a personalized reflection. Asking gender
+second prevents the application from showing a feminine or masculine character
+before the person chooses. From that reflection, the person can start using the
+product or voluntarily answer common moment, starting pattern, intentionality,
+and change pace before returning to a richer reflection. A separate editorial welcome
 page remains rejected because it delays interaction and makes the opening feel
 like a landing page.
 
@@ -86,12 +87,13 @@ becomes a separate scene variant and is resolved by the following primary-
 indulgence question. The selection UI must expose the current scene membership
 and removal affordances while the scene itself proves the same stacking result.
 
-### Treat personal data as optional local conversation state
+### Treat personal data as local conversation state
 
 No answer leaves the process or app bundle. Name and gender exist solely for
-copy and visual personalization. Gender never controls product access and has a
-neutral “Prefer not to say” path. A custom identity value is short, optional,
-and displayed only in the current flow.
+copy and visual personalization. The person chooses a gender presentation before
+the character resolves; “Prefer not to say,” non-binary, and custom identities
+retain a neutral abstract treatment. Gender never controls product access. A
+custom identity value is short and displayed only in the current flow.
 
 ### Ask purpose directly and separately from automaticity
 
@@ -139,10 +141,10 @@ continues to replace travel with short fades.
 
 The first beat removes the centered wordmark, linear progress bar, chapter
 label, scene caption, and explanatory paragraph. It presents only the optional
-name question, one text field, a short local-privacy note, and Continue. A
+name question, one text field, and Continue. A
 separate Skip action is excluded because Continue already accepts an empty
 optional name.
-Subsequent beats may show quiet textual progress such as “2 of 7,” but progress
+Subsequent beats may show quiet textual progress such as “2 of 8,” but progress
 must not compete with the current decision.
 
 When a text field receives focus, the full cinematic stage collapses to a
@@ -159,19 +161,19 @@ and green prompt trays are excluded.
 
 ### Make long-flow navigation reversible
 
-Back preserves all answers. Optional questions after the opening expose Skip;
-the optional opening name uses Continue for both named and unnamed paths. Required questions
-keep the primary action disabled until valid. Text-entry steps are scrollable
+Back preserves all answers. The optional opening name and voluntary detail
+questions use the primary Continue action without adding a separate Skip label.
+Required questions keep the primary action disabled until valid. Text-entry steps are scrollable
 with keyboard dismissal. On iPad the stage and conversation sit side-by-side or
 within separately constrained regions rather than stretching phone geometry.
 
 ## Risks / Trade-offs
 
-- **A long mandatory intake withholds value** → Keep a seven-beat first-value
-  journey and move the remaining five questions behind an optional deeper route.
-- **Asking gender can feel invasive** → Explain its limited purpose, make it
-  optional, include self-description and non-disclosure, and default to neutral
-  language.
+- **A long mandatory intake withholds value** → Keep an eight-beat first-value
+  journey and move the remaining four questions behind an optional deeper route.
+- **Asking gender can feel invasive** → Ask only for character presentation,
+  include self-description and non-disclosure, and retain neutral treatment when
+  the person does not choose feminine or masculine artwork.
 - **Only one finished indulgence scene exists** → Show the TV scene only for TV
   and use truthful abstract activity treatment for other choices.
 - **Generated scene plates can feel visually richer than the simple product

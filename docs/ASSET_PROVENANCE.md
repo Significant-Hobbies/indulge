@@ -35,3 +35,20 @@ copy, controls, accessibility, and Reduce Motion behavior. No third-party or
 reference-site imagery ships in the app. Record any later imported source asset
 here with author, source URL, license, attribution requirement, modifications,
 and final in-repository path before use.
+
+The expanded customer asset set was generated specifically for Indulge with
+OpenAI's built-in image-generation tool and then integrated as local bundle
+resources:
+
+- `Indulge/Resources/IndulgenceArt/` contains distinct selector artwork for all
+  24 visible indulgences.
+- `Indulge/Resources/LifeDirectionArt/` contains the eight destination pockets
+  used by Trade, completion, and History.
+- `Indulge/Resources/Scene*Feminine.png` and
+  `Indulge/Resources/Scene*Masculine.png` contain equivalent authored scene
+  families for standing, television, phone, browsing, gaming, listening,
+  tasting, resting, social, drink, and combined states.
+
+These are original project assets, not downloaded marketplace images or
+screenshots of third-party applications. Their motion remains native and
+deterministic; the app does not download imagery at runtime.

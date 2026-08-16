@@ -1,6 +1,6 @@
 # Indulge — Project Status
 
-Last updated: 2026-08-12
+Last updated: 2026-08-16
 
 ## Why / What
 
@@ -15,13 +15,35 @@ not as punishment, streaks, or productivity metrics.
 - RealityKit for the persistent modular 3D character and world.
 - XcodeGen for deterministic local project generation; it is a development
   tool, not an app runtime dependency.
-- Astro for the static public product and trust surface, with Cloudflare Pages
-  as its manually promoted production host.
+- Astro for a portable, provider-neutral static public product and trust
+  surface. It is not part of the native app runtime.
 - Apple Screen Time frameworks are planned after the visual proof and are not
   active dependencies yet.
 
 ## Timeline
 
+- **2026-08-16:** Completed the customer Life → Trade → History loop with a
+  versioned SwiftData trade record, deliberate replacement, start and finish,
+  three non-judgmental outcomes, relaunch persistence, honest totals, and
+  all-data deletion. Shared authored-scene motion now carries onboarding, Life,
+  Trade, completion, and History with a crossfade-only Reduce Motion plan.
+- **2026-08-16:** Final current-source simulator verification passed 68 unit
+  tests and three full UI journeys independently on iOS 26.4, iOS 27.0, and an
+  iPad Pro 11-inch simulator; each run skipped only two explicitly
+  hardware-only checks. A post-fix physical iPhone run had previously passed
+  66 unit tests. Current evidence covers standard, Dark Mode, increased
+  contrast, Accessibility XL, Reduce Motion, empty History, completed History,
+  iPad safe areas, and simulator relaunch persistence.
+- **2026-08-16:** Build 2 was archived with personal team `8F7LXHTJZR`. A
+  previous exact development archive installed, launched, relaunched, and
+  retained its completed profile on the paired iPhone. The corrected archive
+  is signed and inspectable, but its final install remains unclaimed while that
+  phone is unavailable to CoreDevice; successful Face ID/passcode completion
+  also remains unverified. The archive inspector correctly classifies it as
+  development-device—not TestFlight-ready—and the upload script refuses it.
+- **2026-08-16:** Retired Focus from the native customer experience and made
+  the authored Life room the direct entry into a Trade. Legacy interruption
+  records remain only for safe SwiftData and private CloudKit compatibility.
 - **2026-08-12:** Aligned the universal iPhone/iPad build's private onboarding
   label and durable product documentation, then refreshed the personal-team
   distribution export.
@@ -40,10 +62,10 @@ not as punishment, streaks, or productivity metrics.
   identity, genuine pleasures, duration,
   context, need, intentionality, desired life direction, and pace, ending in a
   personalized non-judgmental reflection while keeping good habits deferred.
-- **2026-08-11:** The first daily app shell and local Focus interruption journal
-  passed their native and design gates. Completed onboarding now restores on
-  relaunch, unfinished Focus sessions reopen visibly, and the shell adapts to
-  Light and Dark appearances.
+- **2026-08-11:** The first daily app shell and an experimental Focus
+  interruption journal passed their native and design gates. Focus was later
+  retired from the customer experience; its model types remain only so an old
+  local store can migrate without losing data.
 - **2026-08-11:** Distribution preparation completed with an opaque Powder
   Sky/navy/cherry App Store icon, reusable favicon exports, honest beta notes,
   draft App Store metadata and screenshot evidence, and a personal-team signed
@@ -51,37 +73,47 @@ not as punishment, streaks, or productivity metrics.
   confirmed that the Indulge app record must be created before upload.
 - **2026-08-11:** The Life Room landing and its privacy, support, terms,
   accessibility, TestFlight status, Markdown, and agent-indexing surfaces
-  passed CI and design review and were promoted to the `indulge` Cloudflare
-  Pages production project at `indulge.pages.dev`.
-- **2026-08-11:** The public site and native release links adopted
-  `indulge.significanthobbies.com` as the product-owned canonical hostname
-  while retaining `indulge.pages.dev` as the Cloudflare provider origin.
+  passed CI and design review.
+- **2026-08-16:** Removed provider-specific deployment tooling and third-party
+  site analytics. The static trust surface remains portable and the native app
+  remains independent of any web host.
+- **2026-08-16:** Reconciled and archived the original hosted-landing plan. The
+  main launch-surface contract now requires deterministic provider-neutral
+  output and makes no deployment, DNS, or public-availability claim.
+- **2026-08-16:** Uploaded Indulge 0.1.0 build 3 to App Store Connect for
+  internal TestFlight processing on personal team `8F7LXHTJZR`. The inspected
+  IPA is Apple Distribution signed with production push and CloudKit
+  entitlements, `get-task-allow=false`, a valid privacy manifest, and no
+  embedded third-party frameworks. Apple accepted the upload and reported it
+  processing; `Ready to Test` still requires portal confirmation.
 
 ## Products
 
 - **Indulge for iPhone and iPad:** the primary consumer experience.
-- **Indulge public site:** the product, trust, support, beta-status, and
-  machine-readable discovery surface at
-  `https://indulge.significanthobbies.com`.
-- **Attention thread events:** the same-product local event source for manually
-  reported flow interruptions and recovery.
+- **Indulge static launch surface:** a locally verified product, trust,
+  support, beta-status, and machine-readable discovery artifact. It reserves
+  `https://indulge.significanthobbies.com` as its canonical URL but is not
+  claimed as publicly deployed.
 
 ## Features (shipped)
 
 - A private, local 12-beat onboarding conversation with optional identity
   context, a 24-item indulgence catalog, and a non-judgmental reflection.
-- A native Life, Focus, Trade, and History shell that keeps the selected person,
-  room, and visual language coherent across the daily product.
-- A manual Focus journal with immediate interruption capture, bounded reason
-  and return-blockage choices, relaunch-safe SwiftData persistence, factual
-  daily summaries, and evidence-gated aggregate patterns.
-- Offline manual behavior, optional availability-gated on-device tag
-  suggestions, Reduce Motion, Dynamic Type, VoiceOver, and Light/Dark support.
-- App Store identity assets and a reviewable TestFlight preparation package,
-  including internal-only export safeguards and manual release boundaries.
-- A responsive, zero-client-JavaScript public site with real app proof,
-  plain-language privacy and support, truthful beta availability, and stable
-  Markdown, `llms.txt`, and `/api/ai` product truth.
+- A native Life, Trade, and History shell that keeps the selected person, room,
+  and visual language coherent across the daily product.
+- A scene-led daily interaction: tapping the Life room when an indulgence begins
+  opens a small Trade without introducing a tracker dashboard or timer.
+- One persisted active trade, explicit replacement, start and completion,
+  three humane outcomes, a causal completion pocket, and real History totals.
+- Offline manual behavior, optional availability-gated Apple Image Playground,
+  Reduce Motion, Dynamic Type, VoiceOver, and Light/Dark support.
+- App Store identity assets plus an inspected build-3 distribution package.
+  Build 3 has been uploaded for internal TestFlight processing; external beta
+  testing and App Store review remain separate, unauthorized actions.
+- A responsive, zero-client-JavaScript static launch artifact with real app
+  proof, plain-language privacy and support, truthful beta availability, and
+  stable Markdown, `llms.txt`, and `/api/ai` product truth. Hosting is outside
+  the completed scope.
 
 ## Work queue
 

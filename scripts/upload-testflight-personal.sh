@@ -6,6 +6,7 @@ project_root="${0:A:h:h}"
 personal_team="8F7LXHTJZR"
 archive_path="${INDULGE_ARCHIVE_PATH:-$project_root/build/Indulge.xcarchive}"
 export_options="$project_root/scripts/TestFlightExportOptions.plist"
+package_path="${INDULGE_PACKAGE_PATH:-$project_root/build/TestFlightPackage/Indulge.ipa}"
 archive_info="$archive_path/Info.plist"
 expected_bundle_id="$(awk '/PRODUCT_BUNDLE_IDENTIFIER:/ { print $2; exit }' "$project_root/project.yml")"
 expected_version="$(awk '/MARKETING_VERSION:/ { print $2; exit }' "$project_root/project.yml")"
@@ -34,6 +35,9 @@ if [[ "$archive_bundle_id" != "$expected_bundle_id" \
   print -u2 "Expected $expected_bundle_id $expected_version ($expected_build); found $archive_bundle_id $archive_version ($archive_build)."
   exit 4
 fi
+
+INDULGE_ARCHIVE_PATH="$archive_path" "$project_root/scripts/inspect-archive.sh"
+INDULGE_PACKAGE_PATH="$package_path" "$project_root/scripts/inspect-testflight-package.sh"
 
 xcodebuild -exportArchive \
   -archivePath "$archive_path" \

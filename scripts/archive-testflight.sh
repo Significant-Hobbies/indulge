@@ -31,3 +31,4 @@ xcodebuild archive \
   DEVELOPMENT_TEAM="$development_team"
 
 print "Created signed archive at $archive_path"
+INDULGE_ARCHIVE_PATH="$archive_path" "$project_root/scripts/inspect-archive.sh"

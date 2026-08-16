@@ -8,7 +8,7 @@ that synchronization is live.
 
 - Apple Developer team: `8F7LXHTJZR`
 - App bundle identifier: `com.significanthobbies.indulge`
-- Proposed private container: `iCloud.com.significanthobbies.indulge`
+- Configured private container: `iCloud.com.significanthobbies.indulge`
 - Environment in checked-in entitlements: `Development`
 - Background delivery: `remote-notification`
 - Production schema promotion: not authorized
@@ -24,9 +24,11 @@ opened, app startup retries with the local-only configuration.
 The repository cannot prove any of the following without Apple Developer portal
 and physical-device work:
 
-1. The proposed container exists under team `8F7LXHTJZR` and is attached to the
+1. The configured container exists under team `8F7LXHTJZR` and is attached to the
    App ID and development provisioning profile.
-2. A signed build receives the iCloud and development push entitlements.
+2. The development provisioning profile's container association works during
+   an authenticated CloudKit operation. The signed archive does contain the
+   expected development push and iCloud entitlements.
 3. Offline writes later synchronize in both directions across two signed devices.
 4. Stable-ID duplicates and competing active sessions converge after delayed sync.
 5. Confirmed all-data deletion propagates to both private databases.
@@ -43,10 +45,10 @@ separately authorizes the release step.
 3. Inspect the signed app entitlements for the exact container, CloudKit service,
    and development push environment.
 4. Install the same build on two devices signed into the intended iCloud test account.
-5. Record an offline profile and Focus chain on device A; reconnect and verify it
+5. Record an offline profile and Trade on device A; reconnect and verify it
    appears on device B without duplicate observations.
 6. Create competing active sessions offline, reconnect, and verify deterministic repair.
-7. Confirm deletion on one device and verify profile, Focus, generated reflection,
-   and future-life-card metadata disappear from both devices.
+7. Confirm deletion on one device and verify profile, Trade, legacy migration
+   records, generated reflection, and future-life-card metadata disappear from both devices.
 8. Re-run the local test suite and preserve screenshots/logs before requesting any
    production-schema promotion.

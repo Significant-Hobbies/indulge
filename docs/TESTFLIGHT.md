@@ -1,6 +1,6 @@
 # TestFlight preparation
 
-Indulge is configured as iOS version `0.1.0`, build `1`, with bundle identifier
+Indulge is configured as iOS version `0.1.0`, build `3`, with bundle identifier
 `com.significanthobbies.indulge`. The App Store icon is present in `AppIcon`,
 and the checked-in Info.plist declares that the current app does not use
 non-exempt encryption.
@@ -32,47 +32,52 @@ Developer Mode, select it as Xcode's run destination, and press Run. Xcode can
 create the personal provisioning profile automatically when the Apple Account
 is signed in under Xcode > Settings > Accounts.
 
-An earlier signed archive predates the selected production icon and is not
-accepted as current readiness evidence. TestFlight upload is now authorized;
-App Store submission and public release are not.
+Upload remains a separate manual action. The current build-2 archive is signed
+for development-device verification and is not accepted as TestFlight readiness
+evidence. App Store submission and public release are not authorized.
 
 ## Verified local readiness
 
-On 2026-08-11, the generated project completed an unsigned Release build for a
-generic iOS Simulator destination. The 1024×1024 shipping icon is opaque, the
+On 2026-08-16, the generated project completed Release and simulator builds.
+The 1024×1024 shipping icon is opaque, the
 32px and 64px favicon exports are present, the privacy manifest declares the
 app-local UserDefaults reason, the privacy manifest and export options pass
 `plutil`, and both shell scripts pass `zsh -n`. The prepared opaque JPEG store
 screenshots are 1320×2868 for iPhone 6.9-inch and 2064×2752 for iPad 13-inch.
 
 This check proves local Release compilation and package preparation. The
-current icon also completed an unsigned generic-device archive at
-`build/Indulge-Unsigned.xcarchive`. Its bundle identity is
-`com.significanthobbies.indulge` version `0.1.0` build `1`; its bundled privacy
-manifest passes `plutil`; and its compiled 120px phone and 152px iPad icon
-renditions contain the selected sprout mark. The archive is local evidence only
-and is not signed or distributable.
+current build also completed a personal-team signed development archive. Its
+bundle identity is `com.significanthobbies.indulge` version `0.1.0` build `2`;
+its bundled privacy manifest passes `plutil`; and archive inspection reports
+`Apple Development`, `get-task-allow=true`, and development push/iCloud
+environments. It is installable development evidence only, not a distributable
+TestFlight archive.
 
 These checks do not replace App Store Connect record creation, upload
 processing, tester invitation, or release. Those remain separate steps below.
 
 ## Current upload state
 
-On 2026-08-11, Xcode reached App Store Connect with the signed personal-team
-archive and returned `App record with bundle identifier
-"com.significanthobbies.indulge" not found`. The archive and export settings
-passed the local personal-team boundary before transport. Create the Indulge
-app record in the personal App Store Connect provider, then rerun the upload
-script. Do not substitute another developer team.
+Build 3 was uploaded successfully to App Store Connect on 16 August 2026 for
+internal TestFlight processing. The uploaded package is `Apple Distribution`
+signed for team `8F7LXHTJZR`, has production push and CloudKit entitlements,
+sets `get-task-allow=false`, and contains no embedded third-party frameworks.
+Apple reported that the uploaded package was processing. Portal confirmation
+of `Ready to Test` remains pending an authenticated App Store Connect session.
+
+The upload gate verifies the exact personal team, bundle ID, version, build
+number, distribution authority, production entitlements, privacy manifest,
+and embedded-framework boundary before transfer. It will not substitute the
+Vault team. Archive creation and upload remain separate commands.
 
 ## Beta information
 
 ### Beta app description
 
 Indulge helps you notice where your time gets pulled away, keep the pleasures
-you choose, and make room for more of the life you want. This early build pairs
-a personal, visual onboarding with a private Focus journal for interruptions
-and recovery.
+you choose, and make room for more of the life you want. This build pairs a
+personal visual onboarding with one small, private daily trade and truthful
+History.
 
 ### What to test
 
@@ -80,12 +85,12 @@ and recovery.
    intended.
 2. Confirm the room and character respond to activity, presentation, and
    companion choices without changing identity between scenes.
-3. Open Focus, start a session, record an interruption, classify what pulled
-   you away, record what made returning difficult, and return to the session.
-4. Check that the daily Focus summary reflects the interruption and recovery
-   time.
-5. Relaunch the app and confirm your local profile and Focus history remain.
-6. Try Larger Text, VoiceOver, and Reduce Motion and report anything clipped,
+3. Create a trade, replace it deliberately, begin it, and finish with each of
+   the three outcomes.
+4. Check that completed History reflects only the outcome and time you chose.
+5. Relaunch the app and confirm the profile, active trade, and History remain.
+6. Delete all data from settings and confirm first run returns cleanly.
+7. Try Larger Text, VoiceOver, Dark Mode, and Reduce Motion and report anything clipped,
    hidden, or unclear.
 
 ### Known limitations
@@ -96,12 +101,10 @@ and recovery.
 - Private iCloud sync is prepared but remains unverified until the development
   container and two signed devices complete the checklist in
   `docs/CLOUDKIT_PREPARATION.md`.
-- On-device Focus tag suggestions and grounded reflection selection appear only
-  on supported Apple Intelligence devices. Manual classification and authored
-  reflections remain available everywhere.
 - Optional Image Playground card creation appears only on supported devices.
 - Privacy Lock is optional and uses Face ID, Touch ID, or the device passcode.
-- Trade and History are still early product surfaces.
+- The customer animation uses original bundled authored plates with restrained
+  native motion while the reusable RealityKit rig remains a proof engine.
 
 ## Before the first upload
 
@@ -141,12 +144,13 @@ INDULGE_ALLOW_PROVISIONING_UPDATES=YES \
 ./scripts/archive-testflight.sh
 ```
 
-The archive is written to `build/Indulge.xcarchive`. Open it in Xcode Organizer
+The archive is written to `build/Indulge.xcarchive`. The archive script prints
+its classification through `scripts/inspect-archive.sh`. Open it in Xcode Organizer
 to inspect it if needed. The scripted upload below remains locked to TestFlight
 Internal Only and cannot submit a build for App Store review.
 
-After the app record exists, upload the already signed personal-team archive as
-an internal-only build with:
+Only after the archive inspector reports `testflight-ready`, upload the signed
+personal-team archive as an internal-only build with:
 
 ```sh
 ./scripts/upload-testflight-personal.sh

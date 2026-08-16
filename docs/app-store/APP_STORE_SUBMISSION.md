@@ -9,7 +9,7 @@ to the App Store without a separate decision.
 - Bundle ID: `com.significanthobbies.indulge`
 - SKU: `indulge-ios-1`
 - Version: `0.1.0`
-- Build: `1`
+- Build: `3`
 - Minimum iOS: 18.0
 - Primary language: English (U.S.)
 - Primary category: Health & Fitness
@@ -35,16 +35,16 @@ Begin with a visual conversation about the activities you genuinely enjoy, the m
 
 • Keep intentional indulgence without shame
 • Make one small, explicit time trade
-• Record Focus interruptions and the path back
-• See daily recovery time without productivity scoring
-• Keep your profile, trades, and journal private on your device
+• Finish with the outcome that actually happened—without judgment
+• See only real completed trades and reclaimed-time totals in History
+• Keep your profile, trades, and history private on your device
 • Use the core experience offline with no account
 • Explore with VoiceOver, Dynamic Type, and Reduce Motion support
 
 Indulge is a reflective wellbeing tool, not medical care, addiction treatment, or Screen Time enforcement. If a habit is causing serious harm, consider seeking qualified professional support.
 
 **Keywords**
-focus,time,attention,habits,wellbeing,journal,intention,screen time,reflection
+time,attention,habits,wellbeing,intention,reflection,balance,screen habits
 
 ## URLs
 
@@ -60,7 +60,7 @@ invitations are sent.
 
 - Tracking: No
 - Data collected: No
-- Profile, trades, Focus entries, and notes: stored locally first; private
+- Profile, trades, and History: stored locally first; private
   iCloud sync must not be declared until its development verification is complete
 - Third-party advertising and analytics: none
 - IDFA: not used
@@ -88,12 +88,18 @@ Confirm the rating produced by App Store Connect's current questionnaire.
 
 ## Review notes
 
-No Indulge login, subscription, or external hardware is required. Complete onboarding to reach the Life, Focus, Trade, and History tabs. Data saves locally first. Private iCloud sync is prepared but must be described as inactive until its signed two-device verification is recorded. Apple Screen Time enforcement is not part of this build. Optional on-device Focus suggestions and bounded reflection selection appear only on supported Apple Intelligence devices; manual classification and authored reflections are always available.
+No Indulge login, subscription, or external hardware is required. Complete
+onboarding to reach Life, Trade, and History. Data saves locally first. Private
+iCloud sync is prepared but must be described as unverified until signed
+two-device testing is recorded. Screen Time enforcement and application
+monitoring are not part of this build. Optional future-life card creation uses
+Apple's Image Playground system sheet on supported devices; the authored room
+and complete trade loop do not depend on it.
 
 ## Screenshots
 
-- iPhone 6.9-inch portrait sequence (`1320 × 2868`): `onboarding.jpg`, `life.jpg`, `focus.jpg`, `trade.jpg`, and `history.jpg` in `artifacts/app-store/iphone-6.9`
-- iPad 13-inch portrait sequence (`2064 × 2752`): `onboarding.jpg`, `life.jpg`, `focus.jpg`, `trade.jpg`, and `history.jpg` in `artifacts/app-store/ipad-13`
+- iPhone 6.9-inch portrait sequence (`1320 × 2868`): `onboarding.jpg`, `life.jpg`, `trade.jpg`, and `history.jpg` in `artifacts/app-store/iphone-6.9`; the stale `focus.jpg` is excluded
+- iPad 13-inch portrait sequence (`2064 × 2752`): `onboarding.jpg`, `life.jpg`, `trade.jpg`, and `history.jpg` in `artifacts/app-store/ipad-13`; the stale `focus.jpg` is excluded
 - Both sets use Apple-accepted dimensions, contain no alpha channel, and were captured from deterministic simulator routes
 - App previews: omit for version 0.1.0
 - Release: manual

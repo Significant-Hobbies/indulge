@@ -1,3 +1,11 @@
+> Current-release reconciliation (2026-08-16): section 2 records a completed
+> prototype that was removed from build 2. The customer app does not ship
+> Foundation Models, generated reflections, or Focus tag suggestions. The
+> retained Apple capabilities are LocalAuthentication, optional Image
+> Playground, SwiftData, and a prepared private CloudKit configuration. Tasks
+> 4.4, 5.5, 5.6, and 6.3 remain open because their physical-device or external
+> release evidence has not been produced.
+
 ## 1. Versioned Local Data Foundation
 
 - [x] 1.1 Add a versioned SwiftData schema and migration plan covering existing Focus records.

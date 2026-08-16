@@ -50,8 +50,9 @@
 - [x] 5.1 Retain the public Appnovation onboarding guide locally with source,
   copyright boundary, supporting Apple and RevenueCat references, and an
   Indulge-specific application brief.
-- [x] 5.2 Split onboarding into a seven-beat first-value journey and a voluntary
-  five-question deeper-personalization journey that returns to the reflection.
+- [x] 5.2 Split onboarding into an eight-beat first-value journey that asks
+  gender before revealing character presentation, and a voluntary four-question
+  deeper-personalization journey that returns to the reflection.
 - [x] 5.3 Make activity selection update the primary preview and room
   immediately, while preserving a separate confirmation beat.
 - [x] 5.4 Run focused tests, simulator build, OpenSpec validation, and updated

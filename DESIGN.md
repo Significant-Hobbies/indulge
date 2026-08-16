@@ -61,8 +61,8 @@ spacing:
   xl: "32pt"
 components:
   primary-action:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.lamp-cream}"
+    backgroundColor: "{colors.cherry}"
+    textColor: "#FFFFFF"
     typography: "{typography.label}"
     rounded: "{rounded.control}"
     padding: "14pt 20pt"
@@ -243,7 +243,7 @@ larger brand lockups pair the symbol with the line **break the loop.**
   character, hand props, and ambient objects.
 - Camera movement is shallow and authored; user controls never require free 3D
   navigation.
-- Scene state is data-driven so onboarding, Life, Focus, and History reuse one
+- Scene state is data-driven so onboarding, Life, Trade, and History reuse one
   world.
 - Until the reusable 3D rig replaces them, production-quality generated scene
   plates ship as real bundle assets with subtle native parallax, breathing-scale
@@ -275,33 +275,26 @@ larger brand lockups pair the symbol with the line **break the loop.**
 
 ### Daily App Shell
 
-- Life, Focus, Trade, and History use native tab navigation with Cherry selected
+- Life, Trade, and History use native tab navigation with Cherry selected
   state.
-- Life begins with the selected room scene, not a metric dashboard.
-- Focus begins in that same character and room. A continuous thread represents
-  focused attention; an interruption cuts it, and returning stitches the state
-  back together. The interruption timestamp is captured before classification.
-- Focus asks only for a bounded source and reason at the break, then one return
-  blockage. Its daily rows show focused time, interruption count, and recovery
-  cost; cross-day recovery is explicitly described as carried over. Aggregate
-  language remains in a learning state until at least three complete events.
-- Focus motion is restrained and causal: a dot travels the intact thread, the
-  cut settles in place during interruption, and Reduce Motion uses the settled
-  endpoints without travel.
+- Life begins with the selected room scene, not a metric dashboard. The room is
+  a full-width semantic action: a restrained scene-edge cue invites the person
+  to tap when the indulgence begins, and the scene hands directly into Trade.
+- Pressing the room adds one shallow depth response. Reduce Motion opens Trade
+  without spatial travel. No screenshot, metric card, or tracker chrome floats
+  over the authored scene.
 - Trade is a focused task surface: one indulgence, one reclaim target, one
   primary action.
 - History teaches its future value and remains empty until real activity exists;
   it never ships synthetic charts.
-- Inside-app headers may crop the room more tightly than onboarding, but the
-  character identity, furniture, palette, and rounded white tray remain
-  continuous across the handoff.
+- Inside-app headers may crop the room more tightly than onboarding, but never
+  crop away the primary prop that explains the indulgence. Portrait-authored
+  plates are preferred on iPhone; television combinations without one preserve
+  the complete scene over a soft full-bleed extension. Character identity,
+  furniture, palette, and the rounded white tray remain continuous.
 
 ### Optional Apple-native Layers
 
-- Grounded reflections sit below deterministic Life and Focus content in a
-  quiet Powder Soft card. They always show sample size and an authored,
-  evidence-backed sentence; model work never blocks the summary or exposes
-  prompt mechanics.
 - The future-life card is a personal keepsake below the authored room, not a
   replacement hero. Creation is a deliberate button into Apple's system sheet,
   appears functional only when supported, and offers clear replace and

@@ -21,27 +21,26 @@ struct IndulgeTests {
 
     #expect(store.load() == profile)
     #expect(IndulgeLaunchRoute.resolve(arguments: ["Indulge"]) == .automatic)
-    #expect(IndulgeLaunchRoute.automatic.initialTab(hasActiveFocusSession: true) == .focus)
-    #expect(IndulgeLaunchRoute.automatic.initialTab(hasActiveFocusSession: false) == .life)
+    #expect(IndulgeLaunchRoute.automatic.initialTab == .life)
+    #expect(IndulgeAppTab.allCases == [.life, .trade, .history])
     #expect(
       IndulgeLaunchRoute.resolve(arguments: ["Indulge", "--onboarding"]) == .onboarding
     )
   }
 
-  @Test func zeroDurationIsReportedAsZero() {
-    #expect(FocusTimeText.concise(0) == "0 min")
-    #expect(FocusTimeText.concise(30) == "under 1 min")
-  }
-
-  @Test func mainJourneyIncludesEveryPersonalizationQuestionBeforeReflection() {
+  @Test func mainJourneyAsksIdentityBeforeShowingACharacter() {
     #expect(PersonalOnboardingStep.allCases.count == 12)
-    #expect(PersonalOnboardingStep.mainJourney == PersonalOnboardingStep.allCases)
-    #expect(PersonalOnboardingStep.mainJourney.first == .name)
-    #expect(PersonalOnboardingStep.mainJourney[1] == .gender)
-    #expect(PersonalOnboardingStep.mainJourney.contains(.commonMoment))
-    #expect(PersonalOnboardingStep.mainJourney.contains(.intentionality))
-    #expect(PersonalOnboardingStep.mainJourney.contains(.changePace))
-    #expect(PersonalOnboardingStep.mainJourney.last == .reflection)
+    #expect(
+      PersonalOnboardingStep.mainJourney == [
+        .name, .gender, .activities, .primaryIndulgence, .timeSpent, .underlyingNeed,
+        .lifeDirection, .reflection,
+      ])
+    #expect(!PersonalOnboardingStep.mainJourney.contains(.commonMoment))
+    #expect(!PersonalOnboardingStep.mainJourney.contains(.intentionality))
+    #expect(
+      PersonalOnboardingStep.deeperJourney == [
+        .commonMoment, .startingPattern, .intentionality, .changePace, .reflection,
+      ])
   }
 
   @Test func purposeQuestionNamesTheActionAndAnswersCompleteItsMeaning() {
@@ -73,25 +72,32 @@ struct IndulgeTests {
     #expect(PersonalOnboardingStep.name.title(for: profile) == "What should we call you?")
     #expect(PersonalOnboardingStep.name.body(for: profile).isEmpty)
     #expect(!PersonalOnboardingStep.name.showsSkipAction)
+    #expect(PersonalOnboardingPreset.welcome.focusesTextEntry)
+    #expect(PersonalOnboardingPreset.name.focusesTextEntry)
     #expect(PersonalOnboardingPreset.keyboard.step == .name)
     #expect(PersonalOnboardingPreset.keyboard.focusesTextEntry)
     #expect(PersonalOnboardingPreset.keyboard.profile == profile)
   }
 
-  @Test func identityQuestionsAreOptionalAndInclusive() {
+  @Test func identityQuestionsAreInclusiveAndExplicit() {
     let empty = OnboardingProfile()
     #expect(empty.canAdvance(from: .name))
     #expect(!empty.canAdvance(from: .gender))
+    #expect(!empty.hasExplicitCharacterPresentation)
 
     var privateProfile = empty
     privateProfile.gender = .preferNotToSay
     #expect(privateProfile.canAdvance(from: .gender))
+    #expect(!privateProfile.hasExplicitCharacterPresentation)
 
     var selfDescribed = empty
     selfDescribed.gender = .selfDescribe
     #expect(!selfDescribed.canAdvance(from: .gender))
     selfDescribed.customGender = "Genderfluid"
     #expect(selfDescribed.canAdvance(from: .gender))
+
+    #expect(OnboardingProfile(gender: .woman).hasExplicitCharacterPresentation)
+    #expect(OnboardingProfile(gender: .man).hasExplicitCharacterPresentation)
   }
 
   @Test func requiredAnswersGateProgressDeterministically() {
@@ -124,7 +130,7 @@ struct IndulgeTests {
     profile.clearAnswer(for: .lifeDirection)
 
     #expect(profile.preferredName.isEmpty)
-    #expect(profile.gender == .preferNotToSay)
+    #expect(profile.gender == nil)
     #expect(profile.customGender.isEmpty)
     #expect(profile.dailyTime == nil)
     #expect(profile.need == nil)
@@ -214,13 +220,17 @@ struct IndulgeTests {
       IndulgeLaunchRoute.resolve(arguments: ["Indulge", "--app-history"])
         == .application(tab: .history, activeTrade: false))
     #expect(
+      IndulgeLaunchRoute.resolve(arguments: ["Indulge", "--app-history-complete"])
+        == .completedHistory)
+    #expect(
       IndulgeLaunchRoute.resolve(arguments: ["Indulge", "--app-focus"])
-        == .application(tab: .focus, activeTrade: false, focusPreview: .idle))
+        == .application(tab: .life, activeTrade: false))
     #expect(
       IndulgeLaunchRoute.resolve(arguments: ["Indulge", "--app-focus-interrupted"])
-        == .application(tab: .focus, activeTrade: false, focusPreview: .interrupted))
+        == .application(tab: .life, activeTrade: false))
   }
 
+  @MainActor
   @Test func firstTradeSuggestionStartsModestlyFromSelfReportedTime() {
     #expect(ReclaimTarget.suggested(for: nil) == .fifteen)
     #expect(ReclaimTarget.suggested(for: .underThirty) == .fifteen)
@@ -229,8 +239,10 @@ struct IndulgeTests {
     #expect(ReclaimTarget.suggested(for: .threePlus) == .fortyFive)
 
     let trade = IndulgeAppShell.makeSuggestedTrade(for: .appPreview)
-    #expect(
-      trade == ActiveTrade(indulgence: .television, reclaimTarget: .thirty, destination: .presence))
+    #expect(trade?.indulgence == .television)
+    #expect(trade?.reclaimTarget == .thirty)
+    #expect(trade?.destination == .presence)
+    #expect(trade?.startedAt == nil)
 
     let sleepFirst = OnboardingProfile(
       activities: [.shortVideo],
@@ -262,6 +274,9 @@ struct IndulgeTests {
     #expect(PersonalOnboardingStep.reflection.actionTitle == "Start with this")
     #expect(profile.primaryIndulgence != nil)
     #expect(IndulgeLaunchRoute.application(tab: .life, activeTrade: false).opensApplication)
+    #expect(IndulgeLaunchRoute.completedHistory.opensApplication)
+    #expect(IndulgeLaunchRoute.completedHistory.initialTab == .history)
+    #expect(IndulgeLaunchRoute.completedHistory.startsWithCompletedTrade)
     #expect(!IndulgeLaunchRoute.onboarding.startsWithActiveTrade)
   }
 
@@ -278,6 +293,12 @@ struct IndulgeTests {
       #expect(watching.count > 10_000)
       #expect(standing != watching)
     }
+  }
+
+  @Test func lifeHeroIncludesAPortraitTelevisionComposition() throws {
+    let url = try #require(
+      Bundle.main.url(forResource: "SceneStackFemininePortrait", withExtension: "png"))
+    #expect(try Data(contentsOf: url).count > 100_000)
   }
 
   @Test func everyVisibleFamilyChoiceHasARealSceneAndBothPresentations() throws {
@@ -390,7 +411,7 @@ struct IndulgeTests {
     #expect(profile.commonMomentSummary == "in the morning and late at night")
 
     profile.commonMoments.removeAll()
-    #expect(!profile.canAdvance(from: .commonMoment))
+    #expect(profile.canAdvance(from: .commonMoment))
   }
 
   @Test func catalogHasOneRecipePerSupportedIndulgence() {

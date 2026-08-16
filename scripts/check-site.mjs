@@ -17,7 +17,7 @@ const requiredFiles = [
 await Promise.all(requiredFiles.map((file) => access(file)));
 
 const home = await readFile("dist/index.html", "utf8");
-const requiredHomeCopy = ["Enjoy on", "Life", "Focus", "Trade", "History", "private", "TestFlight"];
+const requiredHomeCopy = ["Enjoy on", "Life", "Trade", "History", "private", "TestFlight"];
 for (const fragment of requiredHomeCopy) {
   if (!home.includes(fragment)) throw new Error(`Landing page is missing required copy: ${fragment}`);
 }
@@ -39,10 +39,9 @@ for (const prohibitedClaim of ["cure addiction", "treat addiction", "guaranteed 
   if (home.toLowerCase().includes(prohibitedClaim)) throw new Error(`Prohibited product claim found: ${prohibitedClaim}`);
 }
 
-// The only allowed client-side script is the PostHog analytics snippet.
 const scriptCount = (home.match(/<script/g) ?? []).length;
-if (scriptCount > 1 || (scriptCount === 1 && !home.includes("posthog.init"))) {
-  throw new Error("The static landing unexpectedly ships client-side JavaScript beyond the PostHog analytics snippet.");
+if (scriptCount !== 0) {
+  throw new Error("The static landing unexpectedly ships client-side JavaScript.");
 }
 
 const localHrefs = [...home.matchAll(/href="(\/[^"]*)"/g)]
