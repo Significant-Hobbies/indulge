@@ -22,6 +22,14 @@ not as punishment, streaks, or productivity metrics.
 
 ## Timeline
 
+- **2026-08-21:** Uploaded Habits 0.1.0 (4) from current `main` to internal-only
+  TestFlight on personal team `8F7LXHTJZR`. Xcode 26.6 initially exposed a
+  Swift 6.3.3 compiler crash for a direct SwiftUI `Binding` setter reference;
+  the equivalent explicit closure shipped through PR #26. All 68 unit tests
+  passed, all five UI tests executed with only the two hardware-only checks
+  skipped, and the inspected distribution IPA used production entitlements,
+  `get-task-allow=false`, and no embedded frameworks. Apple processing remains
+  the final availability gate.
 - **2026-08-21:** Evolved the visible product identity from Indulge to Habits
   while preserving the existing bundle ID, SwiftData schema, CloudKit
   container, target names, and stored directory. The existing Life → Trade →
