@@ -1,6 +1,6 @@
 ---
-name: Indulge
-description: Enjoy on purpose.
+name: Habits
+description: Keep what helps. Trade what does not.
 colors:
   powder-sky: "#E1F0FC"
   powder-soft: "#F2FAFF"
@@ -68,13 +68,13 @@ components:
     padding: "14pt 20pt"
 ---
 
-# Design System: Indulge
+# Design System: Habits
 
 ## Overview
 
 **Creative North Star: “The Room Assembles Around You”**
 
-Indulge is a soft-form 3D cartoon world that responds to a person’s choices by
+Habits is a soft-form 3D cartoon world that responds to a person’s choices by
 physically composing their life scene. Selecting “watching TV” does not check a
 box: the floor settles, a rounded sofa springs into place, a television rises,
 and the character lands naturally into a watching pose. Later choices add a

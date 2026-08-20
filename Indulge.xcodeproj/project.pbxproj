@@ -306,7 +306,6 @@
 				F452EA1E2C014874CFB8AF84 /* Indulge.entitlements */,
 				3537CC10B27DB791660E2ED3 /* Info.plist */,
 				405E117DC650C42B68B3A4F7 /* App */,
-				5D41D52401F28EF4F74C8A06 /* Components */,
 				E5CFAE1BAF3FD383940DA0D7 /* Design */,
 				2B8F27D0B83F969E75C43672 /* Domain */,
 				AF7953D263268546435F5262 /* Features */,
@@ -315,13 +314,6 @@
 				6758B4782CB28C8B3FF93DAB /* Services */,
 			);
 			path = Indulge;
-			sourceTree = "<group>";
-		};
-		5D41D52401F28EF4F74C8A06 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		6758B4782CB28C8B3FF93DAB /* Services */ = {
@@ -356,13 +348,6 @@
 			path = LifeDirectionArt;
 			sourceTree = "<group>";
 		};
-		942C59DF1AD7ABCF37E1EB48 /* Focus */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Focus;
-			sourceTree = "<group>";
-		};
 		A2184DAA7A2DBCCBDAAF06AF /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -384,7 +369,6 @@
 		AF7953D263268546435F5262 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				942C59DF1AD7ABCF37E1EB48 /* Focus */,
 				A2184DAA7A2DBCCBDAAF06AF /* Home */,
 				AA8B23C0CC1177E920F8844D /* Onboarding */,
 				13D0D8C7BA509A6A74725A14 /* Review */,

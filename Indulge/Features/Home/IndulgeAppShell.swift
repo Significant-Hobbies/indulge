@@ -353,14 +353,14 @@ private struct IndulgeAboutView: View {
         Section("About") {
           Link(
             "Privacy",
-            destination: URL(string: "https://indulge.significanthobbies.com/privacy/")!)
+            destination: URL(string: "https://habits.significanthobbies.com/privacy/")!)
           Link(
             "Support",
-            destination: URL(string: "https://indulge.significanthobbies.com/support/")!)
+            destination: URL(string: "https://habits.significanthobbies.com/support/")!)
         }
 
         Section("Your data") {
-          Button("Delete all Indulge data", role: .destructive) {
+          Button("Delete all Habits data", role: .destructive) {
             confirmsDataDeletion = true
           }
           Text(
@@ -393,14 +393,14 @@ private struct IndulgeAboutView: View {
 
           Text(
             authenticationService.availability == .available
-              ? "Uses Face ID, Touch ID, or your device passcode. Indulge stores no biometric data."
+              ? "Uses Face ID, Touch ID, or your device passcode. Habits stores no biometric data."
               : "Set up a device passcode or biometric authentication to use Privacy Lock."
           )
           .font(.footnote)
           .foregroundStyle(.secondary)
         }
       }
-      .navigationTitle("Indulge")
+      .navigationTitle("Habits")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .confirmationAction) {
@@ -416,7 +416,7 @@ private struct IndulgeAboutView: View {
       Text(privacyMessage ?? "Please try again.")
     }
     .confirmationDialog(
-      "Delete all Indulge data?",
+      "Delete all Habits data?",
       isPresented: $confirmsDataDeletion,
       titleVisibility: .visible
     ) {
@@ -520,7 +520,7 @@ private struct TradeHomeView: View {
                 Text(
                   activeTrade == nil
                     ? "Keep the part you enjoy. Redirect only the time that stops feeling chosen."
-                    : "Nothing is watched or blocked. Indulge remembers the exchange you chose."
+                    : "Nothing is watched or blocked. Habits remembers the exchange you chose."
                 )
                 .font(.indulgeBody)
                 .foregroundStyle(Color.indulgeText.opacity(0.66))

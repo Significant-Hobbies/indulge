@@ -89,7 +89,7 @@ final class IndulgeJourneyUITests: XCTestCase {
     tapButton("Privacy and data settings")
     XCTAssertTrue(
       app.staticTexts["Keep the pleasure. Reclaim the time."].waitForExistence(timeout: 4))
-    assertReachable(app.buttons["Delete all Indulge data"])
+    assertReachable(app.buttons["Delete all Habits data"])
     assertReachable(app.switches["Require device authentication"])
     tapButton("Done")
   }
@@ -126,7 +126,7 @@ final class IndulgeJourneyUITests: XCTestCase {
 
     tapTab("Life")
     tapButton("Privacy and data settings")
-    tapButton("Delete all Indulge data")
+    tapButton("Delete all Habits data")
     tapButton("Delete all data")
     XCTAssertTrue(app.staticTexts["What should we call you?"].waitForExistence(timeout: 5))
   }
@@ -165,7 +165,7 @@ final class IndulgeJourneyUITests: XCTestCase {
       XCTAssertTrue(privacySwitch.isEnabled)
       XCTAssertTrue(
         app.staticTexts[
-          "Uses Face ID, Touch ID, or your device passcode. Indulge stores no biometric data."
+          "Uses Face ID, Touch ID, or your device passcode. Habits stores no biometric data."
         ].exists,
         "Expected LocalAuthentication to be available on physical hardware."
       )

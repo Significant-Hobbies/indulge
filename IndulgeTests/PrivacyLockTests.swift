@@ -20,7 +20,7 @@ struct PrivacyLockTests {
   @Test func explicitlyRequestedPhysicalAuthenticationCompletes() async {
     #if !targetEnvironment(simulator) && INDULGE_PHYSICAL_AUTH_TEST
       let outcome = await LocalDeviceOwnerAuthenticationService().authenticate(
-        reason: "Verify that Indulge Privacy Lock works on this iPhone."
+        reason: "Verify that Habits Privacy Lock works on this iPhone."
       )
       #expect(outcome == .authenticated)
     #endif

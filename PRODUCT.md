@@ -17,7 +17,7 @@ digital habit or when reflecting on how time was spent.
 
 ## Product Purpose
 
-Indulge helps a person notice one automatic digital escape, decide how much of
+Habits helps a person notice one automatic digital escape, decide how much of
 it they genuinely want to keep, trade a modest amount of unchosen time for a
 satisfying alternative, and watch those alternatives become part of a living
 representation of their life.
@@ -28,7 +28,7 @@ intervention when a new rhythm feels natural.
 
 ## Positioning
 
-Indulge makes reclaimed time emotionally visible as an expanding life scene.
+Habits makes reclaimed time emotionally visible as an expanding life scene.
 It never treats intentional indulgence as failure and is designed to be
 outgrown rather than retained through guilt, streaks, or competitive pressure.
 
@@ -46,7 +46,7 @@ outgrown rather than retained through guilt, streaks, or competitive pressure.
 
 ## Capabilities and Constraints
 
-- Native SwiftUI iPhone app with local-first persistence and no Indulge account wall.
+- Native SwiftUI iPhone app with local-first persistence and no account wall.
 - Name and gender are optional onboarding context. Gender supports
   self-description and prefer-not-to-say; neither answer is used to infer
   behavior or prescribe a different intervention.
@@ -84,8 +84,8 @@ outgrown rather than retained through guilt, streaks, or competitive pressure.
 
 ## Brand Commitments
 
-- Name: Indulge.
-- Working tagline: “Enjoy on purpose.”
+- Name: Habits.
+- Working tagline: “Keep what helps. Trade what does not.”
 - Product promise: keep the indulgence you choose, trade the time you lose, and
   see a fuller life take shape.
 - Voice is intimate, adult, calm, non-moralizing, and free of shame, shock
@@ -98,7 +98,7 @@ outgrown rather than retained through guilt, streaks, or competitive pressure.
 - The owner-provided V1 visual and animation brief is at
   `/Users/sarthak/Downloads/indulge_ios_visual_prd.md`.
 - Significant Hobbies issue #65 records the product boundary and research
-  relationship but is reference-only, not Indulge’s operational work queue.
+  relationship but is reference-only, not Habits’ operational work queue.
 - The repository contains authored scene plates, a shipping app icon, and
   prepared App Store screenshots. No reusable production 3D character rig,
   user research, testimonials, benchmarks, or analytics exist yet and none may
