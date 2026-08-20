@@ -1,8 +1,8 @@
-# Indulge
+# Habits
 
-**Enjoy on purpose.**
+**Keep what helps. Trade what does not.**
 
-Indulge is a native iPhone and iPad experience for keeping the indulgence someone
+Habits is a native iPhone and iPad experience for keeping the indulgence someone
 chooses, trading the time they do not, and watching a fuller life assemble
 around one persistent animated character and room.
 
@@ -41,16 +41,17 @@ The native app has no third-party runtime, web view, analytics SDK, remote-model
 call, or Cloudflare dependency. SwiftData is authoritative. Properly entitled
 signed builds may attempt the configured private CloudKit container and fall
 back to local-only storage; cross-device sync is not claimed until it is tested
-on two signed devices. Image Playground is the only generative Apple surface in
+on two signed devices. The existing Indulge target, bundle ID, CloudKit container,
+and SwiftData schema names remain unchanged so current data survives the rename.
+Image Playground is the only generative Apple surface in
 the current product, and the authored fallback remains complete without it.
 
 ## Public site
 
-The static Astro site under `src/` is the product, privacy, support,
-accessibility, terms, and TestFlight surface for
-`https://indulge.significanthobbies.com`. It ships no client-side JavaScript,
-contains no provider-specific deployment configuration, and can be built as
-portable static files.
+The replacement Habits landing is maintained by the shared `ios-landings`
+factory. The static Astro site under `src/` remains the current Indulge surface
+until a separate, manual domain cutover; this branch does not deploy or change
+the public domain.
 
 ```bash
 pnpm install

@@ -174,7 +174,7 @@ struct IndulgeReviewView: View {
             )
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Your Indulge scene")
+        .accessibilityLabel("Your Habits scene")
         .accessibilityValue(sceneSummary)
     }
 
@@ -308,7 +308,7 @@ struct IndulgeReviewView: View {
         }
         .foregroundStyle(.white)
         .accessibilityAddTraits(selected ? .isSelected : [])
-        .accessibilityHint(id?.explicitOnly == true ? "Adds only the choice you selected; Indulge never recommends it" : "Adds this item to the character")
+        .accessibilityHint(id?.explicitOnly == true ? "Adds only the choice you selected; Habits never recommends it" : "Adds this item to the character")
     }
 
     @MainActor

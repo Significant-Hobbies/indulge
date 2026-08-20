@@ -1,10 +1,10 @@
-# Indulge — Project Status
+# Habits — Project Status
 
-Last updated: 2026-08-17
+Last updated: 2026-08-21
 
 ## Why / What
 
-Indulge is a private, local-first native iPhone and iPad application that helps people
+Habits is a private, local-first native iPhone and iPad application that helps people
 keep intentional digital pleasure while trading automatic time loss for
 meaningful alternatives. Progress appears as an expanding animated life scene,
 not as punishment, streaks, or productivity metrics.
@@ -22,6 +22,11 @@ not as punishment, streaks, or productivity metrics.
 
 ## Timeline
 
+- **2026-08-21:** Evolved the visible product identity from Indulge to Habits
+  while preserving the existing bundle ID, SwiftData schema, CloudKit
+  container, target names, and stored directory. The existing Life → Trade →
+  History loop remains the first Habits release; no data migration, deployment,
+  or TestFlight upload was performed.
 - **2026-08-17:** Landing gained a real-screenshot filmstrip, App Store-safe
   structured data, and an honest split between the iPhone app (no analytics)
   and this website (anonymous page views).
@@ -91,11 +96,10 @@ not as punishment, streaks, or productivity metrics.
 
 ## Products
 
-- **Indulge for iPhone and iPad:** the primary consumer experience.
-- **Indulge static launch surface:** a locally verified product, trust,
-  support, beta-status, and machine-readable discovery artifact. It reserves
-  `https://indulge.significanthobbies.com` as its canonical URL but is not
-  claimed as publicly deployed.
+- **Habits for iPhone and iPad:** the primary consumer experience, retaining
+  the existing Indulge implementation identity for migration safety.
+- **Habits landing:** maintained by the shared iOS landing factory at
+  `https://habits.significanthobbies.com`.
 
 ## Features (shipped)
 

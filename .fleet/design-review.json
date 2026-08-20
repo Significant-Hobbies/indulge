@@ -1,8 +1,8 @@
 {
   "$schema": "fleet.design-review.v1",
   "version": 1,
-  "project": "induldge",
-  "target": "Complete Apple-native Life, Trade, History, and authored-scene motion",
+  "project": "habits",
+  "target": "Rename Indulge to Habits while preserving the native Life, Trade, and History loop",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -31,10 +31,14 @@
       { "width": 402, "path": "artifacts/verification/iphone-onboarding-accessibility-xl.png" },
       { "width": 402, "path": "artifacts/verification/iphone-trade-active-reduce-motion.png" },
       { "width": 834, "path": "artifacts/verification/ipad-life-standard-final.png" },
-      { "width": 834, "path": "artifacts/verification/ipad-history-completed-standard.png" }
+      { "width": 834, "path": "artifacts/verification/ipad-history-completed-standard.png" },
+      { "width": 402, "path": "artifacts/design/habits/after-life.png" },
+      { "width": 390, "path": "artifacts/design/habits/review/habits-390.png" },
+      { "width": 768, "path": "artifacts/design/habits/review/habits-768.png" },
+      { "width": 1440, "path": "artifacts/design/habits/review/habits-1440.png" }
     ],
     "projectCheck": {
-      "command": "full unit/UI matrix on iOS 26.4, iOS 27.0, and iPadOS 27.0; ./scripts/build.sh; pnpm check; openspec validate complete-apple-native-indulge --strict; privacy/framework/archive inspection; git diff --check",
+      "command": "./scripts/test.sh; simulator visual review; git diff --check",
       "status": "pass"
     },
     "critique": {
@@ -58,11 +62,12 @@
         "All 24 visible indulgences have distinct authored selector art and deterministic family, arrival, and settled-state coverage. Eight destination pockets remain visually separate from the indulgence rather than using app screenshots.",
         "The daily app adapts to Dark Mode. Onboarding deliberately preserves its owner-approved daylight art direction while still responding to increased contrast, Dynamic Type, VoiceOver semantics, and Reduce Motion.",
         "The signed build installed on the available iPhone, but physical launch, device authentication, Image Playground success, and two-device CloudKit behavior remain external acceptance checks because the phone's device-service channel was unavailable."
+        ,"The Habits rename changes visible identity only. The bundle ID, CloudKit container, SwiftData schema, and stored Indulge directory remain unchanged so existing records are preserved."
       ]
     }
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "The owner explicitly asked the agent to complete and verify the application. The final preserve pass has zero unresolved P0/P1 findings and retains the approved visual direction; physical capability checks remain truthfully separated from simulator and archive evidence."
+    "note": "The owner explicitly approved merging Indulge into Habits and asked the agent to finish the seven products with maximum reuse. This preserve pass changes identity without redesigning the approved native experience or migrating its data."
   }
 }

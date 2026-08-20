@@ -85,7 +85,7 @@ final class PrivacyLockSettingsStore: PrivacyLockStoring {
 
 @MainActor
 struct PrivacyLockSettingsController {
-  static let unlockReason = "Unlock your private Indulge profile, trades, and history."
+  static let unlockReason = "Unlock your private Habits profile, trades, and history."
 
   let authentication: any DeviceOwnerAuthenticating
   let store: any PrivacyLockStoring

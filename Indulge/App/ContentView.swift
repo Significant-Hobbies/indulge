@@ -129,7 +129,7 @@ struct ContentView: View {
     privacyMessage = nil
     Task { @MainActor in
       let outcome = await authenticationService.authenticate(
-        reason: "Unlock your private Indulge profile, trades, and history."
+        reason: "Unlock your private Habits profile, trades, and history."
       )
       privacyLifecycle.authenticationCompleted(outcome)
       isAuthenticating = false
@@ -161,7 +161,7 @@ private struct PrivacyLockGate: View {
         .font(.system(size: 34, weight: .semibold))
         .foregroundStyle(Color.indulgeCherry)
       VStack(spacing: 7) {
-        Text("Indulge is locked")
+        Text("Habits is locked")
           .font(.indulgeDisplay)
           .foregroundStyle(Color.indulgeText)
         Text(message ?? "Authenticate with this device to see your private history.")
