@@ -32,7 +32,10 @@
       { "width": 402, "path": "artifacts/verification/iphone-trade-active-reduce-motion.png" },
       { "width": 834, "path": "artifacts/verification/ipad-life-standard-final.png" },
       { "width": 834, "path": "artifacts/verification/ipad-history-completed-standard.png" },
-      { "width": 402, "path": "artifacts/design/habits/after-life.png" }
+      { "width": 402, "path": "artifacts/design/habits/after-life.png" },
+      { "width": 390, "path": "artifacts/design/habits/review/habits-390.png" },
+      { "width": 768, "path": "artifacts/design/habits/review/habits-768.png" },
+      { "width": 1440, "path": "artifacts/design/habits/review/habits-1440.png" }
     ],
     "projectCheck": {
       "command": "./scripts/test.sh; simulator visual review; git diff --check",

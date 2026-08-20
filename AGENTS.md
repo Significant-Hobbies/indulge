@@ -1,4 +1,4 @@
-# Indulge agent instructions
+# Habits agent instructions
 
 Follow `/Users/sarthak/Desktop/fleet/AGENTS.md` and the project truth in
 `PROJECT_STATUS.md`, `PRODUCT.md`, and `DESIGN.md`.
@@ -15,6 +15,8 @@ Follow `/Users/sarthak/Desktop/fleet/AGENTS.md` and the project truth in
 ## Native boundaries
 
 - The primary product is a native iPhone and iPad app built with SwiftUI and RealityKit.
+- Keep the existing Indulge target, bundle identifier, CloudKit container, and
+  SwiftData type names until a separate migration is explicitly approved.
 - Keep the animated world in RealityKit and native controls/accessibility in
   SwiftUI.
 - Add no production dependency without explicit approval.
