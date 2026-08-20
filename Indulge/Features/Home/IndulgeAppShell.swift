@@ -375,7 +375,7 @@ private struct IndulgeAboutView: View {
             "Require device authentication",
             isOn: Binding(
               get: { privacyLockEnabled },
-              set: updatePrivacyLock
+              set: { requested in updatePrivacyLock(requested) }
             )
           )
           .disabled(
