@@ -3,6 +3,7 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+  private let platform: HabitsPlatformSync
   private let route: IndulgeLaunchRoute
   private let profileStore: OnboardingProfileStore
   private let authenticationService: any DeviceOwnerAuthenticating
@@ -20,12 +21,14 @@ struct ContentView: View {
   @State private var privacyMessage: String?
 
   init(
+    platform: HabitsPlatformSync = HabitsPlatformSync(enabled: false),
     route: IndulgeLaunchRoute = .launchArguments,
     profileStore: OnboardingProfileStore = OnboardingProfileStore(),
     authenticationService: any DeviceOwnerAuthenticating =
       LocalDeviceOwnerAuthenticationService(),
     resetsTestingData: Bool = ProcessInfo.processInfo.arguments.contains("--reset-testing-data")
   ) {
+    self.platform = platform
     self.route = route
     self.profileStore = profileStore
     self.authenticationService = authenticationService
@@ -47,6 +50,7 @@ struct ContentView: View {
           IndulgeReviewView()
         } else if let displayedProfile {
           IndulgeAppShell(
+            platform: platform,
             profile: displayedProfile,
             initialTab: initialTab,
             startsWithActiveTrade: route.startsWithActiveTrade,
@@ -88,6 +92,10 @@ struct ContentView: View {
       guard route == .automatic, profileRecords.isEmpty, let completedProfile else { return }
       try? OnboardingProfileRepository(context: modelContext).save(completedProfile)
     }
+    .task {
+      guard route == .automatic else { return }
+      await platform.restoreAndSync(context: modelContext)
+    }
     .onChange(of: privacyLockEnabled) { _, enabled in
       if enabled {
         privacyLifecycle.privacyLockWasEnabledAfterAuthentication()
@@ -102,6 +110,9 @@ struct ContentView: View {
         enabled: privacyLockEnabled && route == .automatic,
         relockAfter: privacyRelockAfter
       )
+      if phase == .active, route == .automatic {
+        Task { await platform.synchronize(context: modelContext) }
+      }
     }
     .onReceive(NotificationCenter.default.publisher(for: .indulgeAllDataDeleted)) { _ in
       profileStore.delete()

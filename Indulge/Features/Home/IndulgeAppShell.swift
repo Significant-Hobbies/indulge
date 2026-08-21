@@ -1,3 +1,4 @@
+import PersonalSyncKit
 import SwiftData
 import SwiftUI
 import UIKit
@@ -27,6 +28,7 @@ enum IndulgeAppTab: String, CaseIterable, Equatable, Sendable {
 struct IndulgeAppShell: View {
   @Environment(\.modelContext) private var modelContext
   @Query(sort: \TradeRecord.updatedAt, order: .reverse) private var tradeRecords: [TradeRecord]
+  let platform: HabitsPlatformSync
   let profile: OnboardingProfile
   private let startsWithActiveTrade: Bool
   private let startsWithCompletedTrade: Bool
@@ -34,10 +36,12 @@ struct IndulgeAppShell: View {
   @State private var didPrepareStore = false
 
   init(
+    platform: HabitsPlatformSync = HabitsPlatformSync(enabled: false),
     profile: OnboardingProfile, initialTab: IndulgeAppTab = .life,
     startsWithActiveTrade: Bool = false,
     startsWithCompletedTrade: Bool = false
   ) {
+    self.platform = platform
     self.profile = profile
     self.startsWithActiveTrade = startsWithActiveTrade
     self.startsWithCompletedTrade = startsWithCompletedTrade
@@ -46,13 +50,13 @@ struct IndulgeAppShell: View {
 
   var body: some View {
     TabView(selection: $selectedTab) {
-      LifeHomeView(profile: profile, activeTrade: activeTrade) {
+      LifeHomeView(platform: platform, profile: profile, activeTrade: activeTrade) {
         selectedTab = .trade
       }
       .tag(IndulgeAppTab.life)
       .tabItem { Label(IndulgeAppTab.life.title, systemImage: IndulgeAppTab.life.icon) }
 
-      TradeHomeView(profile: profile, activeRecord: activeRecord)
+      TradeHomeView(platform: platform, profile: profile, activeRecord: activeRecord)
         .tag(IndulgeAppTab.trade)
         .tabItem { Label(IndulgeAppTab.trade.title, systemImage: IndulgeAppTab.trade.icon) }
 
@@ -141,6 +145,7 @@ struct IndulgeAppShell: View {
 private struct LifeHomeView: View {
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+  let platform: HabitsPlatformSync
   let profile: OnboardingProfile
   let activeTrade: ActiveTrade?
   let openTrade: () -> Void
@@ -243,7 +248,7 @@ private struct LifeHomeView: View {
           }
         }
         .sheet(isPresented: $showsAbout) {
-          IndulgeAboutView()
+          IndulgeAboutView(platform: platform)
         }
       }
     }
@@ -324,6 +329,7 @@ private struct LifeHomeView: View {
 private struct IndulgeAboutView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  let platform: HabitsPlatformSync
   @AppStorage(PrivacyLockSettingsStore.enabledKey) private var privacyLockEnabled = false
   @AppStorage(PrivacyLockSettingsStore.relockAfterKey) private var privacyRelockAfter =
     PrivacyLockSettingsStore.defaultRelockAfter
@@ -370,6 +376,35 @@ private struct IndulgeAboutView: View {
           .foregroundStyle(.secondary)
         }
 
+        if let account = platform.account {
+          Section("Cloudflare sync") {
+            if account.isSignedIn {
+              Label(account.session?.email ?? "Personal account", systemImage: "checkmark.icloud")
+              Button(platform.isSyncing ? "Syncing…" : "Sync now") {
+                Task { await platform.synchronize(context: modelContext, announcing: true) }
+              }
+              .disabled(platform.isSyncing)
+              Button("Sign out", role: .destructive) {
+                Task { await account.signOut() }
+              }
+            } else {
+              Button("Connect Significant Hobbies") {
+                Task {
+                  await account.connect()
+                  await platform.synchronize(context: modelContext, announcing: true)
+                }
+              }
+              .buttonStyle(.borderedProminent)
+              .frame(maxWidth: .infinity)
+              .disabled(account.isConnecting)
+            }
+
+            Text(platform.message ?? account.errorMessage ?? "Optional. Habits stays fully usable offline and syncs through your private Personal Platform when connected.")
+              .font(.footnote)
+              .foregroundStyle(.secondary)
+          }
+        }
+
         Section("Privacy Lock") {
           Toggle(
             "Require device authentication",
@@ -408,7 +443,7 @@ private struct IndulgeAboutView: View {
         }
       }
     }
-    .presentationDetents([.medium])
+    .presentationDetents([.large])
     .tint(Color.indulgeCherry)
     .alert("Privacy Lock", isPresented: privacyMessageBinding) {
       Button("OK", role: .cancel) {}
@@ -477,6 +512,7 @@ private struct TradeHomeView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+  let platform: HabitsPlatformSync
   let profile: OnboardingProfile
   let activeRecord: TradeRecord?
   @State private var target: ReclaimTarget
@@ -488,7 +524,12 @@ private struct TradeHomeView: View {
   @State private var persistenceMessage: String?
   @State private var completionMoment: CompletionMoment?
 
-  init(profile: OnboardingProfile, activeRecord: TradeRecord?) {
+  init(
+    platform: HabitsPlatformSync = HabitsPlatformSync(enabled: false),
+    profile: OnboardingProfile,
+    activeRecord: TradeRecord?
+  ) {
+    self.platform = platform
     self.profile = profile
     self.activeRecord = activeRecord
     _target = State(
@@ -718,6 +759,7 @@ private struct TradeHomeView: View {
     isSaving = true
     do {
       try TradeRepository(context: modelContext).complete(record, outcome: outcome)
+      platform.enqueue(record)
       completionMoment = CompletionMoment(trade: trade, outcome: outcome)
     } catch {
       persistenceMessage = "This result could not be saved. Your trade remains available to finish."

@@ -11,11 +11,13 @@
 		0399E208F4444288447FBFAA /* FocusJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5592A20D0B01BC035B1C4D /* FocusJournal.swift */; };
 		05C11A3A256F1B398C2FB7B6 /* LifeSceneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3D48E09FEFF2614D5E2DF6 /* LifeSceneCoordinator.swift */; };
 		06167B25E2FB58C6EC9C0279 /* shortVideo.png in Resources */ = {isa = PBXBuildFile; fileRef = 52CFF827F96EE0452664458D /* shortVideo.png */; };
+		0F7625DC71E099E68FBE54A8 /* PersonalSyncKit in Frameworks */ = {isa = PBXBuildFile; productRef = F8CA61CD46354732BF1648A2 /* PersonalSyncKit */; };
 		13F08692225D595F5E31DBBD /* IndulgeAppShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0429CA45C350F49023766E /* IndulgeAppShell.swift */; };
 		184E1588333A19AAFF86444D /* music.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BD2B9C8EC53F2EF1DF1528B /* music.png */; };
 		1B13858E1E6F737702F3E23D /* SceneTelevisionPhoneMasculine.png in Resources */ = {isa = PBXBuildFile; fileRef = 87384422C31983AADC3B3230 /* SceneTelevisionPhoneMasculine.png */; };
 		1BB9CBF2CD74950FB8A0A0F9 /* SceneBrowsingMasculine.png in Resources */ = {isa = PBXBuildFile; fileRef = B50E77C937AD211C57988098 /* SceneBrowsingMasculine.png */; };
 		1D2F240394CA64041A9FAE94 /* IndulgeJourneyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5949F3069402009EFB911B /* IndulgeJourneyUITests.swift */; };
+		1EAB1614FC38E2219B428F49 /* PersonalSyncKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5E95485C34DC4A5C508FDACA /* PersonalSyncKit */; };
 		263422B3A56B346811B7A596 /* IndulgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AC5C4BB3EAF2681291F395 /* IndulgeApp.swift */; };
 		2DA67CE9DF57EBFB9BEC74D5 /* SceneStandingFeminine.png in Resources */ = {isa = PBXBuildFile; fileRef = 91419606A1DB90B994F88425 /* SceneStandingFeminine.png */; };
 		2EDA3A2168BD5990A72F642D /* alcohol.png in Resources */ = {isa = PBXBuildFile; fileRef = 4304421E13A4312503C7EC56 /* alcohol.png */; };
@@ -24,6 +26,7 @@
 		30A38D9BD1553592761D6FB9 /* AuthoredScenePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F7A0F70D93B077CBF98E48 /* AuthoredScenePresenter.swift */; };
 		36E70A145185637C4649B3E7 /* napping.png in Resources */ = {isa = PBXBuildFile; fileRef = BF50C77544A3B3176B396951 /* napping.png */; };
 		36EA71983E3E3820C6C4BF6D /* OnboardingWatching.png in Resources */ = {isa = PBXBuildFile; fileRef = 42601BB117E69E0BEAD3A19F /* OnboardingWatching.png */; };
+		370BC7C2CF45D8A9050E60B5 /* HabitsPlatformRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2387640A7007F69D47ED08 /* HabitsPlatformRecordTests.swift */; };
 		38B953358A81823EF5C777E8 /* onlineShopping.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D60537C6A1B0D8AF2536738 /* onlineShopping.png */; };
 		3947855CF6C3858EC7FFAD54 /* SceneTelevisionFeminine.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E34074EC4AD623C1A18D306 /* SceneTelevisionFeminine.png */; };
 		3D4A1C4C225275D9085F5DD8 /* OnboardingWine.png in Resources */ = {isa = PBXBuildFile; fileRef = B85073228BDCC70A914B9486 /* OnboardingWine.png */; };
@@ -44,6 +47,7 @@
 		5C471539ACD4E97103D31770 /* SceneRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8815F3A1A4501EF935BED635 /* SceneRecipe.swift */; };
 		5D9E3055C1127F6F99732478 /* PrivacyLockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30261BD00E884448227ADC3B /* PrivacyLockTests.swift */; };
 		5EAE5281AC04394F99F6FD76 /* FocusJournalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE83759B56C17D5F6EA54F26 /* FocusJournalTests.swift */; };
+		65FAF33A9742A77D0843FB7B /* HabitsPlatformSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6829255315BB78E847DC2445 /* HabitsPlatformSync.swift */; };
 		66C2A6EC3655D7F6DA49C4CF /* selfTrust.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BFE06EEDC150BCF7D021729 /* selfTrust.png */; };
 		66F6EB5B444EA9B8D4C804FE /* LifeSceneState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936EAAC044B77C1D6BEF4CBB /* LifeSceneState.swift */; };
 		6B3C112329341C2371064EDA /* presence.png in Resources */ = {isa = PBXBuildFile; fileRef = 578A73B1AAA5F41733CB816D /* presence.png */; };
@@ -158,6 +162,7 @@
 		578A73B1AAA5F41733CB816D /* presence.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = presence.png; sourceTree = "<group>"; };
 		585C6B0D66F8C13AA519E4BD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5CDA6AAC9E676CFFA675B504 /* SceneGamingMasculine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SceneGamingMasculine.png; sourceTree = "<group>"; };
+		6829255315BB78E847DC2445 /* HabitsPlatformSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsPlatformSync.swift; sourceTree = "<group>"; };
 		682C50F94D8D8E9FA8B481CB /* IndulgeDataSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndulgeDataSchema.swift; sourceTree = "<group>"; };
 		6C135F8E865AE0A6E5CFBE09 /* takeaway.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = takeaway.png; sourceTree = "<group>"; };
 		7106C3FD326ABDA69ED116AF /* SceneStackFeminine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SceneStackFeminine.png; sourceTree = "<group>"; };
@@ -188,6 +193,7 @@
 		9B58B0AA82753B1607053390 /* sweets.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sweets.png; sourceTree = "<group>"; };
 		9C8878B65F3CE55A81372287 /* focus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = focus.png; sourceTree = "<group>"; };
 		A40E3874AB1674696E98BBBA /* socialFeeds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = socialFeeds.png; sourceTree = "<group>"; };
+		AB2387640A7007F69D47ED08 /* HabitsPlatformRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsPlatformRecordTests.swift; sourceTree = "<group>"; };
 		AC502D1DEFB84EFD02C796C5 /* videoCalls.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = videoCalls.png; sourceTree = "<group>"; };
 		ADE7D6D242DAA136D17B58C9 /* SceneGamingFeminine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SceneGamingFeminine.png; sourceTree = "<group>"; };
 		AE340FD321C1AA142C892A02 /* SoftFormScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftFormScene.swift; sourceTree = "<group>"; };
@@ -217,6 +223,25 @@
 		FB3D48E09FEFF2614D5E2DF6 /* LifeSceneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeSceneCoordinator.swift; sourceTree = "<group>"; };
 		FE6A9675555EB8F21D6DB555 /* Indulge.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Indulge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B4EF0C532C59482ACD51EC21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1EAB1614FC38E2219B428F49 /* PersonalSyncKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5CA21152283821E42CF202A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0F7625DC71E099E68FBE54A8 /* PersonalSyncKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		13D0D8C7BA509A6A74725A14 /* Review */ = {
@@ -321,6 +346,7 @@
 			children = (
 				79282141E9EE365B430796F7 /* DeviceOwnerAuthentication.swift */,
 				8900F3B04CC4A5E54F592337 /* FutureLifeCardStore.swift */,
+				6829255315BB78E847DC2445 /* HabitsPlatformSync.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -382,6 +408,7 @@
 				0D7E69A413C784E780E7DF67 /* AuthoredScenePresenterTests.swift */,
 				BE83759B56C17D5F6EA54F26 /* FocusJournalTests.swift */,
 				D892F084539FFD867C6D83DF /* FutureLifeCardTests.swift */,
+				AB2387640A7007F69D47ED08 /* HabitsPlatformRecordTests.swift */,
 				E7393133A6B24B796A31371C /* IndulgeTests.swift */,
 				30261BD00E884448227ADC3B /* PrivacyLockTests.swift */,
 				C4306ED86819E26216C8A77D /* PrivateCloudPreparationTests.swift */,
@@ -476,6 +503,7 @@
 			buildConfigurationList = C9A427BB91AC513578416EB2 /* Build configuration list for PBXNativeTarget "IndulgeTests" */;
 			buildPhases = (
 				8C6C9C6E6D09ACEBE28CCBBB /* Sources */,
+				E5CA21152283821E42CF202A /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -484,6 +512,7 @@
 			);
 			name = IndulgeTests;
 			packageProductDependencies = (
+				F8CA61CD46354732BF1648A2 /* PersonalSyncKit */,
 			);
 			productName = IndulgeTests;
 			productReference = 2622FDC2B0DC68F3D10CF55E /* IndulgeTests.xctest */;
@@ -495,6 +524,7 @@
 			buildPhases = (
 				CCF132539AEB5F67A072865A /* Sources */,
 				212B1FBE546EE4B7F03F1DD8 /* Resources */,
+				B4EF0C532C59482ACD51EC21 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -502,6 +532,7 @@
 			);
 			name = Indulge;
 			packageProductDependencies = (
+				5E95485C34DC4A5C508FDACA /* PersonalSyncKit */,
 			);
 			productName = Indulge;
 			productReference = FE6A9675555EB8F21D6DB555 /* Indulge.app */;
@@ -538,6 +569,9 @@
 			);
 			mainGroup = 305E063C4D7203E4AF3EFC86;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				112E122E611C1B9FB1964F31 /* XCRemoteSwiftPackageReference "personal-platform" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C6F63200AF24D44A7244731F /* Products */;
 			projectDirPath = "";
@@ -631,6 +665,7 @@
 				F499B7F4D1CB375DAE16F7AC /* AuthoredScenePresenterTests.swift in Sources */,
 				5EAE5281AC04394F99F6FD76 /* FocusJournalTests.swift in Sources */,
 				761FF4A10EE59F59BE27EC66 /* FutureLifeCardTests.swift in Sources */,
+				370BC7C2CF45D8A9050E60B5 /* HabitsPlatformRecordTests.swift in Sources */,
 				FEC565439DC5B69B513640B1 /* IndulgeTests.swift in Sources */,
 				5D9E3055C1127F6F99732478 /* PrivacyLockTests.swift in Sources */,
 				AC8174AD3A1829D195575A23 /* PrivateCloudPreparationTests.swift in Sources */,
@@ -648,6 +683,7 @@
 				0399E208F4444288447FBFAA /* FocusJournal.swift in Sources */,
 				57BFE2517DFABDCA56F04E28 /* FutureLifeCardSection.swift in Sources */,
 				4D6CE594C528C68F1217874D /* FutureLifeCardStore.swift in Sources */,
+				65FAF33A9742A77D0843FB7B /* HabitsPlatformSync.swift in Sources */,
 				263422B3A56B346811B7A596 /* IndulgeApp.swift in Sources */,
 				13F08692225D595F5E31DBBD /* IndulgeAppShell.swift in Sources */,
 				E093D9CCE77C6C439C8B2CAD /* IndulgeDataSchema.swift in Sources */,
@@ -697,7 +733,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Indulge/Indulge.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 8F7LXHTJZR;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Indulge/Info.plist;
@@ -737,7 +773,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Indulge/Indulge.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 8F7LXHTJZR;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Indulge/Info.plist;
@@ -969,6 +1005,30 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		112E122E611C1B9FB1964F31 /* XCRemoteSwiftPackageReference "personal-platform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Significant-Hobbies/personal-platform.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5E95485C34DC4A5C508FDACA /* PersonalSyncKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 112E122E611C1B9FB1964F31 /* XCRemoteSwiftPackageReference "personal-platform" */;
+			productName = PersonalSyncKit;
+		};
+		F8CA61CD46354732BF1648A2 /* PersonalSyncKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 112E122E611C1B9FB1964F31 /* XCRemoteSwiftPackageReference "personal-platform" */;
+			productName = PersonalSyncKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8D3F6F939AD99DB498229E8F /* Project object */;
 }

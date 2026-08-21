@@ -45,7 +45,8 @@ export const siteSummary = {
     },
     {
       question: "Is Indulge on the App Store?",
-      answer: "Not yet. This site will not show Apple’s App Store badge until a live apps.apple.com listing exists."
+      answer:
+        "Not yet. This site will not show Apple’s App Store badge until a live apps.apple.com listing exists."
     }
   ]
 } as const;

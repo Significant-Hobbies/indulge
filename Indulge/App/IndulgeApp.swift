@@ -4,10 +4,12 @@ import SwiftUI
 @main
 struct IndulgeApp: App {
   private let modelContainer: ModelContainer
+  @State private var platform: HabitsPlatformSync
 
   init() {
     let usesPreviewStore =
       ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    _platform = State(initialValue: HabitsPlatformSync(enabled: !usesPreviewStore))
     do {
       let resolvedContainer: ModelContainer
       do {
@@ -26,7 +28,7 @@ struct IndulgeApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      ContentView(platform: platform)
     }
     .modelContainer(modelContainer)
   }
