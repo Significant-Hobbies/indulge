@@ -8,7 +8,7 @@ import SwiftData
 @Observable
 final class HabitsPlatformSync {
   private let connection: PersonalPlatformConnection?
-  let account: PersonalWebSignInModel?
+  let account: PersonalAccountModel?
   private(set) var isSyncing = false
   private(set) var message: String?
 
@@ -35,7 +35,7 @@ final class HabitsPlatformSync {
     )
     self.connection = connection
     account = connection.map {
-      PersonalWebSignInModel(identity: $0.identity, callbackScheme: "habits")
+      PersonalAccountModel(identity: $0.identity, callbackScheme: "habits")
     }
   }
 
