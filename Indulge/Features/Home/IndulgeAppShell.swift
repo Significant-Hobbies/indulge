@@ -508,6 +508,7 @@ private struct IndulgeAboutView: View {
 
   private func deleteAllData() {
     do {
+      let cloudRecordIDs = try modelContext.fetch(FetchDescriptor<TradeRecord>()).map(\.id)
       try AllIndulgeDataRepository(
         context: modelContext,
         cardAssets: FutureLifeCardAssetStore()
@@ -516,6 +517,7 @@ private struct IndulgeAboutView: View {
       privacyLockEnabled = false
       privacyRelockAfter = PrivacyLockSettingsStore.defaultRelockAfter
       NotificationCenter.default.post(name: .indulgeAllDataDeleted, object: nil)
+      platform.delete(recordIDs: cloudRecordIDs)
       dismiss()
     } catch {
       privacyMessage = "Your data could not be completely deleted. Please try again."
