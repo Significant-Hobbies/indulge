@@ -25,6 +25,11 @@ not as punishment, streaks, or productivity metrics.
 
 ## Timeline
 
+- **2026-08-22:** Apple completed processing 0.1.0 (6) and confirmed it
+  available to internal TestFlight testers on personal team `8F7LXHTJZR`.
+  App Store Connect retains the legacy `Indulge by Significant Hobbies` record;
+  the installed application displays the current `Habits` name.
+
 - **2026-08-21:** Habits 0.1.0 (5) completed internal-only TestFlight
   processing on personal team `8F7LXHTJZR`. This build connects completed trades to the
   Cloudflare Personal Platform without adding an account wall or moving the
