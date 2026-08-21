@@ -97,12 +97,12 @@ function checkTypes() {
 }
 
 function checkTests() {
-  run("bash", ["scripts/test.sh"]);
+  run("zsh", ["scripts/test.sh"]);
   log("Tests: scripts/test.sh / XCTest is the native source of truth.");
 }
 
 function checkCoverage() {
-  run("bash", ["scripts/test.sh"]);
+  run("zsh", ["scripts/test.sh"]);
   log("Coverage: the Indulge scheme gathers coverage during scripts/test.sh.");
 }
 

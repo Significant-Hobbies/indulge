@@ -19,8 +19,17 @@ not as punishment, streaks, or productivity metrics.
   surface. It is not part of the native app runtime.
 - Apple Screen Time frameworks are planned after the visual proof and are not
   active dependencies yet.
+- `PersonalSyncKit` supplies optional Sign in with Apple, a durable local
+  mutation outbox, and Personal Platform synchronization. SwiftData remains
+  the immediate store; private CloudKit remains a temporary rollback path.
 
 ## Timeline
+
+- **2026-08-21:** Prepared Habits 0.1.0 (5) to connect completed trades to the
+  Cloudflare Personal Platform without adding an account wall or moving the
+  immediate SwiftData write. The app can restore an Apple-backed session,
+  retry a durable outbox, pull Pace-created check-ins into History, and report
+  manual sync state; focused contract tests and a generic Release build pass.
 
 - **2026-08-21:** Uploaded Habits 0.1.0 (4) from current `main` to internal-only
   TestFlight on personal team `8F7LXHTJZR`. Xcode 26.6 initially exposed a
@@ -121,6 +130,8 @@ not as punishment, streaks, or productivity metrics.
   three humane outcomes, a causal completion pocket, and real History totals.
 - Offline manual behavior, optional availability-gated Apple Image Playground,
   Reduce Motion, Dynamic Type, VoiceOver, and Light/Dark support.
+- Optional Apple sign-in and Cloudflare synchronization for completed trades,
+  with local-first writes and a visible manual refresh path.
 - App Store identity assets plus an inspected distribution package on
   internal TestFlight. External beta testing and App Store review remain
   separate, unauthorized actions.

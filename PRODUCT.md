@@ -46,7 +46,8 @@ outgrown rather than retained through guilt, streaks, or competitive pressure.
 
 ## Capabilities and Constraints
 
-- Native SwiftUI iPhone app with local-first persistence and no account wall.
+- Native SwiftUI iPhone app with local-first persistence and no account wall;
+  optional Sign in with Apple connects private Cloudflare synchronization.
 - Name and gender are optional onboarding context. Gender supports
   self-description and prefer-not-to-say; neither answer is used to infer
   behavior or prescribe a different intervention.
@@ -66,13 +67,13 @@ outgrown rather than retained through guilt, streaks, or competitive pressure.
   authentication, it obscures private profile, Trade, and History content whenever
   the app leaves the active state, then requires authentication after the selected
   relock interval. It supports Face ID, Touch ID, or device-passcode fallback.
-- Private CloudKit sync is prepared for properly entitled signed builds and
-  remains local-first. Simulator, preview, test, failed-container, signed-out,
-  and offline paths keep local recording usable. No sync status is claimed until
-  two-device development verification is complete.
+- Cloudflare Personal Platform is the long-term shared sync path. Private
+  CloudKit remains temporarily enabled for rollback while SwiftData stays the
+  immediate local store. Simulator, preview, test, signed-out, failed-service,
+  and offline paths keep local recording usable.
 - Core functionality works offline. The current build does not request Screen
-  Time access, monitor application switching, call a remote model, or upload
-  selected indulgences.
+  Time access, monitor application switching, or call a remote model. Completed
+  trades sync only after the owner explicitly connects the app.
 - The app must support Dynamic Type, VoiceOver, Dark Mode, increased contrast,
   and Reduce Motion.
 - User-declared alcohol or smoking context may be mirrored neutrally as a scene

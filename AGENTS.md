@@ -16,9 +16,10 @@ Follow `/Users/sarthak/Desktop/fleet/AGENTS.md` and the project truth in
 
 - The primary product is a native iPhone and iPad app built with SwiftUI and RealityKit.
 - Keep the existing Indulge target, bundle identifier, CloudKit container, and
-  SwiftData type names until a separate migration is explicitly approved.
+  SwiftData type names during the Cloudflare transition; Personal Platform is
+  the only approved additional service dependency.
 - Keep the animated world in RealityKit and native controls/accessibility in
   SwiftUI.
-- Add no production dependency without explicit approval.
+- Add no other production dependency without explicit approval.
 - Keep visual-proof data deterministic, offline, and free of entitlements.
 - Preserve the non-moralizing product voice and Reduce Motion alternative.
