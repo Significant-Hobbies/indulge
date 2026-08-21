@@ -25,11 +25,13 @@ not as punishment, streaks, or productivity metrics.
 
 ## Timeline
 
-- **2026-08-21:** Prepared Habits 0.1.0 (5) to connect completed trades to the
+- **2026-08-21:** Habits 0.1.0 (5) completed internal-only TestFlight
+  processing on personal team `8F7LXHTJZR`. This build connects completed trades to the
   Cloudflare Personal Platform without adding an account wall or moving the
   immediate SwiftData write. The app can restore an Apple-backed session,
   retry a durable outbox, pull Pace-created check-ins into History, and report
-  manual sync state; focused contract tests and a generic Release build pass.
+  manual sync state; focused contract tests, the signed distribution package,
+  and a stable Xcode 26.6 archive passed.
 
 - **2026-08-21:** Uploaded Habits 0.1.0 (4) from current `main` to internal-only
   TestFlight on personal team `8F7LXHTJZR`. Xcode 26.6 initially exposed a
