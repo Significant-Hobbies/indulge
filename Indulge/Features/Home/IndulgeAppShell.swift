@@ -1,3 +1,4 @@
+import AuthenticationServices
 import PersonalSyncKit
 import SwiftData
 import SwiftUI
@@ -388,7 +389,21 @@ private struct IndulgeAboutView: View {
                 Task { await account.signOut() }
               }
             } else {
-              Button("Connect Significant Hobbies") {
+              SignInWithAppleButton(.continue) { request in
+                account.prepareApple(request)
+              } onCompletion: { result in
+                Task {
+                  await account.completeApple(result)
+                  if account.isSignedIn {
+                    await platform.synchronize(context: modelContext, announcing: true)
+                  }
+                }
+              }
+              .signInWithAppleButtonStyle(.black)
+              .frame(minHeight: 46)
+              .disabled(account.isConnecting)
+
+              Button("Continue with Google") {
                 Task {
                   await account.connect()
                   await platform.synchronize(context: modelContext, announcing: true)
