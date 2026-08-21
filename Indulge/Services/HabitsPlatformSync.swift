@@ -49,6 +49,7 @@ final class HabitsPlatformSync {
     isSyncing = true
     defer { isSyncing = false }
     do {
+      try await enqueueCompletedTrades(context: context, using: connection)
       let changes = try await connection.sync.synchronize()
       try apply(changes, context: context)
       if announcing { message = "Cloudflare sync complete." }
@@ -71,6 +72,34 @@ final class HabitsPlatformSync {
         )
         _ = try? await connection.sync.synchronize()
       } catch {}
+    }
+  }
+
+  func delete(recordIDs: [UUID]) {
+    guard let connection, !recordIDs.isEmpty else { return }
+    Task {
+      for id in recordIDs {
+        try? await connection.sync.enqueue(
+          recordId: id.uuidString.lowercased(),
+          operation: .delete,
+          occurredAt: Self.iso(.now)
+        )
+      }
+      _ = try? await connection.sync.synchronize()
+    }
+  }
+
+  private func enqueueCompletedTrades(
+    context: ModelContext,
+    using connection: PersonalPlatformConnection
+  ) async throws {
+    for record in try context.fetch(FetchDescriptor<TradeRecord>()) {
+      guard let completedAt = record.completedAt else { continue }
+      try await connection.sync.enqueue(
+        recordId: record.id.uuidString.lowercased(),
+        occurredAt: Self.iso(completedAt),
+        record: HabitsPlatformRecord.encode(record)
+      )
     }
   }
 
