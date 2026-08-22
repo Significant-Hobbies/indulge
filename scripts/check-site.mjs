@@ -10,6 +10,7 @@ const requiredFiles = [
   "dist/index.md",
   "dist/llms.txt",
   "dist/api/ai",
+  "dist/openapi.json",
   "dist/robots.txt",
   "dist/sitemap.xml"
 ];
@@ -72,6 +73,10 @@ for (const href of localHrefs) {
 const ai = JSON.parse(await readFile("dist/api/ai", "utf8"));
 if (ai.product?.name !== "Indulge")
   throw new Error("AI product surface does not identify Indulge.");
+if (ai.markdown?.negotiation !== true)
+  throw new Error("AI product surface must have markdown.negotiation set to true.");
+if (!ai.openapi)
+  throw new Error("AI product surface must include an openapi field.");
 
 console.log(
   `Checked ${requiredFiles.length} built public surfaces and ${localHrefs.length} internal links.`

@@ -7,7 +7,8 @@ const pages = [
   "testflight/",
   "index.md",
   "llms.txt",
-  "api/ai"
+  "api/ai",
+  "openapi.json"
 ];
 
 export const prerender = true;
