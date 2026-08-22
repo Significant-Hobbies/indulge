@@ -49,6 +49,21 @@ const betaHref = hasVerifiedBetaUrl ? configuredBetaUrl : "/testflight/";
       "@context": "https://schema.org",
       "@graph": [
         {
+          "@type": "Organization",
+          name: "Significant Hobbies",
+          url: "https://significanthobbies.com",
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "customer support",
+            email: "support@significanthobbies.com",
+            url: "https://indulge.significanthobbies.com/support/"
+          },
+          address: {
+            "@type": "PostalAddress",
+            addressCountry: "US"
+          }
+        },
+        {
           "@type": "SoftwareApplication",
           name: "Indulge",
           operatingSystem: "iOS",
